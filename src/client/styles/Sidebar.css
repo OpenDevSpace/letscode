@@ -5,8 +5,11 @@
   background-color: #313131;
   color: white;
   text-decoration: none;
-  padding: 4rem 1.5rem 1rem 1rem;
-  position: fixed; }
+  padding: 5rem 1.5rem 1rem 1rem;
+  position: fixed;
+  -webkit-box-shadow: 3px 5px 10px rgba(34, 34, 34, 0.5);
+  -moz-box-shadow: 3px 5px 10px rgba(34, 34, 34, 0.5);
+  box-shadow: 3px 5px 10px rgba(34, 34, 34, 0.5); }
   .sidebar li {
     list-style: none;
     margin-bottom: 1rem; }

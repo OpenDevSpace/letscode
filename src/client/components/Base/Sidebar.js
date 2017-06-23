@@ -45,7 +45,7 @@ class Sidebar extends Component {
                                 <Button icon='home' basic color='blue'/>
                                 {
                                     this.state.isToggleOn
-                                        ? <Button className="sidebarButtonText" color='blue'>My Profile</Button>
+                                        ? <Button className="sidebarButtonText" color='blue'>Dashboard</Button>
                                         : null
                                 }
                             </Button.Group>
@@ -57,7 +57,7 @@ class Sidebar extends Component {
                                 <Button icon='code' basic color='blue'/>
                                 {
                                     this.state.isToggleOn
-                                        ? <Button className="sidebarButtonText" color='blue'>My Courses</Button>
+                                        ? <Button className="sidebarButtonText" color='blue'>Course list</Button>
                                         : null
                                 }
                             </Button.Group>
@@ -67,6 +67,7 @@ class Sidebar extends Component {
 
                 <List divided relaxed className="bottomList">
                     <List.Item>
+                        <Link to="/settings">
                         <Button.Group>
                             <Button icon='setting' basic color='blue'/>
                             {
@@ -75,6 +76,7 @@ class Sidebar extends Component {
                                     : null
                             }
                         </Button.Group>
+                        </Link>
                     </List.Item>
                     <List.Item >
                         <Link to="/">

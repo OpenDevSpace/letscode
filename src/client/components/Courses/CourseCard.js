@@ -28,7 +28,9 @@ class CourseCard extends Component {
                         </Card.Content>
                         <Card.Content extra>
                             <div className="centeredStyle">
-                                <Button basic color='green'>Start Course</Button>
+                                <Link to={"/course/"+this.props.course.id+"/edit"}>
+                                <Button basic color='green' >Start Course</Button>
+                                </Link>
                             </div>
                         </Card.Content>
                     </Card>
