@@ -1,0 +1,14 @@
+.headerBar {
+  width: 100%;
+  height: 3.5rem;
+  text-align: right;
+  margin: 0;
+  top: 0;
+  background-color: #222222; }
+
+.headerSearch {
+  right: 0;
+  padding: 0.5rem; }
+
+.SearchComponent {
+  padding: .5rem; }
