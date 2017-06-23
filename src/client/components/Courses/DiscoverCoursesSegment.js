@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Card from './CourseCard'
-import {Segment, Grid} from 'semantic-ui-react'
+import {Segment, Container} from 'semantic-ui-react'
 import courseData from '../../data/Courses'
 
 class DiscoverCourses extends Component {
@@ -8,14 +8,12 @@ class DiscoverCourses extends Component {
         let courseInfo = courseData.map((course, index) => {
             return <Card course={course}/>;
         });
-        return <div className="attendedCourses">
-            <Segment raised>
+        return <Container fluid className="attendedCourses">
+            <Segment stacked={true}>
                 <h2>Discover new Courses</h2>
-                <Grid>
-                    {courseInfo}
-                </Grid>
+                {courseInfo}
             </Segment>
-        </div>
+        </Container>
     }
 }
 

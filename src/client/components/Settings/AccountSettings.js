@@ -6,7 +6,7 @@ class AccountSettings extends Component {
 
     render() {
         return (
-            <Accordion styled exclusive={false} defaultActiveIndex={1}>
+            <Accordion styled exclusive={false} defaultActiveIndex={1} fluid={true} className="settings">
                 <Accordion.Title className="inverted">
                     <Header as='h3' color='blue'>
                         <Icon name='dropdown'/>

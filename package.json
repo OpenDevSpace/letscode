@@ -9,6 +9,7 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-router-dom": "^4.1.1",
+    "react-truncate": "^2.1.4",
     "semantic-ui-css": "^2.2.10",
     "semantic-ui-react": "^0.68.5"
   },
