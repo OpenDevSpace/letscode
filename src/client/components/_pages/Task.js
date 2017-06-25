@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
-import SettingsFrame from "../Base/Frame"
-import {Header} from 'semantic-ui-react'
+import TaskFrame from "../Base/Frame"
+import TaskWrapper from '../Tasks/TaskWrapper'
 
 class Task extends Component {
     render() {
         return (
-            <SettingsFrame>
-                <Header content={"Comming Soon!"}/>
-            </SettingsFrame>
+            <TaskFrame>
+                <TaskWrapper/>
+            </TaskFrame>
         )
     }
 }

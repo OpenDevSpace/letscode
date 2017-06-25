@@ -1,0 +1,15 @@
+.taskWrapper {
+  display: block;
+  width: 100%; }
+  .taskWrapper .taskContainer {
+    display: inline-block; }
+
+.taskColumn {
+  -webkit-transition-duration: 0.5s;
+  -moz-transition-duration: 0.5s;
+  -o-transition-duration: 0.5s;
+  max-width: 33%;
+  align-items: baseline !important; }
+
+.taskSegment {
+  width: 100%; }

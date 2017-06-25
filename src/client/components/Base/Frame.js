@@ -8,20 +8,11 @@ class Frame extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            active: 'DASHBOARD'
+            isToggleOn: true
         }
     }
 
-    handleMyClick(button) {
-        var active = this.state.active
-        var newActive = {button}
-        this.setState({
-            active: newActive
-        });
-    }
-
     render() {
-        let active = this.state.active
         const children = this.props.children
 
         return (
@@ -29,7 +20,7 @@ class Frame extends Component {
                 <Header/>
                 <div className="bodyDiv">
                     <div className="sidebarDiv">
-                        <Sidebar onClick={() => this.handleMyClick({})}/>
+                        <Sidebar />
                     </div>
                     <div className="dashboardContent">
                         {children}
