@@ -12,17 +12,17 @@ class AttendedCourses extends Component {
 
         this.state = {
             courseInfo: courseData,
-            itemsToShow: 2,
+            itemsToShow: 3,
             expanded: false
         }
         this.showMore = this.showMore.bind(this)
     }
 
     showMore() {
-        this.state.itemsToShow === 2 ? (
+        this.state.itemsToShow === 3 ? (
             this.setState({itemsToShow: this.state.courseInfo.length, expanded: true})
         ) : (
-            this.setState({itemsToShow: 2, expanded: false})
+            this.setState({itemsToShow: 3, expanded: false})
         )
     }
 
@@ -35,9 +35,9 @@ class AttendedCourses extends Component {
                 )}
                 <a className="" onClick={this.showMore}>
                     {this.state.expanded ? (
-                        <ShowMoreLess icon="minus" text="Show less courses"/>
+                        <ShowMoreLess icon="arrow up" text="Show less courses"/>
                     ) : (
-                        <ShowMoreLess icon="plus" text="Show more courses"/>
+                        <ShowMoreLess icon="arrow down" text="Show more courses"/>
                     )
                     }
                 </a>

@@ -7,18 +7,15 @@ class ShowMoreCard extends Component {
     constructor(props) {
         super(props)
     }
+
     render() {
         return (
-            <div className="courseCards showMoreLess">
-                <Link to={"/dashboard"}>
-                <Segment circular className="showMore">
-                    <Header as='h2' icon>
-                        <Icon name={this.props.icon} />
-                        {this.props.text}
-                    </Header>
-                </Segment>
-                </Link>
-            </div>
+            <Button fluid animated='vertical'>
+                <Button.Content hidden><Icon name={this.props.icon}/></Button.Content>
+                <Button.Content visible>
+                    {this.props.text}
+                </Button.Content>
+            </Button>
         );
     };
 }
