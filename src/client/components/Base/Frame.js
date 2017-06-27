@@ -14,13 +14,12 @@ class Frame extends Component {
 
     render() {
         const children = this.props.children
-
         return (
             <div className="mainContainer">
                 <Header/>
                 <div className="bodyDiv">
-                    <div className="sidebarDiv">
-                        <Sidebar />
+                    <div className="sidebarDiv" >
+                        <Sidebar type={this.props.type}/>
                     </div>
                     <div className="dashboardContent">
                         {children}

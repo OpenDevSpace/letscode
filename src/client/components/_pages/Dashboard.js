@@ -9,7 +9,7 @@ class Dashboard extends Component {
     render() {
         return (
             <DashboardFrame>
-                <CoursesSegment/>
+                <CoursesSegment courseNumber="2"/>
                 <Divider />
                 <DiscoverCourses/>
             </DashboardFrame>

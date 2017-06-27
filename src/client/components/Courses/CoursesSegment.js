@@ -1,18 +1,26 @@
 import React, {Component} from 'react'
 import Card from './CourseCard'
-import {Segment, Container} from 'semantic-ui-react'
+import ShowMore from './ShowMoreCard'
+import {Segment, Container, Header} from 'semantic-ui-react'
 import courseData from '../../data/Courses'
 import '../../styles/CoursesSegment.css'
-import {Button} from "semantic-ui-react"
 
 
 class AttendedCourses extends Component {
+    constructor(props) {
+        super(props);
+    }
     render() {
         let courseInfo = courseData.map((course, index) => {
-            return <Card course={course}/>;
+            let n = Number(this.props.courseNumber)
+            if(index < n){
+                return <Card course={course}/>
+            } else if(index === n){
+                return <ShowMore/>
+            }
         });
         return <Container fluid className="CoursesSegment">
-                <Segment stacked={true}>
+                <Segment>
                     <h2>Your Courses</h2>
                     {courseInfo}
                 </Segment>

@@ -8,8 +8,9 @@
   -webkit-transition-duration: 0.5s;
   -moz-transition-duration: 0.5s;
   -o-transition-duration: 0.5s;
-  max-width: 33%;
-  align-items: baseline !important; }
+  align-items: baseline !important;
+  display: block !important; }
 
-.taskSegment {
-  width: 100%; }
+.taskText {
+  display: inline-block;
+  position: absolute; }

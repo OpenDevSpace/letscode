@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Button, Checkbox, Icon, Table, Menu, Dropdown} from 'semantic-ui-react'
+import {Checkbox, Table, Menu, Dropdown} from 'semantic-ui-react'
 import '../../../styles/CourseList.css'
 import viewData from '../../../data/Visibilitiy'
 

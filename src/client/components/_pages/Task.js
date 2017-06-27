@@ -3,10 +3,13 @@ import TaskFrame from "../Base/Frame"
 import TaskWrapper from '../Tasks/TaskWrapper'
 
 class Task extends Component {
+    constructor(props) {
+        super(props);
+    }
     render() {
         return (
-            <TaskFrame>
-                <TaskWrapper/>
+            <TaskFrame type="task">
+                <TaskWrapper type="task"/>
             </TaskFrame>
         )
     }

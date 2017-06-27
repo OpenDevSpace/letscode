@@ -1,13 +1,23 @@
 import React, {Component} from 'react'
 import TaskStep from './TaskStep'
-import {Step, Icon, Segment, Header, Checkbox, List, Button}from 'semantic-ui-react'
+import {Step, Icon, Segment, Header, Form, Checkbox, Radio, Button}from 'semantic-ui-react'
 import '../../styles/TaskWrapper.css'
 import taskData from '../../data/Tasks'
+import TaskDefinition from "./TaskDefinition";
+import TaskWorkspace from "./TaskWorkspace";
 
 
 class TaskWrapper extends Component {
+    constructor(props) {
+        super(props);
+    }
+    state = {}
+
+    handleChange = (e, { value }) => this.setState({ value })
+
     render() {
-        let counter = 0
+        const { value } = this.state
+        let counter = 1
         let taskInfo = taskData.map((task, index) => {
             return <TaskStep task={task}/>;
         });
@@ -15,63 +25,32 @@ class TaskWrapper extends Component {
             <div className="taskWrapper">
                 <Step.Group fluid={true}>
                     <Step className="taskColumn">
-                        <Segment vertical basic={true} color={"red"} className="taskSegment">
-                            <Header as='h3'>
-                                <Icon name='tasks' />
-                                <Header.Content>
-                                    {taskData[counter].title}
-                                    <Header.Subheader>
-                                        Some tasks
-                                    </Header.Subheader>
-                                </Header.Content>
-                            </Header>
-                            <p className="taskText">
-                                {taskData[counter].description}
-                            </p>
-                        </Segment>
+                        <TaskDefinition currentTask={taskData[counter]}/>
                     </Step>
-
-                    <Step className="taskColumn" color={"grey"}>
-                        <Segment vertical basic={true} color={"orange"} className="taskSegment">
-                            <Header as='h3'>
-                                <Icon name="code"/>
-                                <Header.Content>
-                                    Whats the answer?
-                                    <Header.Subheader>
-                                        Mark right answers
-                                    </Header.Subheader>
-                                </Header.Content>
-                            </Header>
-                            <List divided relaxed>
-                                <List.Item>
-                                    <Checkbox label={taskData[counter].option1} />
-                                </List.Item>
-                                <List.Item>
-                                    <Checkbox label={taskData[counter].option2} />
-                                </List.Item>
-                                <List.Item>
-                                    <Checkbox label={taskData[counter].option3} />
-                                </List.Item>
-                                <List.Item>
-                                    <Checkbox label={taskData[counter].option4} />
-                                </List.Item>
-                            </List>
-                        </Segment>
+                    <Step className="taskColumn">
+                        <TaskWorkspace currentTask={taskData[counter]}/>
                     </Step>
-                    <Step className="taskColumn" color={"grey"}>
-                        <Segment vertical basic={true} color={"yellow"} className="taskSegment">
-                            <Header as='h3'>
-                                <Icon name='code'/>
-                                <Header.Content>
-                                    See if that was right
-                                    <Header.Subheader>
-                                        Check it!
-                                    </Header.Subheader>
-                                </Header.Content>
-                            </Header>
-                            <Button basic color='green' >Click me</Button>
-                        </Segment>
-                    </Step>
+                    {
+                        taskData[counter].type === "coding"
+                            ? (
+                            <Step className="taskColumn">
+                                <Segment vertical basic={true} color={"yellow"} className="taskSegment">
+                                    <Header as='h3'>
+                                        <Icon name='code'/>
+                                        <Header.Content>
+                                            See if that was right
+                                            <Header.Subheader>
+                                                Check it!
+                                            </Header.Subheader>
+                                        </Header.Content>
+                                    </Header>
+                                    <Button basic color='green' onClick={[].forEach.call(document.querySelectorAll('.myCheckbox:checked'), function (cb) {
+                                        console.log(cb.value);
+                                    })} >Click me</Button>
+                                </Segment>
+                            </Step>
+                        ) : null
+                    }
                 </Step.Group>
             </div>
         )
