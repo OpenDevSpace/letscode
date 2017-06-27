@@ -11,3 +11,14 @@
 .courseCard {
   height: 30rem;
   margin: 1rem; }
+
+.courseIcon {
+  width: 30%; }
+
+.showMore {
+  margin-top: 6rem;
+  margin-left: 3rem;
+  display: inline-block !important; }
+
+.showMoreLess {
+  margin: 1rem 1rem 1rem 5rem; }
