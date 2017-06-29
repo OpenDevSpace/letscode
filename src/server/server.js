@@ -4,8 +4,6 @@ var path = require('path');
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 
-var authRoutes = require('./routes/auth');
-
 var app = express();
 
 app.use(bodyparser.urlencoded({extended: false}));

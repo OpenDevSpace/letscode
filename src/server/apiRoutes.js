@@ -1,5 +1,6 @@
-var authRoutes = require('./routes/auth');
+var userRoutes = require('./routes/user');
+
 
 module.exports = (app) => {
-    app.use('/api/auth', authRoutes);
+    app.use('/api/user', userRoutes);
 }

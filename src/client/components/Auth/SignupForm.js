@@ -22,7 +22,7 @@ class Signup extends Component {
                 lastName = $form.find( "input[id='lastName']" ).val(),
                 emailInput = $form.find( "input[id='emailInput']" ).val(),
                 password = $form.find( "input[type='password']" ).val(),
-                url = "http://localhost:8080/api/auth/register";
+                url = "http://localhost:8080/api/user/new";
 
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(password, salt, (err, hash) => {

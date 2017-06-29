@@ -8,6 +8,7 @@ import Dashboard from "./components/_pages/Dashboard"
 import Course from "./components/_pages/Course"
 import AllCourses from "./components/_pages/AllCourses"
 import AdminCourseList from './components/Admin/_pages/Courses'
+import AdminUserList from './components/Admin/_pages/Users'
 import NotFound from "./components/_pages/404"
 import Settings from "./components/_pages/Settings"
 import Task from "./components/_pages/Task"
@@ -24,9 +25,10 @@ class App extends Component {
                 <Route path="/dashboard" component={Dashboard}/>
                 <Route path="/course/:number/edit" component={Task}/>
                 <Route path="/course/:number" component={Course}/>
-                <Route path="/courselist" component={AllCourses}/>
+                <Route exact path="/admin/courselist" component={AdminCourseList}/>
+                <Route exact path="/admin/userlist" component={AdminUserList}/>
+                <Route exact path="/courselist" component={AllCourses}/>
                 <Route path="/settings" component={Settings}/>
-                <Route path='*' component={NotFound} />
             </Switch>
         </Router>
     );

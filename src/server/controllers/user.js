@@ -1,15 +1,15 @@
-var User = require('../models/user');
+var UserModel = require('../models/user');
 
-class Auth {
+class User {
 
     register(firstName, LastName, email, password, callback) {
 
         var success = false;
 
-        User.findOne({email: email}, (err, user) => {
+        UserModel.findOne({email: email}, (err, user) => {
             if (err) throw err;
             if (!user) {
-                new User({
+                new UserModel({
                     firstName: firstName,
                     lastName: LastName,
                     email: email,
@@ -24,6 +24,12 @@ class Auth {
 
     }
 
+    listAll(callback){
+        UserModel.find({}, (err, res) => {
+           if (err) throw err;
+           callback(res);
+        });
+    }
 }
 
-module.exports = Auth;
+module.exports = User;

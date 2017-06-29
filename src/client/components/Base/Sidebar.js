@@ -75,6 +75,30 @@ class Sidebar extends Component {
                             </Button.Group>
                         </Link>
                     </List.Item>
+                    <List.Item>
+                        <Link to="/admin/courselist">
+                            <Button.Group>
+                                <Button icon='code' basic color='blue'/>
+                                {
+                                    this.state.isToggleOn
+                                        ? <Button className="sidebarButtonText" color='blue'>Course list</Button>
+                                        : null
+                                }
+                            </Button.Group>
+                        </Link>
+                    </List.Item>
+                    <List.Item>
+                        <Link to="/admin/userlist">
+                            <Button.Group>
+                                <Button icon='code' basic color='blue'/>
+                                {
+                                    this.state.isToggleOn
+                                        ? <Button className="sidebarButtonText" color='blue'>User list</Button>
+                                        : null
+                                }
+                            </Button.Group>
+                        </Link>
+                    </List.Item>
                 </List>
 
                 <List divided relaxed className="bottomList">
