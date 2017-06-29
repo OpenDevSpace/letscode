@@ -14,6 +14,7 @@ class Signup extends Component {
 
             // Stop form from submitting normally
             event.preventDefault();
+            event.stopImmediatePropagation();
 
             // Get some values from elements on the page:
             var $form = $( this ),
