@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Form, Button} from 'semantic-ui-react'
 import "../../styles/SignupForm.css"
 import $ from 'jquery'
-
+var bcrypt = require('bcryptjs')
 class Signup extends Component {
     constructor(props) {
         super(props);
@@ -23,16 +23,20 @@ class Signup extends Component {
                 password = $form.find( "input[type='password']" ).val(),
                 url = "http://localhost:8080/api/auth/register";
 
-            // Send the data using post
-            var posting = $.post( url, {
-                firstName: firstName,
-                lastName: lastName,
-                emailInput: emailInput,
-                password: password,
-            } )
-                .done((data) => {
-                    console.log(data);
+            bcrypt.genSalt(10, (err, salt) => {
+                bcrypt.hash(password, salt, (err, hash) => {
+                    // Send the data using post
+                    var posting = $.post( url, {
+                        firstName: firstName,
+                        lastName: lastName,
+                        emailInput: emailInput,
+                        password: hash,
+                    } )
+                        .done((data) => {
+                            console.log(data);
+                        });
                 });
+            });
         });
     }
 
