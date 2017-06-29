@@ -21,7 +21,7 @@ class Signup extends Component {
                 lastName = $form.find( "input[id='lastName']" ).val(),
                 emailInput = $form.find( "input[id='emailInput']" ).val(),
                 password = $form.find( "input[type='password']" ).val(),
-                url = $form.attr( "localhost:8080/api/auth/register" );
+                url = "http://localhost:8080/api/auth/register";
 
             // Send the data using post
             var posting = $.post( url, {

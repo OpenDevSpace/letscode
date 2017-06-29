@@ -9,6 +9,7 @@
     "jquery": "^3.2.1",
     "jsonwebtoken": "^7.4.1",
     "mongoose": "^4.11.0",
+    "path": "^0.12.7",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
@@ -24,11 +25,12 @@
   },
   "scripts": {
     "start": "npm-run-all -p watch-css start-js",
-    "build": "react-scripts build",
+    "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "start-js": "react-scripts start",
     "build-css": "node-sass-chokidar src/client/styles/sass -o src/client/styles/",
-    "watch-css": "npm run build-css && node-sass-chokidar src/client/styles/sass -o src/client/styles/ --watch --recursive"
+    "watch-css": "npm run build-css && node-sass-chokidar src/client/styles/sass -o src/client/styles/ --watch --recursive",
+    "express": "npm run build && node ./src/server/server.js"
   }
 }

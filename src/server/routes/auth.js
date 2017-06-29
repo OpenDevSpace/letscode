@@ -4,7 +4,7 @@ var AuthController = new Auth();
 var routes = require('express').Router();
 
 routes.post('/register', (req, res) => {
-    AuthController.register("Blubb", "Hello", "email4", "secure", (result) => {
+    AuthController.register(req.body.firstName, req.body.lastName, req.body.emailInput, req.body.password, (result) => {
         if (result) {
             message = 'User created successfully!';
         } else {
