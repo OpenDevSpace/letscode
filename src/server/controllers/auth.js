@@ -39,8 +39,33 @@ class Auth {
         });
     }
 
-    register() {
+    register(firstName, lastName, email, password, callback) {
 
+        UserModel.findOne({email: email}, (err, user) => {
+            if (err) throw err;
+            if (!user) {
+                bcrypt.genSalt(15, (err, salt) => {
+                    if (err) throw err;
+                    bcrypt.hash(password, salt, (err, hash) => {
+                        if (err) throw err;
+                        new UserModel({
+                            firstName: firstName,
+                            lastName: lastName,
+                            email: email,
+                            password: hash
+                        }).save();
+                        callback(
+                            {success: true}
+                        );
+                    });
+
+                });
+            } else {
+                callback({
+                    success: false
+                });
+            }
+        });
     }
 }
 
