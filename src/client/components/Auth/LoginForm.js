@@ -37,7 +37,8 @@ class LoginForm extends Component {
             user: this.state.user,
             password: this.state.password
         }).done((data) => {
-            console.log(data);
+            localStorage.setItem("odslearncode", data.token);
+            window.location.replace('/dashboard');
         });
 
         console.log("Login request");

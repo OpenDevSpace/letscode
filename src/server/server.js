@@ -7,6 +7,10 @@ var jwt = require('jsonwebtoken');
 var app = express();
 
 var authRoutes = require('./routes/auth');
+var userRoutes = require('./routes/user');
+
+
+var authMiddleware = require('./controllers/auth-middleware');
 
 app.use(bodyparser.urlencoded({extended: false}));
 app.use(bodyparser.json());
@@ -15,7 +19,10 @@ console.log(path.join(__dirname, '../../build'));
 
 app.use(express.static(path.join(__dirname, '../../build')))
 
-var apiRoutes = require('./apiRoutes')(app);
+app.use('/api', authMiddleware);
+
+app.use('/api/user', userRoutes);
+
 
 app.use('/auth', authRoutes);
 
