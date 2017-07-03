@@ -24,11 +24,20 @@ class User {
 
     }
 
-    listAll(callback){
-        UserModel.find({}, (err, res) => {
-           if (err) throw err;
-           callback(res);
-        });
+    listAll(role, callback){
+        if(role !== "Admin") {
+            callback({
+                success: false
+            });
+        } else {
+            UserModel.find({}, (err, res) => {
+                if (err) throw err;
+                callback({
+                    success: true,
+                    data: res
+                });
+            });
+        }
     }
 
     loadDashboard(userID, callback){

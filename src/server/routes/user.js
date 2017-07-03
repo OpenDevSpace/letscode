@@ -3,9 +3,13 @@ var UserController = new User();
 
 var routes = require('express').Router();
 
-routes.get('/list', (req, res) => {
-    UserController.listAll((users) => {
-        res.json(users);
+routes.get('/listall', (req, res) => {
+    UserController.listAll(req.user.role, (users) => {
+        if(!users.success){
+            res.status(401).end();
+        } else {
+            res.json(users.data);
+        }
     });
 });
 

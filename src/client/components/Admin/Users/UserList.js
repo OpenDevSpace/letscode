@@ -8,16 +8,32 @@ import $ from 'jquery'
 class CourseList extends Component {
     constructor(props) {
         super(props);
-        this.state
-    }
-    componentDidMount(){
-        $.get('http://localhost:8080/api/user/list')
+        this.state = {
+            users: []
+        }
+
+        $.ajaxSetup({
+            beforeSend: (xhr) => {
+                xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
+            }
+        });
+
+        $.get("http://localhost:8080/api/user/listall")
+            .fail(() => {
+                console.log("Failure!");
+            })
             .done((data) => {
-            this.setState(data);
+                this.setState({
+                    users: data
+                })
             });
-        console.log(this.state);
     }
+
+
     render() {
+        let userData = this.state.users.map((user, index) => {
+            return <UserListItem user={user}/>
+        });
         return (
             <div>
                 <Table >
@@ -34,6 +50,7 @@ class CourseList extends Component {
                     </Table.Header>
 
                     <Table.Body>
+                        {userData}
                     </Table.Body>
 
                     <Table.Footer fullWidth>

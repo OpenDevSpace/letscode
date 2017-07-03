@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Form, Button} from 'semantic-ui-react'
+import {Form, Button, Dimmer, Loader} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import $ from 'jquery'
 import "../../styles/LoginForm.css"
@@ -12,7 +12,8 @@ class LoginForm extends Component {
 
         this.state = {
             user: '',
-            password: ''
+            password: '',
+            requestActive: false
         };
 
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -33,6 +34,10 @@ class LoginForm extends Component {
 
     login(evt) {
 
+        this.setState(prevState => ({
+            requestActive: !prevState.requestActive
+        }));
+
         $.post("http://localhost:8080/auth/login", {
             user: this.state.user,
             password: this.state.password
@@ -52,6 +57,9 @@ class LoginForm extends Component {
             <div className="loginComponent">
                 <div className="loginFormBar">
                     <Form className="loginForm">
+                        <Dimmer active={this.state.requestActive}>
+                            <Loader />
+                        </Dimmer>
                         <h2>Sign in</h2>
                         <Form.Input id="emailInput" label='E-Mail' type="email" placeholder='your.name@mail.com' onChange={this.handleEmailChange} required autoFocus/>
                         <Form.Input label='Enter Password' type='password' placeholder='s3cur3Pa55w0rd' onChange={this.handlePasswordChange} required/>

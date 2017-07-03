@@ -10,8 +10,13 @@ class CourseOverviewItem extends Component {
                 <Table.Cell>{this.props.user.lastName}</Table.Cell>
                 <Table.Cell>{this.props.user.email}</Table.Cell>
                 <Table.Cell>{this.props.user.created}</Table.Cell>
+                <Table.Cell>
+                <Menu compact>
+                    <Dropdown className="roleDropdown" text={this.props.user.role} fluid selection options={"Blubb"} />
+                </Menu>
+                </Table.Cell>
                 <Table.Cell>{this.props.user.courses}</Table.Cell>
-                <Table.Cell>{this.props.user.role}</Table.Cell>
+
                 <Table.Cell>
                     <Checkbox toggle checked={this.props.user.active}/>
                 </Table.Cell>
