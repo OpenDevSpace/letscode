@@ -30,17 +30,29 @@ class AttendedCourses extends Component {
         return <Container fluid className="CoursesSegment">
             <Segment>
                 <h2>Your Courses</h2>
-                {this.state.courseInfo.slice(0, this.state.itemsToShow).map((courseInfo, i) =>
-                    <Card course={courseInfo}/>
-                )}
-                <a className="" onClick={this.showMore}>
-                    {this.state.expanded ? (
-                        <ShowMoreLess icon="arrow up" text="Show less courses"/>
-                    ) : (
-                        <ShowMoreLess icon="arrow down" text="Show more courses"/>
-                    )
-                    }
-                </a>
+                <h3>You attend to: {this.props.courses.length} courses</h3>
+                {
+                    this.props.courses.length === 0
+                        ? <div>
+                        It looks empty here. How about looking for some courses?
+                    </div>
+                        :
+                        <div>
+                            {this.state.courseInfo.slice(0, this.state.itemsToShow).map((courseInfo, i) =>
+                                <Card course={courseInfo}/>
+                            )}
+                            <a className="" onClick={this.showMore}>
+                                {this.state.expanded ? (
+                                    <ShowMoreLess icon="arrow up" text="Show less courses"/>
+                                ) : (
+                                    <ShowMoreLess icon="arrow down" text="Show more courses"/>
+                                )
+                                }
+                            </a>
+                        </div>
+
+                }
+
             </Segment>
         </Container>
     }

@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import Header from './Header'
 import Sidebar from './Sidebar'
-import CoursesSegment from '../Courses/CoursesSegment'
 import '../../styles/Frame.css'
 import $ from 'jquery'
 
@@ -38,10 +37,19 @@ class Frame extends Component {
             });
     }
 
+    renderChildren(props) {
+        return React.Children.map(props.children, child => {
+            return React.cloneElement(child, {
+                firstName: this.state.firstName,
+                courses: this.state.courses,
+                role: this.state.role
+            })
+        })
+    }
+
 
 
     render() {
-        const children = this.props.children
         return (
             <div className="mainContainer">
                 <Header/>
@@ -50,7 +58,7 @@ class Frame extends Component {
                         <Sidebar userRole={this.state.role} type={this.props.type}/>
                     </div>
                     <div className="dashboardContent">
-                        {children}
+                        {this.renderChildren(this.props)}
                     </div>
                 </div>
             </div>
@@ -58,7 +66,4 @@ class Frame extends Component {
     }
 }
 
-Frame.propTypes = {
-    children: PropTypes.element.isRequired
-}
 export default Frame
