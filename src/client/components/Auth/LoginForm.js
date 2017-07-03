@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Form, Button, Dimmer, Loader} from 'semantic-ui-react'
+import {Form, Button, Dimmer, Loader, Modal, Header} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import $ from 'jquery'
 import "../../styles/LoginForm.css"
@@ -13,7 +13,8 @@ class LoginForm extends Component {
         this.state = {
             user: '',
             password: '',
-            requestActive: false
+            requestActive: false,
+            open: false
         };
 
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -41,38 +42,55 @@ class LoginForm extends Component {
         $.post("http://localhost:8080/auth/login", {
             user: this.state.user,
             password: this.state.password
-        }).done((data) => {
+        })
+            .done((data) => {
             localStorage.setItem("odslearncode", data.token);
+            console.log("token set");
             window.location.replace('/dashboard');
-        });
-
-        console.log("Login request");
-        console.log(this.state.user);
+        })
+            .fail(
+                this.show('blurring'),
+                console.log("fail")
+            );
     }
 
+    show = (dimmer) => () => this.setState({ dimmer, open: true })
+    close = () => this.setState({ open: false, requestActive: false })
+
     render() {
+        const { open, dimmer } = this.state
         // Hide overflow of body
         document.getElementsByTagName('body')[0].style.overflow = 'hidden'
         return (
             <div className="loginComponent">
                 <div className="loginFormBar">
+                    <Dimmer active={this.state.requestActive}>
+                        <Loader />
+                    </Dimmer>
                     <Form className="loginForm">
-                        <Dimmer active={this.state.requestActive}>
-                            <Loader />
-                        </Dimmer>
                         <h2>Sign in</h2>
                         <Form.Input id="emailInput" label='E-Mail' type="email" placeholder='your.name@mail.com' onChange={this.handleEmailChange} required autoFocus/>
                         <Form.Input label='Enter Password' type='password' placeholder='s3cur3Pa55w0rd' onChange={this.handlePasswordChange} required/>
-                        <Button type='submit' onClick={this.login.bind(this)}>Login</Button><Link to="/dashboard" id="forgotPassword">Forgot Password?</Link>
+                        <Button type='submit' onClick={this.login.bind(this)}>Login</Button><Link to="/" id="forgotPassword">Forgot Password?</Link>
                     </Form>
                     <h2>Not registered?</h2>
                     <Button onClick={this.props.onClick}>Sign Up</Button>
                 </div>
+                <Modal dimmer={dimmer} open={open} onClose={this.close}>
+                    <Modal.Header>Login failed</Modal.Header>
+                    <Modal.Content>
+                        <Modal.Description>
+                            <Header>The entered password or e-mail was incorrect. Please try again.</Header>
+                            <p>Don't have an account? Go to signup.</p>
+                        </Modal.Description>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button positive icon='checkmark' labelPosition='right' content="Try again" onClick={this.close} />
+                    </Modal.Actions>
+                </Modal>
             </div>
         )
     }
 }
 
 export default LoginForm
-
-/**TODO: Waiter when log in clicked**/
