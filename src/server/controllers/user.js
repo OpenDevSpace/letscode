@@ -30,6 +30,28 @@ class User {
            callback(res);
         });
     }
+
+    loadDashboard(userID, callback){
+        UserModel.findById(userID, (err, user) => {
+            if (err) throw err;
+            callback({
+                firstName: user.firstName,
+                courses: user.courses,
+                role: user.role
+            });
+        })
+    }
+
+    doAfterLogin(userID, callback){
+        UserModel.findById(userID, (err, user) => {
+            if (err) throw err;
+            callback({
+                firstName: user.firstName,
+                courses: user.courses,
+                role: user.role
+            })
+        })
+    }
 }
 
 module.exports = User;

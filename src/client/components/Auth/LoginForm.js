@@ -66,3 +66,5 @@ class LoginForm extends Component {
 }
 
 export default LoginForm
+
+/**TODO: Waiter when log in clicked**/

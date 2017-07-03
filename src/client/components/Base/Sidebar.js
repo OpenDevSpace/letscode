@@ -20,7 +20,6 @@ class Sidebar extends Component {
     }
 
 
-
     handleClick() {
         this.setState(prevState => ({
             isToggleOn: !prevState.isToggleOn
@@ -31,7 +30,7 @@ class Sidebar extends Component {
                 'padding-right': '1rem',
             }, "fast")
             $('.dashboardContent').animate({
-                'padding' : '5rem 1rem 1rem 7rem'
+                'padding': '5rem 1rem 1rem 7rem'
             }, "fast")
         }
         else {
@@ -39,7 +38,7 @@ class Sidebar extends Component {
                 'padding-right': '1.5rem',
             }, "fast")
             $('.dashboardContent').animate({
-                'padding' : '5rem 1rem 1rem 15rem'
+                'padding': '5rem 1rem 1rem 15rem'
             }, "fast")
         }
     }
@@ -75,43 +74,51 @@ class Sidebar extends Component {
                             </Button.Group>
                         </Link>
                     </List.Item>
-                    <List.Item>
-                        <Link to="/admin/courselist">
-                            <Button.Group>
-                                <Button icon='code' basic color='blue'/>
-                                {
-                                    this.state.isToggleOn
-                                        ? <Button className="sidebarButtonText" color='blue'>Course list</Button>
-                                        : null
-                                }
-                            </Button.Group>
-                        </Link>
-                    </List.Item>
-                    <List.Item>
-                        <Link to="/admin/userlist">
-                            <Button.Group>
-                                <Button icon='code' basic color='blue'/>
-                                {
-                                    this.state.isToggleOn
-                                        ? <Button className="sidebarButtonText" color='blue'>User list</Button>
-                                        : null
-                                }
-                            </Button.Group>
-                        </Link>
-                    </List.Item>
+                    {
+                        this.props.userRole === 'Admin'
+                            ? <List.Item>
+                            <Link to="/admin/courselist">
+                                <Button.Group>
+                                    <Button icon='code' basic color='blue'/>
+                                    {
+                                        this.state.isToggleOn
+                                            ? <Button className="sidebarButtonText" color='blue'>Course list</Button>
+                                            : null
+                                    }
+                                </Button.Group>
+                            </Link>
+                        </List.Item>
+                            : null
+                    }
+                    {
+                        this.props.userRole === 'Admin'
+                            ? <List.Item>
+                            <Link to="/admin/userlist">
+                                <Button.Group>
+                                    <Button icon='code' basic color='blue'/>
+                                    {
+                                        this.state.isToggleOn
+                                            ? <Button className="sidebarButtonText" color='blue'>User list</Button>
+                                            : null
+                                    }
+                                </Button.Group>
+                            </Link>
+                        </List.Item>
+                            : null
+                    }
                 </List>
 
                 <List divided relaxed className="bottomList">
                     <List.Item>
                         <Link to="/settings">
-                        <Button.Group>
-                            <Button icon='setting' basic color='blue'/>
-                            {
-                                this.state.isToggleOn
-                                    ? <Button className="sidebarButtonText" color='blue'>Settings</Button>
-                                    : null
-                            }
-                        </Button.Group>
+                            <Button.Group>
+                                <Button icon='setting' basic color='blue'/>
+                                {
+                                    this.state.isToggleOn
+                                        ? <Button className="sidebarButtonText" color='blue'>Settings</Button>
+                                        : null
+                                }
+                            </Button.Group>
                         </Link>
                     </List.Item>
                     <List.Item >

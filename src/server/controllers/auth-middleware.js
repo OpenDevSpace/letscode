@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
 
     jwt.verify(token, 'highsecure', (err, data) => {
         if (err) return res.status(401).end();
-        User.findOne({email: data.user}, (usrErr, user) => {
+        User.findById(data.userID, (usrErr, user) => {
             if (usrErr || !user) {
                 return res.status(401).end();
             } else {

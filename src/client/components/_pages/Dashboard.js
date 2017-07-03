@@ -8,23 +8,9 @@ import $ from 'jquery'
 
 
 class Dashboard extends Component {
-
     constructor(props) {
         super(props);
 
-        $.ajaxSetup({
-            beforeSend: (xhr) => {
-                xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
-        }
-        });
-
-        $.get("http://localhost:8080/api/user/list")
-            .fail(() => {
-            console.log("Failure!");
-            })
-            .done((data) => {
-            console.log(data);
-            });
     }
     render() {
         return (

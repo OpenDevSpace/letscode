@@ -3,6 +3,7 @@ import {Form, Button} from 'semantic-ui-react'
 import "../../styles/SignupForm.css"
 import $ from 'jquery'
 var bcrypt = require('bcryptjs')
+
 class Signup extends Component {
     constructor(props) {
         super(props);
@@ -87,3 +88,6 @@ class Signup extends Component {
 }
 
 export default Signup
+
+
+/** TODO: Password check and success message on register (check your mails) **/

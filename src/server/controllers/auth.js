@@ -20,7 +20,7 @@ class Auth {
                         });
                     } else {
                         jwt.sign({
-                            user: user.email,
+                            userID: user._id,
                             firstName: user.firstName,
                             role: user.role
                         }, 'highsecure', {
@@ -35,7 +35,6 @@ class Auth {
                     }
                 })
             }
-
         });
     }
 

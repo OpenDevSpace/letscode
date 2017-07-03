@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { Button, Table } from 'semantic-ui-react'
-import CourseOverviewItem from './UserListItem'
+import UserListItem from './UserListItem'
 import '../../../styles/CourseList.css'
 import $ from 'jquery'
 
