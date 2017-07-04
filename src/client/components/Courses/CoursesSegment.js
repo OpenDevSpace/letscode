@@ -30,7 +30,6 @@ class CoursesSegment extends Component {
                 this.setState({
                     courses: courses.data
                 });
-                console.log(this.state.courses);
             });
     }
 

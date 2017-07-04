@@ -12,7 +12,8 @@ class CourseDetails extends Component {
         super(props);
         this.state = {
             percent: 43,
-            courses: []
+            courses: [],
+            course: []
         }
 
         $.ajaxSetup({
@@ -20,12 +21,13 @@ class CourseDetails extends Component {
                 xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
             }
         });
-        $.get('http://localhost:8080/api/course/listactive')
+        $.get('http://localhost:8080/api/course/coursedetail/:'+this.props.courseID)
             .done((courses) => {
+                console.log(courses.data)
                 this.setState({
                     courses: courses.data
-                });
-                console.log(this.state.courses);
+                })
+                console.log("done");
             });
     }
 
@@ -34,13 +36,20 @@ class CourseDetails extends Component {
     })
 
     render() {
-        let selectedCourse = this.props._id;
+        let courseInfo = this.state.courses.map((course, index) => {
+            if(course._id === this.props.courseID){
+                console.log(course)
+                this.setState({
+                    courses: course
+                });
+            }
+        });
 
         return (
             <Segment raised className="courseDetailSegment">
                 <Segment vertical>
-                    <h2>{courseData[selectedCourse].name}</h2>
-                    {courseData[selectedCourse].description}
+                    <h2>{this.state.course.title}</h2>
+                    {this.state.course.description}
                 </Segment>
                 <Segment vertical>
                     <Accordion exclusive={false} defaultActiveIndex={1}>

@@ -67,13 +67,14 @@ class Course {
 
     courseDetail(filter, callback) {
         CourseModel.find(filter)
+            .populate('_id')
             .exec((err, res) => {
                 if (err) throw err;
                 callback({
                     success: true,
                     data: res
                 });
-            })
+            });
     }
 }
 
