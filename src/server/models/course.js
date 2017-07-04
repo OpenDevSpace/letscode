@@ -5,6 +5,8 @@ module.exports = mongoose.model('Course', mongoose.Schema({
     description: String,
     language: {type: String, enum: ['web', 'java', 'c', 'python'], required: true},
     tags: [{type: String}],
+    level: {type: String, enum: ['easy', 'medium', 'advanced'], required: true},
     timestamp: {type: Date, default: Date.now()},
+    createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     active: {type: Boolean, default: false}
 }));

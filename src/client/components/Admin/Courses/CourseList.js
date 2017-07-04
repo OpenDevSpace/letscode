@@ -1,15 +1,21 @@
 import React, {Component} from 'react'
 import {Button, Table, Modal, Menu, Form, Input, Dropdown} from 'semantic-ui-react'
-import CourseOverviewItem from './CourseListItem'
+import CourseListItem from './CourseListItem'
 import '../../../styles/CourseList.css'
 import $ from 'jquery'
 
-const options = [
+const language = [
     {key: 'web', text: 'web', value: 'web'},
     {key: 'java', text: 'java', value: 'java'},
     {key: 'c', text: 'c', value: 'c'},
     {key: 'python', text: 'python', value: 'python'}
 ]
+const level = [
+    {key: 'easy', text: 'easy', value: 'easy'},
+    {key: 'medium', text: 'medium', value: 'medium'},
+    {key: 'advanced', text: 'advanced', value: 'advanced'}
+]
+
 
 class CourseList extends Component {
     constructor(props) {
@@ -21,24 +27,28 @@ class CourseList extends Component {
                 title: '',
                 description: '',
                 language: '',
-                tags: []
+                tags: [],
+                level: ''
             }
         }
 
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handleDescChange = this.handleDescChange.bind(this);
         this.handleLangSelection = this.handleLangSelection.bind(this);
+        this.handleLevelSelection = this.handleLevelSelection.bind(this);
 
         $.ajaxSetup({
             beforeSend: (xhr) => {
                 xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
             }
         });
+
+        this.fetchCourses();
     }
 
     updateNewCourse(currentInput, evt){
         var tempCourse = this.state.newcourse;
-        if(currentInput === "language") {
+        if(currentInput === "language" || currentInput === "level") {
             tempCourse[currentInput] = evt.value;
         } else {
             tempCourse[currentInput] = evt.target.value;
@@ -60,22 +70,35 @@ class CourseList extends Component {
         this.updateNewCourse("language", lang);
     }
 
+    handleLevelSelection(evt, level){
+        this.updateNewCourse("level", level);
+    }
+
     handleCreateCourse(evt){
         $.post("http://localhost:8080/api/course/new", this.state.newcourse)
             .done((data) => {
+            this.fetchCourses();
             this.close();
         });
     }
 
+    fetchCourses(){
+        $.get('http://localhost:8080/api/course/listall')
+            .done((courses) => {
+                this.setState({
+                    courses: courses.data
+                });
+            });
+    }
 
-    show = (dimmer) => () => this.setState({dimmer, open: true})
-    close = () => this.setState({open: false})
+    show = (dimmer) => () => this.setState({dimmer, open: true});
+    close = () => this.setState({open: false});
 
     render() {
-        const {open, dimmer} = this.state
+        const {open, dimmer} = this.state;
 
         let courseData = this.state.courses.map((course, index) => {
-            return <CourseOverviewItem course={course}/>
+            return <CourseListItem course={course} />
         });
 
         return (
@@ -83,19 +106,20 @@ class CourseList extends Component {
                 <Table >
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell>ID</Table.HeaderCell>
-                            <Table.HeaderCell>Name</Table.HeaderCell>
+                            <Table.HeaderCell>Title</Table.HeaderCell>
                             <Table.HeaderCell>Description</Table.HeaderCell>
                             <Table.HeaderCell>Language</Table.HeaderCell>
-                            <Table.HeaderCell>Maximum Members</Table.HeaderCell>
                             <Table.HeaderCell>Level</Table.HeaderCell>
-                            <Table.HeaderCell>Visibility</Table.HeaderCell>
+                            <Table.HeaderCell>Tags</Table.HeaderCell>
+                            <Table.HeaderCell>Timestamp</Table.HeaderCell>
+                            <Table.HeaderCell>Created by</Table.HeaderCell>
                             <Table.HeaderCell>Active</Table.HeaderCell>
+                            <Table.HeaderCell/>
                         </Table.Row>
                     </Table.Header>
 
                     <Table.Body>
-                        {/* {courseData} */}
+                        {courseData}
                     </Table.Body>
 
                     <Table.Footer fullWidth>
@@ -112,6 +136,7 @@ class CourseList extends Component {
                                     Add Course
                                 </Button>
                             </Table.HeaderCell>
+                            <Table.HeaderCell />
                         </Table.Row>
                     </Table.Footer>
                 </Table>
@@ -123,7 +148,8 @@ class CourseList extends Component {
                                 <Form.Input id="courseName" label='Enter course Name' type="string" required autoFocus onChange={this.handleTitleChange}/>
                                 <Form.Input id="courseDesc" label='Please describe the course' type="string" required onChange={this.handleDescChange} />
                                 <Menu compact>
-                                    <Dropdown placeholder="Select Language..." fluid selection search options={options} onChange={this.handleLangSelection}/>
+                                    <Dropdown placeholder="Select Language..." selection search options={language} onChange={this.handleLangSelection}/>
+                                    <Dropdown placeholder="Select Level..." selection search options={level} onChange={this.handleLevelSelection}/>
                                 </Menu>
                             </Form>
                         </Modal.Description>

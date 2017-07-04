@@ -1,8 +1,9 @@
 var CourseModel = require('../models/course');
 
 class Course {
-    create(data, callback) {
+    create(data, userID, callback) {
         var course = new CourseModel(data);
+        course.createdBy = userID;
         course.save((err, newcourse) => {
             if (err) {
                 callback({
@@ -49,6 +50,16 @@ class Course {
                 });
             }
         });
+    }
+
+    list(filter, callback) {
+        CourseModel.find(filter, (err, res) => {
+            if (err) throw err;
+            callback({
+                success: true,
+                data: res
+            });
+        })
     }
 }
 
