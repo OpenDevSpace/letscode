@@ -11,9 +11,9 @@ const language = [
     {key: 'python', text: 'python', value: 'python'}
 ]
 const level = [
-    {key: 'easy', text: 'easy', value: 'easy'},
-    {key: 'medium', text: 'medium', value: 'medium'},
-    {key: 'advanced', text: 'advanced', value: 'advanced'}
+    {key: '1', text: 'easy', value: '1'},
+    {key: '2', text: 'medium', value: '2'},
+    {key: '3', text: 'advanced', value: '3'}
 ]
 
 
@@ -88,6 +88,7 @@ class CourseList extends Component {
                 this.setState({
                     courses: courses.data
                 });
+                console.log(this.state.courses);
             });
     }
 

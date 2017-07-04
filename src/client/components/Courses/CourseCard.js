@@ -17,7 +17,7 @@ class CourseCard extends Component {
                         <Card.Content>
                             <div className="centeredStyle">
                                 {(() => {
-                                    switch (this.props.course.name) {
+                                    switch (this.props.course.title) {
                                         case 'HTML5':
                                             return <HTML5 />
                                         case 'CSS3':
@@ -27,11 +27,11 @@ class CourseCard extends Component {
                                         default :
                                             null
                                     }
-                                })()}<this.props.course.name/>
+                                })()}<this.props.course.title/>
                             </div>
                             <Card.Header>
                                 <div className="centeredStyle">
-                                    {this.props.course.name}
+                                    {this.props.course.title}
                                 </div>
                             </Card.Header>
                             <Card.Meta>

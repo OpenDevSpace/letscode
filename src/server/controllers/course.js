@@ -52,14 +52,17 @@ class Course {
         });
     }
 
-    list(filter, callback) {
-        CourseModel.find(filter, (err, res) => {
-            if (err) throw err;
-            callback({
-                success: true,
-                data: res
+    list(filter, order, callback) {
+        CourseModel.find(filter)
+            .sort(order)
+            .populate('createdBy')
+            .exec((err, res) => {
+                if (err) throw err;
+                callback({
+                    success: true,
+                    data: res
+                });
             });
-        })
     }
 }
 

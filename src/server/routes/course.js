@@ -17,7 +17,7 @@ routes.get('/listall', (req, res) => {
     if (req.user.role !== 'Admin' && req.user.role !== 'Moderator') {
         res.status(401).end();
     } else {
-        CourseController.list({}, (courses) => {
+        CourseController.list({}, {language: 1}, (courses) => {
             res.json(courses);
         });
     }
@@ -26,7 +26,8 @@ routes.get('/listall', (req, res) => {
 routes.get('/listactive', (req, res) => {
     CourseController.list({
         active: true
-    }, (courses) => {
+    }, {title: 1}, (courses) => {
+        courses['createdBy'] = null
         res.json(courses);
     })
 })
