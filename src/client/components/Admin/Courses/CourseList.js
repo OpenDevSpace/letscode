@@ -88,7 +88,6 @@ class CourseList extends Component {
                 this.setState({
                     courses: courses.data
                 });
-                console.log(this.state.courses);
             });
     }
 
@@ -132,12 +131,12 @@ class CourseList extends Component {
                             <Table.HeaderCell />
                             <Table.HeaderCell />
                             <Table.HeaderCell />
+                            <Table.HeaderCell />
                             <Table.HeaderCell>
                                 <Button primary size='small' onClick={this.show('blurring')}>
                                     Add Course
                                 </Button>
                             </Table.HeaderCell>
-                            <Table.HeaderCell />
                         </Table.Row>
                     </Table.Footer>
                 </Table>

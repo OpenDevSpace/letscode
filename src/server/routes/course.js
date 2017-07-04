@@ -32,7 +32,7 @@ routes.get('/listactive', (req, res) => {
     })
 })
 
-routes.get('/coursedetail/:courseID', (req, res) => {
+routes.get('/coursedetail', (req, res) => {
     console.log(req.params.userID)
     CourseController.list({
         active: true

@@ -75,7 +75,7 @@ class Sidebar extends Component {
                         </Link>
                     </List.Item>
                     {
-                        this.props.userRole === 'Admin'
+                        this.props.userRole === 'Admin' || this.props.userRole === 'Moderator'
                             ? <List.Item>
                             <Link to="/admin/courselist">
                                 <Button.Group>

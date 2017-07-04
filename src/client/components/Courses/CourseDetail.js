@@ -12,8 +12,8 @@ class CourseDetails extends Component {
         super(props);
         this.state = {
             percent: 43,
-            courses: [],
-            course: []
+            courses: {},
+            course: {}
         }
 
         $.ajaxSetup({
@@ -21,7 +21,7 @@ class CourseDetails extends Component {
                 xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
             }
         });
-        $.get('http://localhost:8080/api/course/coursedetail/:'+this.props.courseID)
+        $.get('http://localhost:8080/api/course/coursedetail')
             .done((courses) => {
                 console.log(courses.data)
                 this.setState({
@@ -36,15 +36,6 @@ class CourseDetails extends Component {
     })
 
     render() {
-        let courseInfo = this.state.courses.map((course, index) => {
-            if(course._id === this.props.courseID){
-                console.log(course)
-                this.setState({
-                    courses: course
-                });
-            }
-        });
-
         return (
             <Segment raised className="courseDetailSegment">
                 <Segment vertical>
