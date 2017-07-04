@@ -3,7 +3,7 @@ import {Checkbox, Table, Menu, Dropdown} from 'semantic-ui-react'
 import rightsConfig from '../../../config/Rights'
 import '../../../styles/CourseList.css'
 
-class CourseOverviewItem extends Component {
+class UserListItem extends Component {
     render() {
         return (
             <Table.Row>
@@ -26,4 +26,4 @@ class CourseOverviewItem extends Component {
     };
 }
 
-export default CourseOverviewItem
+export default UserListItem

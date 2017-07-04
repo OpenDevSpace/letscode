@@ -7,5 +7,7 @@ module.exports = mongoose.model('User', new mongoose.Schema({
     lastName: {type: String, required: true},
     role: {type: String, enum: ['Standard', 'Moderator', 'Admin'], default: 'Standard'},
     courses: [{type: Number, ref: 'Course'}],
-    created: {type: Date, default: Date.now()}
+    created: {type: Date, default: Date.now()},
+    active: {type: Boolean, default: true}
+
 }));
