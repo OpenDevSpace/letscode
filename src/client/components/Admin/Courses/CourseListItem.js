@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Checkbox, Table, Modal, Button, Form, Menu, Dropdown} from 'semantic-ui-react'
 import '../../../styles/CourseList.css'
+import $ from 'jquery';
 
 const language = [
     {key: 'web', text: 'web', value: 'web'},
@@ -20,20 +21,43 @@ class CourseOverviewItem extends Component {
         super(props);
         this.state = {
             open: false,
+            course: this.props.course
         }
+        this.changeActivity = this.changeActivity.bind(this);
+
     }
 
     show = (dimmer) => () => this.setState({dimmer, open: true});
     close = () => this.setState({open: false});
 
-    render() {
-        console.log(level[this.props.course.level - 1])
-        console.log(language)
 
+    updateCourseItem(item, evt) {
+        var tempCourse = this.state.course;
+        if (item === "active") {
+            tempCourse[item] = !this.state.course.active;
+        }
+        console.log("Bin hier");
+        this.setState({
+            course: tempCourse
+        });
+
+        var requestdata = $.extend(true, {}, this.state.course);
+        requestdata["createdBy"] = this.state.course.createdBy._id;
+
+        $.post('http://localhost:8080/api/course/update/'+this.state.course._id, requestdata)
+            .done((data) => {
+            console.log(data);
+            });
+    }
+
+    changeActivity(evt) {
+        this.updateCourseItem("active", evt);
+    }
+    render() {
         const {open, dimmer} = this.state;
         return (
             <Table.Row>
-                <Table.Cell>{this.props.course.title}</Table.Cell>
+                <Table.Cell>{this.state.course.title}</Table.Cell>
                 <Table.Cell>{this.props.course.description}</Table.Cell>
                 <Table.Cell>{this.props.course.language}</Table.Cell>
                 <Table.Cell>
@@ -56,7 +80,7 @@ class CourseOverviewItem extends Component {
                 <Table.Cell>{this.props.course.timestamp}</Table.Cell>
                 <Table.Cell>{this.props.course.createdBy.firstName} {this.props.course.createdBy.lastName}</Table.Cell>
                 <Table.Cell>
-                    <Checkbox toggle checked={this.props.course.active}/>
+                    <Checkbox toggle checked={this.state.course.active} onChange={this.changeActivity}/>
                 </Table.Cell>
                 <Table.Cell>
                     <Button color='blue' icon='edit'

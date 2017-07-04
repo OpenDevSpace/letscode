@@ -12,22 +12,21 @@ class CourseDetails extends Component {
         super(props);
         this.state = {
             percent: 43,
-            courses: {},
             course: {}
-        }
+        };
 
         $.ajaxSetup({
             beforeSend: (xhr) => {
                 xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
             }
         });
-        $.get('http://localhost:8080/api/course/coursedetail')
-            .done((courses) => {
-                console.log(courses.data)
+        $.get('http://localhost:8080/api/course/coursedetail/'+this.props.courseID)
+            .done((course) => {
+            console.log(course);
                 this.setState({
-                    courses: courses.data
-                })
-                console.log("done");
+                    course: course
+                });
+                console.log(this.state.course);
             });
     }
 

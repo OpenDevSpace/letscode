@@ -3,6 +3,8 @@ var CourseController = new Course();
 
 var routes = require('express').Router();
 
+var mongoose = require('mongoose');
+
 routes.post('/new', (req, res) => {
     if (req.user.role !== 'Admin' && req.user.role !== 'Moderator') {
         res.status(401).end();
@@ -11,6 +13,15 @@ routes.post('/new', (req, res) => {
             res.json(data);
         });
     }
+});
+
+routes.post('/update/:courseID', (req, res) => {
+    //console.log(req.body);
+    CourseController.update(req.body, (data) => {
+        console.log(data);
+    });
+
+    //res.send(res.send(req.params.courseID));
 });
 
 routes.get('/listall', (req, res) => {
@@ -32,12 +43,14 @@ routes.get('/listactive', (req, res) => {
     })
 })
 
-routes.get('/coursedetail', (req, res) => {
-    console.log(req.params.userID)
+routes.get('/coursedetail/:courseID', (req, res) => {
+    console.log("Joh"+req.params.courseID);
     CourseController.list({
-        active: true
-    }, {_id: req.params.userID}, (courses) => {
-        res.json(courses);
+        active: true,
+        _id: mongoose.Types.ObjectId(req.params.courseID)
+    }, {}, (course) => {
+        console.log(course.data[0]);
+        res.json(course.data[0]);
     })
 })
 
