@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Checkbox, Table, Modal, Button, Form, Menu, Dropdown} from 'semantic-ui-react'
+import {Checkbox, Table, Modal, Button, Form, Menu, Dropdown, Accordion} from 'semantic-ui-react'
 import '../../../styles/CourseList.css'
 
 const language = [
@@ -34,6 +34,7 @@ class CourseOverviewItem extends Component {
         return (
             <Table.Row>
                 <Table.Cell>{this.props.course.title}</Table.Cell>
+
                 <Table.Cell>{this.props.course.description}</Table.Cell>
                 <Table.Cell>{this.props.course.language}</Table.Cell>
                 <Table.Cell>
@@ -53,12 +54,12 @@ class CourseOverviewItem extends Component {
                     </div>
                 </Table.Cell>
                 <Table.Cell>{this.props.course.tags}</Table.Cell>
-                <Table.Cell>{this.props.course.timestamp}</Table.Cell>
+                <Table.Cell collapsing>{this.props.course.timestamp}</Table.Cell>
                 <Table.Cell>{this.props.course.createdBy.firstName} {this.props.course.createdBy.lastName}</Table.Cell>
-                <Table.Cell>
+                <Table.Cell collapsing>
                     <Checkbox toggle checked={this.props.course.active}/>
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell collapsing>
                     <Button color='blue' icon='edit'
                             label={{basic: true, color: 'blue', pointing: 'left', content: 'Edit course'}}
                             onClick={this.show('blurring')}
@@ -94,6 +95,7 @@ class CourseOverviewItem extends Component {
                                 content="Create new course"/>
                     </Modal.Actions>
                 </Modal>
+
             </Table.Row>
         );
     };
