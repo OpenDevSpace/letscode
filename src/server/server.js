@@ -9,6 +9,7 @@ var app = express();
 
 var authRoutes = require('./routes/auth');
 var userRoutes = require('./routes/user');
+var courseRoutes = require('./routes/course');
 
 
 var authMiddleware = require('./controllers/auth-middleware');
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, '../../build')))
 app.use('/api', authMiddleware);
 
 app.use('/api/user', userRoutes);
+app.use('/api/course', courseRoutes);
 
 app.use('/auth', authRoutes);
 
