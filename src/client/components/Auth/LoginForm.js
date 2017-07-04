@@ -45,7 +45,6 @@ class LoginForm extends Component {
         })
             .done((data) => {
             localStorage.setItem("odslearncode", data.token);
-            console.log("token set");
             window.location.replace('/dashboard');
         })
             .fail(

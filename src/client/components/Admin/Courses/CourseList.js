@@ -5,24 +5,10 @@ import '../../../styles/CourseList.css'
 import $ from 'jquery'
 
 const options = [
-    {key: 'angular', text: 'Angular', value: 'angular'},
-    {key: 'css', text: 'CSS', value: 'css'},
-    {key: 'design', text: 'Graphic Design', value: 'design'},
-    {key: 'ember', text: 'Ember', value: 'ember'},
-    {key: 'html', text: 'HTML', value: 'html'},
-    {key: 'ia', text: 'Information Architecture', value: 'ia'},
-    {key: 'javascript', text: 'Javascript', value: 'javascript'},
-    {key: 'mech', text: 'Mechanical Engineering', value: 'mech'},
-    {key: 'meteor', text: 'Meteor', value: 'meteor'},
-    {key: 'node', text: 'NodeJS', value: 'node'},
-    {key: 'plumbing', text: 'Plumbing', value: 'plumbing'},
-    {key: 'python', text: 'Python', value: 'python'},
-    {key: 'rails', text: 'Rails', value: 'rails'},
-    {key: 'react', text: 'React', value: 'react'},
-    {key: 'repair', text: 'Kitchen Repair', value: 'repair'},
-    {key: 'ruby', text: 'Ruby', value: 'ruby'},
-    {key: 'ui', text: 'UI Design', value: 'ui'},
-    {key: 'ux', text: 'User Experience', value: 'ux'},
+    {key: 'web', text: 'web', value: 'web'},
+    {key: 'java', text: 'java', value: 'java'},
+    {key: 'c', text: 'c', value: 'c'},
+    {key: 'python', text: 'python', value: 'python'}
 ]
 
 class CourseList extends Component {
@@ -48,24 +34,10 @@ class CourseList extends Component {
                 xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
             }
         });
-
-        $.post("http://localhost:8080/api/course/new", {
-            newcourse: {
-
-            }
-        })
-            .fail(() => {
-                console.log("Failure!");
-            })
-            .done((data) => {
-                this.setState({
-                    courses: data
-                })
-            });
     }
 
     updateNewCourse(currentInput, evt){
-        var tempCourse = this.state.newcourse
+        var tempCourse = this.state.newcourse;
         if(currentInput === "language") {
             tempCourse[currentInput] = evt.value;
         } else {
@@ -89,8 +61,10 @@ class CourseList extends Component {
     }
 
     handleCreateCourse(evt){
-        console.log(this.state.newcourse);
-        this.close();
+        $.post("http://localhost:8080/api/course/new", this.state.newcourse)
+            .done((data) => {
+            this.close();
+        });
     }
 
 
@@ -103,6 +77,7 @@ class CourseList extends Component {
         let courseData = this.state.courses.map((course, index) => {
             return <CourseOverviewItem course={course}/>
         });
+
         return (
             <div>
                 <Table >
@@ -148,8 +123,7 @@ class CourseList extends Component {
                                 <Form.Input id="courseName" label='Enter course Name' type="string" required autoFocus onChange={this.handleTitleChange}/>
                                 <Form.Input id="courseDesc" label='Please describe the course' type="string" required onChange={this.handleDescChange} />
                                 <Menu compact>
-                                    <Dropdown placeholder="Select Language..." text={options.active} options={options} simple item />
-                                    <Dropdown placeholder='Tags' fluid selection search options={options} onChange={this.handleLangSelection}/>
+                                    <Dropdown placeholder="Select Language..." fluid selection search options={options} onChange={this.handleLangSelection}/>
                                 </Menu>
                             </Form>
                         </Modal.Description>

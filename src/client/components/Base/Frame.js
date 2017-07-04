@@ -41,7 +41,6 @@ class Frame extends Component {
 
     renderChildren(props) {
         return React.Children.map(props.children, child => {
-            console.log(child.type);
             if(child.type === CoursesSegment || child.type === DiscoverCoursesSegment) {
                 return React.cloneElement(child, {
                     firstName: this.state.firstName,

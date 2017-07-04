@@ -45,7 +45,6 @@ class TaskWrapper extends Component {
                                         </Header.Content>
                                     </Header>
                                     <Button basic color='green' onClick={[].forEach.call(document.querySelectorAll('.myCheckbox:checked'), function (cb) {
-                                        console.log(cb.value);
                                     })} >Click me</Button>
                                 </Segment>
                             </Step>

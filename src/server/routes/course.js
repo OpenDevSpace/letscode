@@ -4,10 +4,10 @@ var CourseController = new Course();
 var routes = require('express').Router();
 
 routes.post('/new', (req, res) => {
-    if (req.user.role !== 'Admin' || req.user.role !== 'Moderator') {
+    if (req.user.role === 'Standard') {
         res.status(401).end();
     } else {
-        CourseController.create(req.body.newcourse, (data) => {
+        CourseController.create(req.body, (data) => {
             res.json(data);
         });
     }
