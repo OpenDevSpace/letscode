@@ -27,11 +27,11 @@ class CourseCard extends Component {
                                             return <CSS3 />
                                         case 'JavaScript':
                                             return <JavaScript />
-                                        case 'Java':
+                                        case 'java':
                                             return <Java />
-                                        case 'Python':
-                                            return <Python />
-                                        case 'C':
+                                        case 'python':
+                                            return <Python/>
+                                        case 'c':
                                             return <C />
                                         default :
                                             return <HTML5 />

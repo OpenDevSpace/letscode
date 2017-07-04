@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Form, Button} from 'semantic-ui-react'
+import {Form, Button, Modal, Header, Dimmer, Loader} from 'semantic-ui-react'
 import "../../styles/SignupForm.css"
 import $ from 'jquery'
 var bcrypt = require('bcryptjs')
@@ -12,7 +12,9 @@ class Signup extends Component {
             firstName: '',
             lastName: '',
             email: '',
-            password: ''
+            password: '',
+            requestActive: false,
+            open: false
         };
 
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
@@ -46,22 +48,39 @@ class Signup extends Component {
     }
 
     handleSignupAction(evt) {
+
+        this.setState(prevState => ({
+            requestActive: !prevState.requestActive
+        }));
+
         $.post("http://localhost:8080/auth/register", {
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             email: this.state.email,
             password: this.state.password
         }).done((data) => {
+            this.show('blurring');
             console.log(data);
+            window.location.replace('/');
         });
     }
 
+    show = (dimmer) => () => this.setState({ dimmer, open: true })
+    close = () => {
+        this.setState({ open: false, requestActive: false });
+        window.location.replace('/');
+    }
+
     render() {
+        const { open, dimmer } = this.state;
         // Hide overflow of body
         document.getElementsByTagName('body')[0].style.overflow = 'hidden'
         return (
             <div className="signupComponent">
                 <div className="signupFormBar">
+                    <Dimmer active={this.state.requestActive}>
+                        <Loader />
+                    </Dimmer>
                     <Form className="signupForm" id="signupForm">
                         <h2>Create an Account</h2>
                         <Form.Input id="firstName" label="First name"  onChange={this.handleFirstNameChange} required/>
@@ -82,6 +101,17 @@ class Signup extends Component {
                     <h2>Already registered?</h2>
                     <Button onClick={this.props.onClick} >Login</Button>
                 </div>
+                <Modal dimmer={dimmer} open={open} onClose={this.close}>
+                    <Modal.Header>Success!</Modal.Header>
+                    <Modal.Content>
+                        <Modal.Description>
+                            <Header>Great, your account was created. Now you can log in.</Header>
+                        </Modal.Description>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button positive icon='checkmark' labelPosition='right' content="Ok" onClick={this.close} />
+                    </Modal.Actions>
+                </Modal>
             </div>
         )
     }
