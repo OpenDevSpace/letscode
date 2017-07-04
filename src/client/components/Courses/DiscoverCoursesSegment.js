@@ -3,7 +3,7 @@ import Card from './CourseCard'
 import {Segment, Container} from 'semantic-ui-react'
 import courseData from '../../data/Courses'
 
-class DiscoverCourses extends Component {
+class DiscoverCoursesSegment extends Component {
     render() {
         let courseInfo = courseData.map((course, index) => {
             return <Card course={course}/>;
@@ -17,4 +17,4 @@ class DiscoverCourses extends Component {
     }
 }
 
-export default DiscoverCourses
+export default DiscoverCoursesSegment

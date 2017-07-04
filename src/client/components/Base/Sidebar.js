@@ -127,7 +127,7 @@ class Sidebar extends Component {
                                 <Button icon='sign out' basic color='blue' />
                                 {
                                     this.state.isToggleOn
-                                        ? <Button className="sidebarButtonText" color='blue'>Logout</Button>
+                                        ? <Button className="sidebarButtonText" color='blue' >Logout</Button>
                                         : null
                                 }
                             </Button.Group>

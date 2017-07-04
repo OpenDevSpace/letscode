@@ -5,6 +5,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
+    "cors": "^2.8.3",
     "express": "^4.15.3",
     "history": "^4.6.2",
     "jquery": "^3.2.1",
@@ -25,13 +26,13 @@
     "react-scripts": "1.0.7"
   },
   "scripts": {
-    "start": "npm-run-all -p watch-css start-js",
+    "start": "npm-run-all -p watch-css start-js express",
     "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "start-js": "react-scripts start",
     "build-css": "node-sass-chokidar src/client/styles/sass -o src/client/styles/",
     "watch-css": "npm run build-css && node-sass-chokidar src/client/styles/sass -o src/client/styles/ --watch --recursive",
-    "express": "npm run build && node ./src/server/server.js"
+    "express": "node ./src/server/server.js"
   }
 }

@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import Header from './Header'
+import DiscoverCoursesSegment from '../Courses/DiscoverCoursesSegment'
+import CoursesSegment from '../Courses/CoursesSegment'
 import Sidebar from './Sidebar'
 import '../../styles/Frame.css'
 import $ from 'jquery'
@@ -39,11 +41,16 @@ class Frame extends Component {
 
     renderChildren(props) {
         return React.Children.map(props.children, child => {
-            return React.cloneElement(child, {
-                firstName: this.state.firstName,
-                courses: this.state.courses,
-                role: this.state.role
-            })
+            console.log(child.type);
+            if(child.type === CoursesSegment || child.type === DiscoverCoursesSegment) {
+                return React.cloneElement(child, {
+                    firstName: this.state.firstName,
+                    courses: this.state.courses,
+                    role: this.state.role
+                })
+            } else {
+                return child;
+            }
         })
     }
 

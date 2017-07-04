@@ -21,3 +21,7 @@
 .bottomList {
   position: fixed;
   bottom: 3%; }
+
+.sidebarButtonText {
+  min-width: 8rem;
+  text-align: left !important; }

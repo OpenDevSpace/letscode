@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import Card from './CourseCard'
 import ShowMoreLess from './ShowMoreCard'
-import {Segment, Container, Header} from 'semantic-ui-react'
+import {Segment, Container} from 'semantic-ui-react'
 import courseData from '../../data/Courses'
 import '../../styles/CoursesSegment.css'
 
 
-class AttendedCourses extends Component {
+class CoursesSegment extends Component {
     constructor(props) {
         super(props);
 
@@ -58,4 +58,4 @@ class AttendedCourses extends Component {
     }
 }
 
-export default AttendedCourses
+export default CoursesSegment

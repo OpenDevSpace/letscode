@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import DashboardFrame from "../Base/Frame";
 import CoursesSegment from "../Courses/CoursesSegment"
-import DiscoverCourses from "../Courses/DiscoverCoursesSegment"
+import DiscoverCoursesSegment from "../Courses/DiscoverCoursesSegment"
 import {Divider} from 'semantic-ui-react'
 
 import $ from 'jquery'
@@ -17,7 +17,7 @@ class Dashboard extends Component {
             <DashboardFrame>
                 <CoursesSegment courseNumber="2"/>
                 <Divider />
-                <DiscoverCourses/>
+                <DiscoverCoursesSegment/>
             </DashboardFrame>
         )
     }
