@@ -4,16 +4,37 @@ import {Link} from 'react-router-dom'
 import courseData from '../../data/Courses'
 import '../../styles/CourseDetail.css'
 
+import $ from 'jquery'
+
 
 class CourseDetails extends Component {
-    state = {percent: 43}
+    constructor(props) {
+        super(props);
+        this.state = {
+            percent: 43,
+            courses: []
+        }
+
+        $.ajaxSetup({
+            beforeSend: (xhr) => {
+                xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
+            }
+        });
+        $.get('http://localhost:8080/api/course/listactive')
+            .done((courses) => {
+                this.setState({
+                    courses: courses.data
+                });
+                console.log(this.state.courses);
+            });
+    }
 
     increment = () => this.setState({
         percent: this.state.percent >= 100 ? 0 : this.state.percent + 20,
     })
 
     render() {
-        let selectedCourse = this.props.courseID;
+        let selectedCourse = this.props._id;
 
         return (
             <Segment raised className="courseDetailSegment">

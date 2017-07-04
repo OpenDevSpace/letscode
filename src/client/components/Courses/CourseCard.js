@@ -6,28 +6,37 @@ import Truncate from 'react-truncate'
 import HTML5 from '../Icons/HTML5'
 import JavaScript from '../Icons/JavaScript'
 import CSS3 from '../Icons/CSS3'
+import Java from "../Icons/Java";
+import Python from "../Icons/Python";
+import C from "../Icons/C";
 
 
 class CourseCard extends Component {
     render() {
         return (
             <div className="courseCards">
-                <Link to={"/course/"+this.props.course.id}>
+                <Link to={"/course/"+this.props.course._id}>
                     <Card className="courseCard" fluid={true} color={"blue"}>
                         <Card.Content>
                             <div className="centeredStyle">
                                 {(() => {
-                                    switch (this.props.course.title) {
+                                    switch (this.props.course.language) {
                                         case 'HTML5':
                                             return <HTML5 />
                                         case 'CSS3':
                                             return <CSS3 />
                                         case 'JavaScript':
                                             return <JavaScript />
+                                        case 'Java':
+                                            return <Java />
+                                        case 'Python':
+                                            return <Python />
+                                        case 'C':
+                                            return <C />
                                         default :
-                                            null
+                                            return <HTML5 />
                                     }
-                                })()}<this.props.course.title/>
+                                })()}
                             </div>
                             <Card.Header>
                                 <div className="centeredStyle">
@@ -35,7 +44,20 @@ class CourseCard extends Component {
                                 </div>
                             </Card.Header>
                             <Card.Meta>
-                                {this.props.course.level}
+                                <div>
+                                    {(() => {
+                                        switch (this.props.course.level) {
+                                            case 1:
+                                                return "Easy"
+                                            case 2:
+                                                return "Medium"
+                                            case 3:
+                                                return "Hard"
+                                            default :
+                                                null
+                                        }
+                                    })()}
+                                </div>
                             </Card.Meta>
                             <Card.Description>
                                 <Truncate lines={5} ellipsis={<span>... <br/><Link to={"/course/"+this.props.course.id}>Read more</Link></span>}>

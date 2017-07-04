@@ -5,6 +5,8 @@ import {Segment, Container} from 'semantic-ui-react'
 import courseData from '../../data/Courses'
 import '../../styles/CoursesSegment.css'
 
+import $ from 'jquery'
+
 
 class CoursesSegment extends Component {
     constructor(props) {
@@ -13,9 +15,23 @@ class CoursesSegment extends Component {
         this.state = {
             courseInfo: courseData,
             itemsToShow: 3,
-            expanded: false
+            expanded: false,
+            courses: []
         }
         this.showMore = this.showMore.bind(this)
+
+        $.ajaxSetup({
+            beforeSend: (xhr) => {
+                xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
+            }
+        });
+        $.get('http://localhost:8080/api/course/listactive')
+            .done((courses) => {
+                this.setState({
+                    courses: courses.data
+                });
+                console.log(this.state.courses);
+            });
     }
 
     showMore() {
@@ -27,6 +43,9 @@ class CoursesSegment extends Component {
     }
 
     render() {
+        let courseInfo = this.state.courses.map((course, index) => {
+                return <Card course={course}/>
+            });
         return <Container fluid className="CoursesSegment">
             <Segment>
                 <h2>Your Courses</h2>
@@ -50,7 +69,6 @@ class CoursesSegment extends Component {
                                 }
                             </a>
                         </div>
-
                 }
 
             </Segment>

@@ -6,7 +6,7 @@ class Course extends Component {
     render() {
         return (
             <CourseFrame>
-                <CourseDetails courseID={this.props.match.params.number}/>
+                <CourseDetails courseID={this.props.match.params.string}/>
             </CourseFrame>
         )
     }

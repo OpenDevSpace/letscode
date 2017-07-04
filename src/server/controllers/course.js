@@ -64,6 +64,17 @@ class Course {
                 });
             });
     }
+
+    courseDetail(filter, callback) {
+        CourseModel.find(filter)
+            .exec((err, res) => {
+                if (err) throw err;
+                callback({
+                    success: true,
+                    data: res
+                });
+            })
+    }
 }
 
 module.exports = Course;

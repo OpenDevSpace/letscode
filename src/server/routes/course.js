@@ -32,4 +32,12 @@ routes.get('/listactive', (req, res) => {
     })
 })
 
+routes.get('/coursedetail', (req, res) => {
+    CourseController.courseDetail({
+        active: true
+    }, (courses) => {
+        res.json(courses);
+    })
+})
+
 module.exports = routes;
