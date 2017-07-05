@@ -32,6 +32,7 @@ class CourseDetails extends Component {
             percent: 43,
             course: {},
             userRole: '',
+            attendedCourses: [],
             task: [],
             taskType: 'coding',
             answerRadio: 1
@@ -57,7 +58,8 @@ class CourseDetails extends Component {
             })
             .done((data) => {
                 this.setState({
-                    userRole: data.role
+                    userRole: data.role,
+                    attendedCourses: data.courses
                 })
             });
     }
@@ -180,19 +182,19 @@ class CourseDetails extends Component {
                                                 <Form.Group>
                                                     <Form.Radio value={1}
                                                                 checked={answerRadio === 1}
-                                                                onChange={this.handleAnswerChange} />
-                                                    <Form.Input placeholder="Answer 1" required />
+                                                                onChange={this.handleAnswerChange}/>
+                                                    <Form.Input placeholder="Answer 1" required/>
                                                 </Form.Group>
                                                 <Form.Group>
                                                     <Form.Radio value={2}
                                                                 checked={answerRadio === 2}
-                                                                onChange={this.handleAnswerChange} />
-                                                    <Form.Input placeholder="Answer 2" required />
+                                                                onChange={this.handleAnswerChange}/>
+                                                    <Form.Input placeholder="Answer 2" required/>
                                                 </Form.Group>
                                                 <Form.Group>
                                                     <Form.Radio value={3}
                                                                 checked={answerRadio === 3}
-                                                                onChange={this.handleAnswerChange} />
+                                                                onChange={this.handleAnswerChange}/>
                                                     <Form.Input placeholder="Answer 3" required/>
                                                 </Form.Group>
                                             </Form.Group>
@@ -208,14 +210,24 @@ class CourseDetails extends Component {
 
                     }
                     <Divider/>
-                    {
-                        this.state.userRole === 'Admin' || this.state.userRole === 'Moderator'
-                            ? <Button type='submit' positive icon='checkmark' labelPosition='right'
-                                      content="Done" centered/>
-                            : <Link to={"/course/" + this.props.courseID + "/edit"}>
-                            <Label content='Continue with next task.' icon='terminal' color={"green"} size={"big"}/>
-                        </Link>
-                    }
+                    <Container textAlign='center'>
+                        {
+                            this.state.userRole === 'Admin' || this.state.userRole === 'Moderator'
+                                ? <Button type='submit' positive icon='checkmark' labelPosition='right'
+                                          content="Done" centered/>
+                                : <span>
+                            {
+                                this.props.courseID.indexOf(this.state.attendedCourses) !== -1
+                                    ? <Button positive icon='checkmark' labelPosition='right' content="Enroll course"
+                                              centered/>
+                                    : <Link to={"/course/" + this.props.courseID + "/edit"}>
+                                    <Label content='Continue with next task.' icon='terminal' color={"green"}
+                                           size={"big"}/>
+                                </Link>
+                            }
+                        </span>
+                        }
+                    </Container>
                 </Segment>
             </Segment>
         )
