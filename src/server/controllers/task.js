@@ -52,11 +52,11 @@ class Task {
             }
         });
     }
+ */
 
-    list(filter, order, callback) {
-        CourseModel.find(filter)
-            .sort(order)
-            .populate('createdBy')
+    list(filter, callback) {
+        TaskModel.find(filter)
+            .populate('belongsTo')
             .exec((err, res) => {
                 if (err) throw err;
                 callback({
@@ -65,7 +65,7 @@ class Task {
                 });
             });
     }
-    */
+
 }
 
 module.exports = Task;

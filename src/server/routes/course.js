@@ -44,7 +44,6 @@ routes.get('/listactive', (req, res) => {
 })
 
 routes.get('/coursedetail/:courseID', (req, res) => {
-    console.log("Joh"+req.params.courseID);
     CourseController.list({
         active: true,
         _id: mongoose.Types.ObjectId(req.params.courseID)

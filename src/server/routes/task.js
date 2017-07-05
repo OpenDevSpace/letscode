@@ -1,5 +1,5 @@
 var Task = require('../controllers/task');
-var TasskController = new Task();
+var TaskController = new Task();
 
 var routes = require('express').Router();
 
@@ -9,23 +9,20 @@ routes.post('/new', (req, res) => {
     if (req.user.role !== 'Admin' && req.user.role !== 'Moderator') {
         res.status(401).end();
     } else {
-        TasskController.create(req.body, (data) => {
+        TaskController.create(req.body, (data) => {
             res.json(data);
         });
     }
 });
 
-/*
-routes.get('/listall', (req, res) => {
-    if (req.user.role !== 'Admin' && req.user.role !== 'Moderator') {
-        res.status(401).end();
-    } else {
-        CourseController.list({}, {language: 1}, (courses) => {
-            res.json(courses);
+routes.get('/listall/:courseID', (req, res) => {
+    TaskController.list({
+        belongsTo: mongoose.Types.ObjectId(req.params.courseID)
+    }, (tasks) => {
+        console.log(tasks.data[0]);
+            res.json(tasks.data[0]);
         });
-    }
 });
-*/
 
 module.exports = routes;
 

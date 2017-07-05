@@ -14,7 +14,7 @@ import {
 } from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import '../../styles/CourseDetail.css'
-import CreateTask from "./TaskList";
+import TaskList from "./TaskList";
 import HTML5 from '../Icons/HTML5'
 import JavaScript from '../Icons/JavaScript'
 import CSS3 from '../Icons/CSS3'
@@ -33,6 +33,7 @@ class CourseDetails extends Component {
             course: {},
             userRole: '',
             attendedCourses: [],
+            allTasks: [],
             taskType: 'coding',
             answerRadio: 1,
             title: '',
@@ -77,6 +78,17 @@ class CourseDetails extends Component {
 
                 })
             });
+        this.fetchTasks();
+    }
+
+    fetchTasks(){
+        $.get('http://localhost:8080/api/task/listall/'+this.state.belongsTo)
+            .done((tasks) => {
+            console.log(tasks)
+                this.setState({
+                    allTasks: tasks
+                });
+            });
     }
 
 
@@ -92,7 +104,7 @@ class CourseDetails extends Component {
                 tags: this.state.tags,
                 belongsTo: this.state.belongsTo
             }).done((data) => {
-                console.log(data);
+                this.fetchTasks();
             });
         } else {
             console.log("not valid");
@@ -155,6 +167,11 @@ class CourseDetails extends Component {
     })
 
     render() {
+        let taskInfo = this.state.allTasks.map((task, index) => {
+            console.log(task);
+            return <TaskList task={task}/>
+        });
+
         const {taskType, answerRadio} = this.state;
         return (
             <Segment className="courseDetailSegment">
@@ -215,8 +232,7 @@ class CourseDetails extends Component {
                             </Header>
                         </Accordion.Title>
                         <Accordion.Content>
-                            /* ToDO Render Task List */
-                            <CreateTask/>
+                            {taskInfo}
                         </Accordion.Content>
                     </Accordion>
                     <Divider/>
