@@ -63,6 +63,7 @@ class CourseList extends Component {
                             <Table.HeaderCell />
                             <Table.HeaderCell />
                             <Table.HeaderCell />
+                            <Table.HeaderCell />
                         </Table.Row>
                     </Table.Footer>
                 </Table>
