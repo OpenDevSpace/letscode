@@ -57,7 +57,7 @@ class CourseOverviewItem extends Component {
         const {open, dimmer} = this.state;
         return (
             <Table.Row>
-                <Table.Cell>{this.state.course.title}</Table.Cell>
+                <Table.Cell>{this.props.course.title}</Table.Cell>
                 <Table.Cell>{this.props.course.description}</Table.Cell>
                 <Table.Cell>{this.props.course.language}</Table.Cell>
                 <Table.Cell>
