@@ -46,6 +46,7 @@ class CourseList extends Component {
                             <Table.HeaderCell>Role</Table.HeaderCell>
                             <Table.HeaderCell>Courses</Table.HeaderCell>
                             <Table.HeaderCell>Active</Table.HeaderCell>
+                            <Table.HeaderCell/>
                         </Table.Row>
                     </Table.Header>
 

@@ -60,7 +60,6 @@ class Signup extends Component {
             password: this.state.password
         }).done((data) => {
             this.show('blurring');
-            console.log(data);
             window.location.replace('/');
         });
     }

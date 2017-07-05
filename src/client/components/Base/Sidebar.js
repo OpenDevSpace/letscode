@@ -123,11 +123,11 @@ class Sidebar extends Component {
                     </List.Item>
                     <List.Item >
                         <Link to="/">
-                            <Button.Group>
+                            <Button.Group onClick={() => {localStorage.removeItem("odslearncode")}}>
                                 <Button icon='sign out' basic color='blue' />
                                 {
                                     this.state.isToggleOn
-                                        ? <Button className="sidebarButtonText" color='blue' >Logout</Button>
+                                        ? <Button className="sidebarButtonText" color='blue'>Logout</Button>
                                         : null
                                 }
                             </Button.Group>

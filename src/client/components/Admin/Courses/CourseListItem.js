@@ -122,22 +122,22 @@ class CourseOverviewItem extends Component {
             <Table.Row>
                 <Table.Cell>{this.state.course.title}</Table.Cell>
                 <Table.Cell>{this.state.course.description}</Table.Cell>
-                <Table.Cell>{this.state.course.language}</Table.Cell>
-                <Table.Cell>{this.state.levelText}</Table.Cell>
-                <Table.Cell>{this.props.course.tags}</Table.Cell>
-                <Table.Cell>{this.props.course.timestamp}</Table.Cell>
-                <Table.Cell>{this.props.course.createdBy.firstName} {this.props.course.createdBy.lastName}</Table.Cell>
-                <Table.Cell>
+                <Table.Cell collapsing>{this.state.course.language}</Table.Cell>
+                <Table.Cell collapsing>{this.state.levelText}</Table.Cell>
+                <Table.Cell>{this.state.course.tags}</Table.Cell>
+                <Table.Cell collapsing>{this.state.course.timestamp}</Table.Cell>
+                <Table.Cell>{this.state.course.createdBy.firstName} {this.state.course.createdBy.lastName}</Table.Cell>
+                <Table.Cell collapsing>
                     <Checkbox toggle checked={this.state.course.active} onChange={this.handleActiveChange}/>
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell collapsing>
                     <Button color='blue' icon='edit'
                             label={{basic: true, color: 'blue', pointing: 'left', content: 'Edit course'}}
                             onClick={this.show('blurring')}
                     />
                 </Table.Cell>
                 <Modal dimmer={dimmer} open={open} onClose={this.close} closeOnDimmerClick={false}>
-                    <Modal.Header>Edit {this.props.course.title} course</Modal.Header>
+                    <Modal.Header>Edit "{this.state.course.title}" course</Modal.Header>
                     <Modal.Content image>
                         <Modal.Description>
                             <Form className="loginForm">
@@ -145,7 +145,7 @@ class CourseOverviewItem extends Component {
                                             defaultValue={this.state.course.title} required autoFocus
                                             onChange={this.handleTitleChange}/>
                                 <Form.Input id="courseDesc" label='Please describe the course' type="string"
-                                            defaultValue={this.props.course.description} required
+                                            defaultValue={this.state.course.description} required
                                             onChange={this.handleDescChange}/>
                                 <Menu compact>
                                     <Dropdown placeholder="Select Language..." selection search options={language}

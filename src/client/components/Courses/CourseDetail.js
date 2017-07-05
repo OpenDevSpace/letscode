@@ -28,11 +28,9 @@ class CourseDetails extends Component {
         });
         $.get('http://localhost:8080/api/course/coursedetail/'+this.props.courseID)
             .done((course) => {
-                console.log(course);
                 this.setState({
                     course: course
                 });
-                console.log(this.state.course);
             });
     }
 

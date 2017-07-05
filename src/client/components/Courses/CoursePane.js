@@ -24,13 +24,11 @@ class CoursePane extends Component {
                 this.setState({
                     courses: courses.data
                 });
-                console.log(this.state.courses);
             });
     }
     render() {
         let courseInfo = this.state.courses.map((course, index) => {
-            let n = Number(this.props.level)
-            console.log(course.level);
+            let n = Number(this.props.level);
             if(course.level === n){
                 return <Card course={course}/>
             } else if (n === 0){
