@@ -3,6 +3,17 @@ var UserController = new User();
 
 var routes = require('express').Router();
 
+routes.post('/update/:userID', (req, res) => {
+    if (req.user.role !== 'Admin') {
+        res.status(401).end();
+    } else {
+        UserController.update(req.body, (data) => {
+            console.log("UserController.update");
+            console.log(data);
+        })
+    }
+});
+
 routes.get('/listall', (req, res) => {
     UserController.listAll(req.user.role, (users) => {
         if(!users.success){

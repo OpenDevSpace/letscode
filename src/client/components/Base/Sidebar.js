@@ -68,7 +68,7 @@ class Sidebar extends Component {
                                 <Button icon='code' basic color='blue'/>
                                 {
                                     this.state.isToggleOn
-                                        ? <Button className="sidebarButtonText" color='blue'>Course list</Button>
+                                        ? <Button className="sidebarButtonText" color='blue'>All Courses</Button>
                                         : null
                                 }
                             </Button.Group>
@@ -79,10 +79,10 @@ class Sidebar extends Component {
                             ? <List.Item>
                             <Link to="/admin/courselist">
                                 <Button.Group>
-                                    <Button icon='code' basic color='blue'/>
+                                    <Button icon='bars' basic color='orange'/>
                                     {
                                         this.state.isToggleOn
-                                            ? <Button className="sidebarButtonText" color='blue'>Course list</Button>
+                                            ? <Button className="sidebarButtonText" color='orange'>Courses</Button>
                                             : null
                                     }
                                 </Button.Group>
@@ -95,10 +95,10 @@ class Sidebar extends Component {
                             ? <List.Item>
                             <Link to="/admin/userlist">
                                 <Button.Group>
-                                    <Button icon='code' basic color='blue'/>
+                                    <Button icon='users' basic color='orange'/>
                                     {
                                         this.state.isToggleOn
-                                            ? <Button className="sidebarButtonText" color='blue'>User list</Button>
+                                            ? <Button className="sidebarButtonText" color='orange'>Manage Users</Button>
                                             : null
                                     }
                                 </Button.Group>
