@@ -7,6 +7,6 @@ module.exports = mongoose.model('Task', mongoose.Schema({
     question: {type: String, required: true},
     sampleCode: {type: String},
     answer: {type: String},
-    tags: [{type: String}],
+    tags: {type: String},
     belongsTo: {type: mongoose.Schema.Types.ObjectId, ref: 'Course'}
 }));

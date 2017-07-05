@@ -33,13 +33,26 @@ class CourseDetails extends Component {
             course: {},
             userRole: '',
             attendedCourses: [],
-            task: [],
             taskType: 'coding',
-            answerRadio: 1
+            answerRadio: 1,
+            title: '',
+            introduction: '',
+            question: '',
+            sampleCode: '',
+            answer: '',
+            tags: '',
+            belongsTo: this.props.courseID
         };
 
         this.handleTypeChange = this.handleTypeChange.bind(this);
         this.handleAnswerChange = this.handleAnswerChange.bind(this);
+        this.handleAddMoreTasks = this.handleAddMoreTasks.bind(this);
+        this.handleTaskTitleChange = this.handleTaskTitleChange.bind(this);
+        this.handleTaskIntroductionChange = this.handleTaskIntroductionChange.bind(this);
+        this.handleTaskQuestionChange = this.handleTaskQuestionChange.bind(this);
+        this.handleTaskSampleChange = this.handleTaskSampleChange.bind(this);
+        this.handleTaskCodeAnswerChange = this.handleTaskCodeAnswerChange.bind(this);
+        this.handleTaskTagsChange = this.handleTaskTagsChange.bind(this);
 
         $.ajaxSetup({
             beforeSend: (xhr) => {
@@ -59,22 +72,94 @@ class CourseDetails extends Component {
             .done((data) => {
                 this.setState({
                     userRole: data.role,
-                    attendedCourses: data.courses
+                    attendedCourses: data.courses,
+
                 })
             });
+    }
+
+
+    handleAddMoreTasks(evt) {
+        if ($('#createTaskForm')[0].checkValidity()) {
+            {/* $.post("http://localhost:8080/...", {
+             title: this.state.title,
+             taskType: this.state.taskType,
+             introduction: this.state.introduction,
+             question: this.state.question,
+             sampleCode: this.state.sampleCode,
+             answer: this.state.answer,
+             tags: this.state.tags,
+             belongsTo: this.state.belongsTo
+
+             }).done((data) => {
+             this.show('blurring');
+             window.location.replace('/');
+             });
+             */
+            }
+            console.log(this.state.title);
+            console.log(this.state.taskType);
+            console.log(this.state.introduction);
+            console.log(this.state.question);
+            console.log(this.state.sampleCode);
+            console.log(this.state.answer);
+            console.log(this.state.tags);
+            console.log(this.state.belongsTo);
+            console.log("button click");
+        } else {
+            console.log("not valid");
+        }
     }
 
     handleTypeChange(evt, type) {
         this.setState({
             taskType: type.value
         });
-    };
+    }
+    ;
 
     handleAnswerChange(evt, type) {
         this.setState({
             answerRadio: type.value
         });
-    };
+    }
+    ;
+
+    handleTaskTitleChange(evt, title) {
+        this.setState({
+            title: title.value
+        });
+    }
+
+    handleTaskIntroductionChange(evt, introduction) {
+        this.setState({
+            introduction: introduction.value
+        });
+    }
+
+    handleTaskQuestionChange(evt, question) {
+        this.setState({
+            question: question.value
+        });
+    }
+
+    handleTaskSampleChange(evt, sampleCode) {
+        this.setState({
+            sampleCode: sampleCode.value
+        });
+    }
+
+    handleTaskCodeAnswerChange(evt, answer) {
+        this.setState({
+            answer: answer.value
+        });
+    }
+
+    handleTaskTagsChange(evt, tags) {
+        this.setState({
+            answer: tags.value
+        });
+    }
 
     increment = () => this.setState({
         percent: this.state.percent >= 100 ? 0 : this.state.percent + 20,
@@ -154,8 +239,8 @@ class CourseDetails extends Component {
                                 <Header as={'h2'}>
                                     Add a task
                                 </Header>
-                                <Form>
-                                    <Form.Input label='Task Title' required/>
+                                <Form id="createTaskForm">
+                                    <Form.Input label='Task Title' required onChange={this.handleTaskTitleChange}/>
                                     <Form.Group grouped required>
                                         <label>Task Type</label>
                                         <Form.Radio label='Coding' value='coding' checked={taskType === 'coding'}
@@ -164,17 +249,20 @@ class CourseDetails extends Component {
                                                     checked={taskType === 'qanda'}
                                                     onChange={this.handleTypeChange}/>
                                     </Form.Group>
-                                    <Form.TextArea label='Introduction' placeholder='What is this task for?'/>
+                                    <Form.TextArea label='Introduction' placeholder='What is this task for?'
+                                                   onChange={this.handleTaskIntroductionChange}/>
                                     <Form.TextArea label='Question' placeholder='What is the user supposed to do?'
-                                                   required/>
+                                                   required onChange={this.handleTaskQuestionChange}/>
                                     {
                                         (this.state.taskType === "coding")
                                             ?
                                             <Form.Group required widths={2}>
                                                 <Form.TextArea label='Sample code'
-                                                               placeholder='Provide some sample code...' required/>
+                                                               placeholder='Provide some sample code...' required
+                                                               onChange={this.handleTaskSampleChange}/>
                                                 <Form.TextArea label='Answer' placeholder='What is the right answer?'
-                                                               required/>
+                                                               required
+                                                               onChange={this.handleTaskCodeAnswerChange}/>
                                             </Form.Group>
                                             :
                                             <Form.Group required grouped>
@@ -200,8 +288,8 @@ class CourseDetails extends Component {
                                             </Form.Group>
                                     }
 
-                                    <Form.Input label='Tags' inline/>
-                                    <Form.Button positive>Add more tasks</Form.Button>
+                                    <Form.Input label='Tags' inline onChange={this.handleTaskTagsChange}/>
+                                    <Form.Button positive onClick={this.handleAddMoreTasks}>Add more tasks</Form.Button>
                                 </Form>
                             </div>
                             : <Progress percent={this.state.percent} active indicating>
