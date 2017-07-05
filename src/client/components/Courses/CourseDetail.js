@@ -1,8 +1,14 @@
 import React, {Component} from 'react'
-import {Segment, Progress, Label, Accordion, Icon, Header, Divider} from 'semantic-ui-react'
+import {Segment, Progress, Label, Accordion, Icon, Header, Divider, Image} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
-import courseData from '../../data/Courses'
 import '../../styles/CourseDetail.css'
+import HTML5 from '../Icons/HTML5'
+import JavaScript from '../Icons/JavaScript'
+import CSS3 from '../Icons/CSS3'
+import Java from "../Icons/Java";
+import Python from "../Icons/Python";
+import C from "../Icons/C";
+import Web from "../Icons/WEB";
 
 import $ from 'jquery'
 
@@ -22,7 +28,7 @@ class CourseDetails extends Component {
         });
         $.get('http://localhost:8080/api/course/coursedetail/'+this.props.courseID)
             .done((course) => {
-            console.log(course);
+                console.log(course);
                 this.setState({
                     course: course
                 });
@@ -38,7 +44,49 @@ class CourseDetails extends Component {
         return (
             <Segment raised className="courseDetailSegment">
                 <Segment vertical>
-                    <h2>{this.state.course.title}</h2>
+                    <Header as='h2'>
+                        <Image id="courseHeaderIcon">
+                            {(() => {
+                                switch (this.state.course.language) {
+                                    case 'HTML5':
+                                        return <HTML5 />
+                                    case 'CSS3':
+                                        return <CSS3 />
+                                    case 'JavaScript':
+                                        return <JavaScript />
+                                    case 'java':
+                                        return <Java />
+                                    case 'python':
+                                        return <Python/>
+                                    case 'c':
+                                        return <C />
+                                    case 'web':
+                                        return <Web/>
+                                    default :
+                                        return <HTML5 />
+                                }
+                            })()}
+                        </Image>
+                        <Header.Content>
+                            {this.state.course.title}
+                            <Header.Subheader>
+                                {this.state.course.language} | <span>
+                                {(() => {
+                                    switch (this.state.course.level) {
+                                        case 1:
+                                            return "Easy"
+                                        case 2:
+                                            return "Medium"
+                                        case 3:
+                                            return "Advanced"
+                                        default :
+                                            null
+                                    }
+                                })()}
+                            </span>
+                            </Header.Subheader>
+                        </Header.Content>
+                    </Header>
                     {this.state.course.description}
                 </Segment>
                 <Segment vertical>
