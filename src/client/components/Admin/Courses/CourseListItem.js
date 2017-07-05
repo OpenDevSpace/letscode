@@ -10,9 +10,9 @@ const language = [
     {key: 'python', text: 'python', value: 'python'}
 ]
 const level = [
-    {key: 'easy', text: 'easy', value: '1'},
-    {key: 'medium', text: 'medium', value: '2'},
-    {key: 'advanced', text: 'advanced', value: '3'}
+    {key: '1', text: 'easy', value: 1},
+    {key: '2', text: 'medium', value: 2},
+    {key: '3', text: 'advanced', value: 3}
 ]
 
 
@@ -21,66 +21,114 @@ class CourseOverviewItem extends Component {
         super(props);
         this.state = {
             open: false,
-            course: this.props.course
+            course: this.props.course,
+            tempCourse: this.props.course,
+            levelText: ''
         }
-        this.changeActivity = this.changeActivity.bind(this);
 
+        this.handleActiveChange = this.handleActiveChange.bind(this);
+        this.handleTitleChange = this.handleTitleChange.bind(this);
+        this.handleDescChange = this.handleDescChange.bind(this);
+        this.handleLangSelection = this.handleLangSelection.bind(this);
+        this.handleLevelSelection = this.handleLevelSelection.bind(this);
     }
 
-    show = (dimmer) => () => this.setState({dimmer, open: true});
+    show = (dimmer) => () => {
+        this.setState({
+            dimmer, open: true
+        });
+    }
     close = () => this.setState({open: false});
 
-
-    updateCourseItem(item, evt) {
-        var tempCourse = this.state.course;
-        if (item === "active") {
-            tempCourse[item] = !this.state.course.active;
-        }
-        console.log("Bin hier");
-        this.setState({
-            course: tempCourse
-        });
-
+    updateRequest() {
         var requestdata = $.extend(true, {}, this.state.course);
         requestdata["createdBy"] = this.state.course.createdBy._id;
 
         $.post('http://localhost:8080/api/course/update/'+this.state.course._id, requestdata)
             .done((data) => {
-            console.log(data);
+                console.log(data);
             });
     }
 
-    changeActivity(evt) {
-        this.updateCourseItem("active", evt);
+
+    changeCourse(change, evt) {
+        var temp = $.extend(true, {}, this.state.tempCourse);
+        if (change === 'active') {
+            temp['active'] = !this.state.course.active;
+            this.setState({
+                course: temp
+            });
+            this.updateRequest();
+        } else if (change === 'language' || change === 'level') {
+            console.log(evt);
+            temp[change] = evt.value;
+            this.setState({
+                tempCourse: temp
+            });
+        } else {
+            temp[change] = evt.target.value;
+            this.setState({
+                tempCourse: temp
+            });
+        }
     }
+
+    handleActiveChange(evt) {
+        this.changeCourse("active", evt);
+    }
+
+    handleTitleChange(evt) {
+        this.changeCourse('title', evt);
+    }
+
+    handleDescChange(evt) {
+        this.changeCourse('description', evt);
+    }
+
+    handleLangSelection(evt) {
+        this.changeCourse('language', evt);
+    }
+
+    handleLevelSelection(evt) {
+        this.changeCourse('level', evt);
+    }
+
+    handleCourseUpdate(evt) {
+        console.log("I was clicked");
+        console.log(this.state.course);
+        console.log(this.state.tempCourse);
+    }
+
+    getLevel() {
+        switch (this.state.course.level) {
+            case 1:
+                this.state.levelText = "easy";
+                break;
+            case 2:
+                this.state.levelText =  "medium";
+                break;
+            case 3:
+                this.state.levelText = "advanced";
+                break;
+            default :
+                null;
+        }
+    }
+
     render() {
         const {open, dimmer} = this.state;
+        this.getLevel();
         return (
             <Table.Row>
                 <Table.Cell>{this.state.course.title}</Table.Cell>
-                <Table.Cell>{this.props.course.description}</Table.Cell>
-                <Table.Cell>{this.props.course.language}</Table.Cell>
-                <Table.Cell>
-                    <div>
-                        {(() => {
-                            switch (this.props.course.level) {
-                                case 1:
-                                    return "Easy"
-                                case 2:
-                                    return "Medium"
-                                case 3:
-                                    return "Advanced"
-                                default :
-                                    null
-                            }
-                        })()}
-                    </div>
-                </Table.Cell>
+                <Table.Cell>{this.state.course.description}</Table.Cell>
+                <Table.Cell>{this.state.course.language}</Table.Cell>
+                <Table.Cell>{this.state.levelText}</Table.Cell>
                 <Table.Cell>{this.props.course.tags}</Table.Cell>
                 <Table.Cell>{this.props.course.timestamp}</Table.Cell>
                 <Table.Cell>{this.props.course.createdBy.firstName} {this.props.course.createdBy.lastName}</Table.Cell>
                 <Table.Cell>
-                    <Checkbox toggle checked={this.state.course.active} onChange={this.changeActivity}/>
+                    <Checkbox toggle checked={this.state.course.active} onChange={this.handleActiveChange}/>
                 </Table.Cell>
                 <Table.Cell>
                     <Button color='blue' icon='edit'
@@ -94,17 +142,17 @@ class CourseOverviewItem extends Component {
                         <Modal.Description>
                             <Form className="loginForm">
                                 <Form.Input id="courseName" label='Enter course Name' type="string"
-                                            defaultValue={this.props.course.title} required autoFocus
+                                            defaultValue={this.state.course.title} required autoFocus
                                             onChange={this.handleTitleChange}/>
                                 <Form.Input id="courseDesc" label='Please describe the course' type="string"
                                             defaultValue={this.props.course.description} required
                                             onChange={this.handleDescChange}/>
                                 <Menu compact>
                                     <Dropdown placeholder="Select Language..." selection search options={language}
-                                              defaultValue={this.props.course.language}
+                                              defaultValue={this.state.course.language}
                                               onChange={this.handleLangSelection}/>
                                     <Dropdown placeholder="Select Level..." selection search options={level}
-                                              defaultValue={this.props.course.level}
+                                              defaultValue={this.state.course.level}
                                               onChange={this.handleLevelSelection}/>
                                 </Menu>
                             </Form>
@@ -115,7 +163,7 @@ class CourseOverviewItem extends Component {
                             Cancel
                         </Button>
                         <Button type='submit' positive icon='checkmark' labelPosition='right'
-                                content="Create new course"/>
+                                content="Update course" onClick={this.handleCourseUpdate.bind(this)} />
                     </Modal.Actions>
                 </Modal>
             </Table.Row>
