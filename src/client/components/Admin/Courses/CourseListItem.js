@@ -64,7 +64,6 @@ class CourseOverviewItem extends Component {
             this.updateRequest();
         } else {
             if (change === 'language' || change === 'level') {
-                console.log(evt);
                 temp[change] = evt.value;
             } else {
                 temp[change] = evt.target.value;
@@ -97,11 +96,9 @@ class CourseOverviewItem extends Component {
 
     handleCourseUpdate(evt) {
         var temp = $.extend(true, this.state.tempCourse, {});
-        console.log(this.state.course);
         this.setState({
             course: temp
         });
-        console.log(this.state.course);
         this.updateRequest();
         this.close();
     }

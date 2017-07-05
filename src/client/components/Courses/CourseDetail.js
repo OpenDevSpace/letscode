@@ -65,6 +65,7 @@ class CourseDetails extends Component {
                     course: course
                 });
             });
+
         $.get("http://localhost:8080/api/user/afterlogin")
             .fail(() => {
                 console.log("Failure!");
@@ -81,35 +82,23 @@ class CourseDetails extends Component {
 
     handleAddMoreTasks(evt) {
         if ($('#createTaskForm')[0].checkValidity()) {
-            {/* $.post("http://localhost:8080/...", {
-             title: this.state.title,
-             taskType: this.state.taskType,
-             introduction: this.state.introduction,
-             question: this.state.question,
-             sampleCode: this.state.sampleCode,
-             answer: this.state.answer,
-             tags: this.state.tags,
-             belongsTo: this.state.belongsTo
-
-             }).done((data) => {
-             this.show('blurring');
-             window.location.replace('/');
-             });
-             */
-            }
-            console.log(this.state.title);
-            console.log(this.state.taskType);
-            console.log(this.state.introduction);
-            console.log(this.state.question);
-            console.log(this.state.sampleCode);
-            console.log(this.state.answer);
-            console.log(this.state.tags);
-            console.log(this.state.belongsTo);
-            console.log("button click");
+            $.post("http://localhost:8080/api/task/new",  {
+                title: this.state.title,
+                taskType: this.state.taskType,
+                introduction: this.state.introduction,
+                question: this.state.question,
+                sampleCode: this.state.sampleCode,
+                answer: this.state.answer,
+                tags: this.state.tags,
+                belongsTo: this.state.belongsTo
+            }).done((data) => {
+                console.log(data);
+            });
         } else {
             console.log("not valid");
         }
     }
+
 
     handleTypeChange(evt, type) {
         this.setState({
