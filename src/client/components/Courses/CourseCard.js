@@ -55,7 +55,7 @@ class CourseCard extends Component {
                                             case 2:
                                                 return "Medium"
                                             case 3:
-                                                return "Hard"
+                                                return "Advanced"
                                             default :
                                                 null
                                         }
