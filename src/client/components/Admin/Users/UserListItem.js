@@ -23,28 +23,32 @@ class UserListItem extends Component {
         this.handleRoleSelection = this.handleRoleSelection.bind(this);
     }
 
-    handleEditClick(){
+    handleEditClick() {
         this.setState(prevState => ({
             editUser: !prevState.editUser
         }));
     }
 
     updateRequest() {
-        //var requestdata = $.extend(true, {}, this.state.user);
+        var requestdata = $.extend(true, {}, this.state.tempUser);
+        $.post('http://localhost:8080/api/user/update/' + this.state.user._id, requestdata)
+            .done((data) => {
+                console.log("done");
+            });
 
     }
 
     updateUser(change, evt) {
         var temp = $.extend(true, {}, this.state.tempUser);
+
         if (change === 'active') {
             temp['active'] = !this.state.user.active;
             this.setState({
-                course: temp
+                tempUser: temp
             });
             this.updateRequest();
         } else if (change === 'role') {
             temp[change] = this.switchRoleValueToText(evt);
-            console.log(temp[change]);
             this.setState({
                 tempUser: temp
             });
@@ -58,24 +62,33 @@ class UserListItem extends Component {
 
     switchRoleValueToText(evt) {
         switch (evt.value) {
-            case 1: return "Standard";
+            case 1:
+                return "Standard";
                 break;
-            case 2: return "Moderator";
+            case 2:
+                return "Moderator";
                 break;
-            case 3: return "Admin";
+            case 3:
+                return "Admin";
                 break;
-            default: return "Standard";
+            default:
+                return "Standard";
         }
     }
-    switchRoleTextToValue(){
+
+    switchRoleTextToValue() {
         switch (this.state.tempUser.role) {
-            case "Standard": return 1;
+            case "Standard":
+                return 1;
                 break;
-            case "Moderator": return 2;
+            case "Moderator":
+                return 2;
                 break;
-            case "Admin": return 3;
+            case "Admin":
+                return 3;
                 break;
-            default: return 1;
+            default:
+                return 1;
         }
     }
 
@@ -86,9 +99,11 @@ class UserListItem extends Component {
     handleFirstNameChange(evt) {
         this.updateUser('firstName', evt);
     }
+
     handleLastNameChange(evt) {
         this.updateUser('lastName', evt);
     }
+
     handleEmailChange(evt) {
         this.updateUser('email', evt);
     }
@@ -98,14 +113,10 @@ class UserListItem extends Component {
     }
 
     handleUserUpdate(evt) {
-        console.log(this.state.tempUser);
         this.setState({
             user: this.state.tempUser
-        })
-        setTimeout(() => {
-            console.log(this.state.user);
-        }, 3000);
-
+        });
+        this.updateRequest();
         this.handleEditClick();
     }
 
@@ -114,9 +125,9 @@ class UserListItem extends Component {
         let date = (this.state.user.created);
 
         let myDate = date.substring(8, 10) + "." +
-                    date.substring(5, 7) + "." +
-                    date.substring(0, 4) + " " +
-                    date.substring(11, 16) + " Uhr";
+            date.substring(5, 7) + "." +
+            date.substring(0, 4) + " " +
+            date.substring(11, 16) + " Uhr";
         return (
             <Table.Row>
                 <Table.Cell>
@@ -140,7 +151,7 @@ class UserListItem extends Component {
                             </Form.Field>
                         </Form>
                     }
-                    </Table.Cell>
+                </Table.Cell>
                 <Table.Cell>
                     {
                         !(this.state.editUser)
@@ -151,7 +162,7 @@ class UserListItem extends Component {
                             </Form.Field>
                         </Form>
                     }
-                    </Table.Cell>
+                </Table.Cell>
                 <Table.Cell collapsing>{myDate}</Table.Cell>
                 <Table.Cell collapsing>
                     {
@@ -172,7 +183,7 @@ class UserListItem extends Component {
                         !(this.state.editUser)
                             ? <span>{
                             (this.state.user.active)
-                            ? <Icon name="checkmark" color={"green"}/>
+                                ? <Icon name="checkmark" color={"green"}/>
                                 : <Icon name="remove" color={"red"}/>
                         } </span>
                             : <Checkbox toggle checked={this.state.user.active} onChange={this.handleActiveChange}/>
@@ -185,10 +196,10 @@ class UserListItem extends Component {
                                       label={{basic: true, color: 'blue', pointing: 'left', content: 'Edit user'}}
                                       onClick={() => {
                                           this.handleEditClick();
-                                      }} />
+                                      }}/>
                             : <Button color='green' icon='checkmark'
                                       label={{basic: true, color: 'green', pointing: 'left', content: 'Ok, done'}}
-                                      onClick={this.handleUserUpdate.bind(this)} />
+                                      onClick={this.handleUserUpdate.bind(this)}/>
                     }
                 </Table.Cell>
             </Table.Row>

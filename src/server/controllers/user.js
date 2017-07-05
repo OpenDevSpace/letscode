@@ -1,7 +1,6 @@
 var UserModel = require('../models/user');
 
 class User {
-
     register(firstName, LastName, email, password, callback) {
 
         var success = false;
@@ -21,7 +20,40 @@ class User {
             }
             callback(success);
         });
+    }
 
+    update(data, callback){
+        console.log(data);
+        UserModel.findById(data._id, (err, user) => {
+            if (err) {
+                callback({
+                    success: false,
+                    message: 'An error occurred!'
+                });
+            } else if (!user) {
+                callback({
+                    success: false,
+                    message: 'User not found!'
+                })
+            } else {
+                for(let prop in data) {
+                    user[prop] =data[prop];
+                }
+                user.save((saveErr, updUser) => {
+                    if (err) {
+                        callback({
+                            success: false,
+                            message: 'Error while updating user: ' + err
+                        });
+                    } else {
+                        callback({
+                            success: true,
+                            user: updUser
+                        })
+                    }
+                });
+            }
+        });
     }
 
     listAll(role, callback){
