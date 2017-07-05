@@ -44,7 +44,8 @@ class UserListItem extends Component {
         if (change === 'active') {
             temp['active'] = !this.state.user.active;
             this.setState({
-                tempUser: temp
+                tempUser: temp,
+                user: temp
             });
             this.updateRequest();
         } else if (change === 'role') {
