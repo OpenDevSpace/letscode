@@ -9,6 +9,7 @@ import CSS3 from '../Icons/CSS3'
 import Java from "../Icons/Java";
 import Python from "../Icons/Python";
 import C from "../Icons/C";
+import Web from "../Icons/WEB";
 
 
 class CourseCard extends Component {
@@ -33,6 +34,8 @@ class CourseCard extends Component {
                                             return <Python/>
                                         case 'c':
                                             return <C />
+                                        case 'web':
+                                            return <Web/>
                                         default :
                                             return <HTML5 />
                                     }
