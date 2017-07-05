@@ -20,6 +20,7 @@ class Course {
     }
 
     update(data, callback) {
+        console.log(data);
         CourseModel.findById(data._id, (err, course) => {
             if (err) {
                 callback({
@@ -42,6 +43,7 @@ class Course {
                             message: 'Error while updating course: ' + err
                         });
                     } else {
+                        //console.log("Hier bin ich");
                         callback({
                             success: true,
                             course: updCourse

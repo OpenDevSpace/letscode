@@ -47,26 +47,28 @@ class CourseOverviewItem extends Component {
         $.post('http://localhost:8080/api/course/update/'+this.state.course._id, requestdata)
             .done((data) => {
                 console.log(data);
+            })
+            .fail((data) => {
+            console.log(data);
             });
     }
 
 
     changeCourse(change, evt) {
-        var temp = $.extend(true, {}, this.state.tempCourse);
+        var temp = $.extend(true, this.state.tempCourse, {});
         if (change === 'active') {
             temp['active'] = !this.state.course.active;
             this.setState({
                 course: temp
             });
             this.updateRequest();
-        } else if (change === 'language' || change === 'level') {
-            console.log(evt);
-            temp[change] = evt.value;
-            this.setState({
-                tempCourse: temp
-            });
         } else {
-            temp[change] = evt.target.value;
+            if (change === 'language' || change === 'level') {
+                console.log(evt);
+                temp[change] = evt.value;
+            } else {
+                temp[change] = evt.target.value;
+            }
             this.setState({
                 tempCourse: temp
             });
@@ -89,14 +91,19 @@ class CourseOverviewItem extends Component {
         this.changeCourse('language', lang);
     }
 
-    handleLevelSelection(evt) {
-        this.changeCourse('level', evt);
+    handleLevelSelection(evt, level) {
+        this.changeCourse('level', level);
     }
 
     handleCourseUpdate(evt) {
-        console.log("I was clicked");
+        var temp = $.extend(true, this.state.tempCourse, {});
         console.log(this.state.course);
-        console.log(this.state.tempCourse);
+        this.setState({
+            course: temp
+        });
+        console.log(this.state.course);
+        this.updateRequest();
+        this.close();
     }
 
     getLevel() {
