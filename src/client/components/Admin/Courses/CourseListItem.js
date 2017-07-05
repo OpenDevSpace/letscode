@@ -85,8 +85,8 @@ class CourseOverviewItem extends Component {
         this.changeCourse('description', evt);
     }
 
-    handleLangSelection(evt) {
-        this.changeCourse('language', evt);
+    handleLangSelection(evt, lang) {
+        this.changeCourse('language', lang);
     }
 
     handleLevelSelection(evt) {
