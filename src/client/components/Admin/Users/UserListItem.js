@@ -46,7 +46,7 @@ class UserListItem extends Component {
             temp[change] = this.switchRoleValueToText(evt);
             console.log(temp[change]);
             this.setState({
-                tempCourse: temp
+                tempUser: temp
             });
         } else {
             temp[change] = evt.target.value;
@@ -68,7 +68,6 @@ class UserListItem extends Component {
         }
     }
     switchRoleTextToValue(){
-    console.log(this.state.tempUser.role);
         switch (this.state.tempUser.role) {
             case "Standard": return 1;
                 break;
@@ -100,6 +99,13 @@ class UserListItem extends Component {
 
     handleUserUpdate(evt) {
         console.log(this.state.tempUser);
+        this.setState({
+            user: this.state.tempUser
+        })
+        setTimeout(() => {
+            console.log(this.state.user);
+        }, 3000);
+
         this.handleEditClick();
     }
 
