@@ -31,8 +31,8 @@ class CourseDetails extends Component {
         this.state = {
             percent: 43,
             course: {},
-            userRole: '',
-            attendedCourses: [],
+            userRole: this.props.role,
+            attendedCourses: this.props.course,
             radioTaskType: 'coding',
             answerRadio: 1,
             newTask: {
@@ -62,12 +62,7 @@ class CourseDetails extends Component {
             }
         });
 
-
-    }
-
-    componentDidMount(){
         this.fetchData();
-
         $.get("http://localhost:8080/api/user/afterlogin")
             .fail(() => {
                 console.log("Failure!");
@@ -79,6 +74,7 @@ class CourseDetails extends Component {
                 })
             });
     }
+
 
     fetchData(){
         $.get('http://localhost:8080/api/course/coursedetail/' + this.props.courseID)
@@ -164,10 +160,7 @@ class CourseDetails extends Component {
     })
 
     render() {
-        console.log(this.state.course)
-
         let taskInfo;
-
 
         if(this.state.retrievedData){
             taskInfo = this.state.course.task.map((value) => {
@@ -306,7 +299,7 @@ class CourseDetails extends Component {
                                           content="Done" centered />
                                 : <span>
                             {
-                                this.props.courseID.indexOf(this.state.attendedCourses) !== -1
+                                this.props._id.indexOf(this.state.attendedCourses) !== -1
                                     ? <Button positive icon='checkmark' labelPosition='right' content="Enroll course"
                                               centered/>
                                     : <Link to={"/course/" + this.props.courseID + "/edit"}>

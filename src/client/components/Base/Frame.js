@@ -5,8 +5,10 @@ import DiscoverCoursesSegment from '../Courses/DiscoverCoursesSegment'
 import CoursesSegment from '../Courses/CoursesSegment'
 import AccountSettings from '../Settings/AccountSettings'
 import Sidebar from './Sidebar'
+import CourseDetail from '../Courses/CourseDetail'
 import '../../styles/Frame.css'
 import $ from 'jquery'
+
 
 
 class Frame extends Component {
@@ -44,7 +46,8 @@ class Frame extends Component {
 
     renderChildren(props) {
         return React.Children.map(props.children, child => {
-            if(child.type === CoursesSegment || child.type === DiscoverCoursesSegment || child.type === AccountSettings) {
+            if(child.type === CoursesSegment || child.type === DiscoverCoursesSegment
+                || child.type === AccountSettings || child.type === CourseDetail)  {
                 return React.cloneElement(child, {
                     _id: this.state._id,
                     firstName: this.state.firstName,
