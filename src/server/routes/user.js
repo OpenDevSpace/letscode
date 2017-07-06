@@ -7,11 +7,11 @@ routes.post('/update/:userID', (req, res) => {
     if (req.user.role !== 'Admin' && req.body._id.toString() !== req.user.userID.toString()) {
         res.status(401).end();
     } else {
+        console.log("Hallo vom Server");
+        console.log(req.body);
         UserController.update(req.body, (data) => {
-            console.log("UserController.update");
-            console.log(data);
-        })
-        res.json(data);
+            res.json(data);
+        });
     }
 });
 

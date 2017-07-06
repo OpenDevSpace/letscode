@@ -59,7 +59,13 @@ class AccountSettings extends Component {
     }
 
     updatePassword(evt) {
-        console.log(this.props);
+        $.post('http://localhost:8080/api/user/update/'+this.state._id, {
+            _id: this.props._id,
+            data: this.state.updatePassword
+        })
+            .done((data) => {
+                console.log(data);
+            });
     }
 
     render() {

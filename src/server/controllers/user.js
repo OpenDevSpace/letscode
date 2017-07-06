@@ -1,4 +1,5 @@
 var UserModel = require('../models/user');
+var bcrypt = require('bcryptjs');
 
 class User {
     register(firstName, LastName, email, password, callback) {
@@ -22,7 +23,28 @@ class User {
         });
     }
 
-    update(data, callback){
+    waitUntilHashReady(user, data, callback) {
+        for (let prop in data) {
+            user[prop] = data[prop];
+        }
+        user.save((saveErr, updUser) => {
+            if (saveErr) {
+                callback({
+                    success: false,
+                    message: 'Error while updating user: ' + err
+                });
+            } else {
+                callback({
+                    success: true,
+                    user: updUser
+                })
+            }
+        });
+    }
+
+    update(data, callback) {
+        console.log(data.data);
+
         UserModel.findById(data._id, (err, user) => {
             if (err) {
                 callback({
@@ -35,28 +57,42 @@ class User {
                     message: 'User not found!'
                 })
             } else {
-                for(let prop in data) {
-                    user[prop] =data[prop];
+                if (data.data) {
+                    bcrypt.compare(data.data.oldPassword, user.password, (passCompareErr, success) => {
+                        if (passCompareErr) throw passCompareErr;
+                        if (!success) {
+                            callback({
+                                success: false,
+                                message: "Wrong old password."
+                            });
+                        } else {
+                            bcrypt.genSalt(15, (saltErr, salt) => {
+                                if (saltErr) throw saltErr;
+                                bcrypt.hash(data.data.newPassword, salt, (hashErr, hash) => {
+                                    if (hashErr) throw hashErr;
+                                    data.password = hash;
+                                    delete data.data;
+                                    console.log(data);
+                                    this.waitUntilHashReady(user, data, (cb) => {
+                                        console.log(cb);
+                                    });
+                                });
+                            });
+                        }
+                    });
+                } else {
+                    this.waitUntilHashReady(user, data, (cb) => {
+                        console.log(cb);
+                    });
                 }
-                user.save((saveErr, updUser) => {
-                    if (err) {
-                        callback({
-                            success: false,
-                            message: 'Error while updating user: ' + err
-                        });
-                    } else {
-                        callback({
-                            success: true,
-                            user: updUser
-                        })
-                    }
-                });
+
+
             }
         });
     }
 
-    listAll(role, callback){
-        if(role !== "Admin") {
+    listAll(role, callback) {
+        if (role !== "Admin") {
             callback({
                 success: false
             });
@@ -71,7 +107,7 @@ class User {
         }
     }
 
-    loadDashboard(userID, callback){
+    loadDashboard(userID, callback) {
         UserModel.findById(userID, (err, user) => {
             if (err) throw err;
             callback({
@@ -82,7 +118,7 @@ class User {
         })
     }
 
-    doAfterLogin(userID, callback){
+    doAfterLogin(userID, callback) {
         UserModel.findById(userID, (err, user) => {
             if (err) throw err;
             callback({
