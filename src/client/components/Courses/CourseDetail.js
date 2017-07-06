@@ -43,7 +43,8 @@ class CourseDetails extends Component {
                 sampleCode: '',
                 answer: '',
                 tags: ''
-            }
+            },
+            retrievedData: false
         };
 
         this.handleTypeChange = this.handleTypeChange.bind(this);
@@ -61,17 +62,11 @@ class CourseDetails extends Component {
             }
         });
 
+
     }
 
-    getInitialData () {
-        $.get('http://localhost:8080/api/course/coursedetail/' + this.props.courseID)
-            .done((course) => {
-                console.log(typeof course);
-                console.log(course);
-                this.setState({
-                    course: course,
-                });
-            });
+    componentDidMount(){
+        this.fetchData();
 
         $.get("http://localhost:8080/api/user/afterlogin")
             .fail(() => {
@@ -84,29 +79,38 @@ class CourseDetails extends Component {
                 })
             });
     }
-    componentDidMount () {
-    this.getInitialData();
-}
+
+    fetchData(){
+        $.get('http://localhost:8080/api/course/coursedetail/' + this.props.courseID)
+            .done((course) => {
+                this.setState({
+                    course: course,
+                    retrievedData: true
+                });
+            });
+
+    }
 
     handleAddMoreTasks(evt) {
         if ($('#createTaskForm')[0].checkValidity()) {
-            $.post("http://localhost:8080/api/course/addtask/"+this.state.course._id, {
+            $.post("http://localhost:8080/api/course/addtask/" + this.state.course._id, {
                 _id: this.state.course._id,
                 task: this.state.newTask
-                })
+            })
                 .done((data) => {
-                console.log("done");
-            });
+                    console.log("done");
+                });
             this.setState({
                 newTask: {}
             });
+            this.fetchData();
             $("#createTaskForm")[0].reset();
         } else {
             console.log("not valid");
         }
     }
 
-    updateNewTask(currentInput, value){
+    updateNewTask(currentInput, value) {
         let tempTask = this.state.newTask;
 
         tempTask[currentInput] = value;
@@ -160,10 +164,17 @@ class CourseDetails extends Component {
     })
 
     render() {
+        console.log(this.state.course)
 
-        let taskInfo = this.state.course.task.map((value) => {
+        let taskInfo;
+
+
+        if(this.state.retrievedData){
+            taskInfo = this.state.course.task.map((value) => {
                 return <TaskList task={value}/>
             });
+        }
+
 
         const {radioTaskType, answerRadio} = this.state;
         return (
@@ -225,7 +236,12 @@ class CourseDetails extends Component {
                             </Header>
                         </Accordion.Title>
                         <Accordion.Content>
-                            {taskInfo}
+                            {
+                                (this.state.retrievedData)
+                                ? <div>{taskInfo}</div>
+                                : null
+                            }
+
                         </Accordion.Content>
                     </Accordion>
                     <Divider/>
@@ -264,9 +280,12 @@ class CourseDetails extends Component {
                                             </Form.Group>
                                             :
                                             <Form.Group required grouped>
-                                                <Form.Input label='Right Answer' required onChange={this.handleTaskCodeAnswerChange}/>
-                                                <Form.Input label='Wrong Answer 1' required onChange={this.handleTaskSampleChange}/>
-                                                <Form.Input label='Wrong Answer 2' required onChange={this.handleTaskSampleChange}/>
+                                                <Form.Input label='Right Answer' required
+                                                            onChange={this.handleTaskCodeAnswerChange}/>
+                                                <Form.Input label='Wrong Answer 1' required
+                                                            onChange={this.handleTaskSampleChange}/>
+                                                <Form.Input label='Wrong Answer 2' required
+                                                            onChange={this.handleTaskSampleChange}/>
                                             </Form.Group>
                                     }
 
@@ -284,7 +303,7 @@ class CourseDetails extends Component {
                         {
                             this.state.userRole === 'Admin' || this.state.userRole === 'Moderator'
                                 ? <Button type='submit' positive icon='checkmark' labelPosition='right'
-                                          content="Done" centered/>
+                                          content="Done" centered />
                                 : <span>
                             {
                                 this.props.courseID.indexOf(this.state.attendedCourses) !== -1

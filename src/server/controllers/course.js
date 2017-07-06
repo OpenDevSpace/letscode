@@ -2,7 +2,6 @@ var CourseModel = require('../models/course');
 
 class Course {
     create(data, userID, callback) {
-        console.log(data);
         var course = new CourseModel(data);
         course.createdBy = userID;
         course.save((err, newcourse) => {
@@ -25,7 +24,6 @@ class Course {
 
     update(data, callback) {
         CourseModel.findById(data._id, (err, course) => {
-            console.log(course);
             if (err) {
                 callback({
                     success: false,
@@ -41,8 +39,6 @@ class Course {
                 for (var prop in data) {
                     course[prop] = data[prop];
                 }
-
-                console.log(course);
 
                 course.save((saveErr, updCourse) => {
                     if (err) {
@@ -63,7 +59,6 @@ class Course {
 
     addTask(data, callback) {
         CourseModel.findById(data._id, (err, course) => {
-            console.log(course);
             if (err) {
                 callback({
                     success: false,
@@ -75,9 +70,8 @@ class Course {
                     message: 'Requested course not found!'
                 });
             } else {
+                course['task'].push(data.task);
 
-                course['task'].push(data);
-                console.log(course);
 
                 course.save((saveErr, updCourse) => {
                     if (err) {

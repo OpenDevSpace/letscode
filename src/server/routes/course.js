@@ -16,8 +16,6 @@ routes.post('/new', (req, res) => {
 });
 
 routes.post('/update/:courseID', (req, res) => {
-    console.log('/update/:courseID req.body');
-    console.log(req.body);
     CourseController.update(req.body, (data) => {
         res.json(data);
     });
@@ -26,8 +24,6 @@ routes.post('/update/:courseID', (req, res) => {
 });
 
 routes.post('/addtask/:courseID', (req, res) => {
-    console.log('/addtask/:courseID req.body');
-    console.log(req.body);
     CourseController.addTask(req.body, (data) => {
         res.json(data);
     });
