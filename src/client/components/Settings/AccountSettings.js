@@ -1,8 +1,59 @@
 import React, {Component} from 'react'
-import {Accordion, Icon, Header} from 'semantic-ui-react'
-
+import {Accordion, Icon, Header, Form, Button} from 'semantic-ui-react'
 
 class AccountSettings extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            updatePassword: {
+                oldPassword: '',
+                newPassword: '',
+                confirm: ''
+            },
+            email: ''
+        }
+
+        this.handleEmailChange = this.handleEmailChange.bind(this);
+        this.handleOldPasswordChange = this.handleOldPasswordChange.bind(this);
+        this.handleNewPasswordChange = this.handleNewPasswordChange.bind(this);
+        this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this);
+    }
+
+    handleEmailChange(evt) {
+        this.setState({
+            email: evt.target.value
+        });
+    }
+
+    updateEmail(evt) {
+        console.log(this.state);
+    }
+
+    passwordChange(field, evt) {
+        var temp = this.state.updatePassword;
+        temp[field] = evt.target.value;
+        this.setState({
+            updatePassword: temp
+        });
+    }
+
+    handleOldPasswordChange(evt) {
+        this.passwordChange('oldPassword', evt);
+    }
+
+    handleNewPasswordChange(evt) {
+        this.passwordChange('newPassword', evt);
+    }
+
+    handleConfirmPasswordChange(evt) {
+        this.passwordChange('confirm', evt);
+    }
+
+    updatePassword(evt) {
+        console.log(this.state);
+    }
 
     render() {
         return (
@@ -15,7 +66,10 @@ class AccountSettings extends Component {
                 </Accordion.Title>
                 <Accordion.Content>
                     <p>
-                        Here you can change E-Mail address
+                        <Form>
+                            <Form.Input label="Update your email" placeholder="my@fancymail.com" onChange={this.handleEmailChange} />
+                            <Button label="Update Email" onClick={this.updateEmail.bind(this)} />
+                        </Form>
                     </p>
                 </Accordion.Content>
                 <Accordion.Title>
@@ -26,7 +80,12 @@ class AccountSettings extends Component {
                 </Accordion.Title>
                 <Accordion.Content>
                     <p>
-                        Here you can change password
+                        <Form id="changePasswordForm">
+                            <Form.Input type="password" label="Old password" placeholder="s3cur3Pa55w0rd" onChange={this.handleOldPasswordChange} />
+                            <Form.Input type="password" label="New password" placeholder="s3cur3Pa55w0rd" onChange={this.handleNewPasswordChange} />
+                            <Form.Input type="password" label="Confirm password" placeholder="s3cur3Pa55w0rd" onChange={this.handleConfirmPasswordChange} />
+                            <Button label="Update Password" onClick={this.updatePassword.bind(this)} />
+                        </Form>
                     </p>
                 </Accordion.Content>
                 <Accordion.Title>

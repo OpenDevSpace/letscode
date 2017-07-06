@@ -19,10 +19,15 @@ const level = [
 class CourseOverviewItem extends Component {
     constructor(props) {
         super(props);
+
+        var testVar = $.extend(true, this.props.course, {});
+
+        console.log(testVar);
+
         this.state = {
             open: false,
             course: this.props.course,
-            tempCourse: this.props.course,
+            tempCourse: {},
             levelText: ''
         }
 
