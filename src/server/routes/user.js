@@ -4,13 +4,14 @@ var UserController = new User();
 var routes = require('express').Router();
 
 routes.post('/update/:userID', (req, res) => {
-    if (req.user.role !== 'Admin') {
+    if (req.user.role !== 'Admin' && req.body._id.toString() !== req.user.userID.toString()) {
         res.status(401).end();
     } else {
         UserController.update(req.body, (data) => {
             console.log("UserController.update");
             console.log(data);
         })
+        res.json(data);
     }
 });
 

@@ -23,7 +23,6 @@ class User {
     }
 
     update(data, callback){
-        console.log(data);
         UserModel.findById(data._id, (err, user) => {
             if (err) {
                 callback({
@@ -87,6 +86,7 @@ class User {
         UserModel.findById(userID, (err, user) => {
             if (err) throw err;
             callback({
+                _id: user._id,
                 firstName: user.firstName,
                 courses: user.courses,
                 role: user.role

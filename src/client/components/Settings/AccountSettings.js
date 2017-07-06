@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Accordion, Icon, Header, Form, Button} from 'semantic-ui-react'
+import $ from 'jquery'
 
 class AccountSettings extends Component {
 
@@ -28,7 +29,13 @@ class AccountSettings extends Component {
     }
 
     updateEmail(evt) {
-        console.log(this.state);
+        $.post('http://localhost:8080/api/user/update/'+this.state._id, {
+            _id: this.props._id,
+            email: this.state.email
+        })
+            .done((data) => {
+            console.log(data);
+            });
     }
 
     passwordChange(field, evt) {
@@ -52,7 +59,7 @@ class AccountSettings extends Component {
     }
 
     updatePassword(evt) {
-        console.log(this.state);
+        console.log(this.props);
     }
 
     render() {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Header from './Header'
 import DiscoverCoursesSegment from '../Courses/DiscoverCoursesSegment'
 import CoursesSegment from '../Courses/CoursesSegment'
+import AccountSettings from '../Settings/AccountSettings'
 import Sidebar from './Sidebar'
 import '../../styles/Frame.css'
 import $ from 'jquery'
@@ -15,6 +16,7 @@ class Frame extends Component {
             isToggleOn: true
         };
         this.state = {
+            _id: '',
             firstName: '',
             courses: [],
             role: ''
@@ -32,6 +34,7 @@ class Frame extends Component {
             })
             .done((data) => {
                 this.setState({
+                    _id: data._id,
                     firstName: data.firstName,
                     courses: data.courses,
                     role: data.role
@@ -41,8 +44,9 @@ class Frame extends Component {
 
     renderChildren(props) {
         return React.Children.map(props.children, child => {
-            if(child.type === CoursesSegment || child.type === DiscoverCoursesSegment) {
+            if(child.type === CoursesSegment || child.type === DiscoverCoursesSegment || child.type === AccountSettings) {
                 return React.cloneElement(child, {
+                    _id: this.state._id,
                     firstName: this.state.firstName,
                     courses: this.state.courses,
                     role: this.state.role
