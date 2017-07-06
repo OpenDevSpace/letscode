@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Checkbox, Table, Modal, Button, Form, Menu, Dropdown} from 'semantic-ui-react'
+import {Link} from 'react-router-dom'
 import '../../../styles/CourseList.css'
 import Truncate from 'react-truncate'
 import $ from 'jquery';
@@ -147,6 +148,13 @@ class CourseOverviewItem extends Component {
                             label={{basic: true, color: 'blue', pointing: 'left', content: 'Edit course'}}
                             onClick={this.show('blurring')}
                     />
+                </Table.Cell>
+                <Table.Cell collapsing>
+                    <Link to={"../course/"+this.state.course._id}>
+                        <Button color='orange' icon='plus'
+                                label={{basic: true, color: 'orange', pointing: 'left', content: 'Add Tasks'}}
+                        />
+                    </Link>
                 </Table.Cell>
                 <Modal dimmer={dimmer} open={open} onClose={this.close} closeOnDimmerClick={false}>
                     <Modal.Header>Edit "{this.state.course.title}" course</Modal.Header>

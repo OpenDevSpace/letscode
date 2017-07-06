@@ -117,6 +117,12 @@ class CourseList extends Component {
                             <Table.HeaderCell>Created by</Table.HeaderCell>
                             <Table.HeaderCell>Active</Table.HeaderCell>
                             <Table.HeaderCell/>
+                            <Table.HeaderCell  colSpan='3'>
+                                <Button color='blue' icon='plus'
+                                        label={{basic: true, color: 'blue', pointing: 'left', content: 'Add Course'}}
+                                        onClick={this.show('blurring')}
+                                />
+                            </Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
 
@@ -134,10 +140,12 @@ class CourseList extends Component {
                             <Table.HeaderCell />
                             <Table.HeaderCell />
                             <Table.HeaderCell />
-                            <Table.HeaderCell>
-                                <Button primary size='small' onClick={this.show('blurring')}>
-                                    Add Course
-                                </Button>
+                            <Table.HeaderCell />
+                            <Table.HeaderCell  colSpan='3'>
+                                <Button color='blue' icon='plus'
+                                        label={{basic: true, color: 'blue', pointing: 'left', content: 'Add Course'}}
+                                        onClick={this.show('blurring')}
+                                />
                             </Table.HeaderCell>
                         </Table.Row>
                     </Table.Footer>

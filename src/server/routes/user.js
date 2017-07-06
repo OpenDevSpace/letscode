@@ -9,6 +9,7 @@ routes.post('/update/:userID', (req, res) => {
     } else {
         console.log("Hallo vom Server");
         console.log(req.body);
+        console.log(req.user.userID);
         UserController.update(req.body, (data) => {
             res.json(data);
         });

@@ -32,6 +32,7 @@ class CourseDetails extends Component {
             percent: 43,
             course: {},
             userRole: this.props.role,
+            userID: this.props._id,
             attendedCourses: this.props.course,
             radioTaskType: 'coding',
             answerRadio: 1,
@@ -44,7 +45,8 @@ class CourseDetails extends Component {
                 answer: '',
                 tags: ''
             },
-            retrievedData: false
+            retrievedData: false,
+            editMode: true
         };
 
         this.handleTypeChange = this.handleTypeChange.bind(this);
@@ -55,6 +57,8 @@ class CourseDetails extends Component {
         this.handleTaskSampleChange = this.handleTaskSampleChange.bind(this);
         this.handleTaskCodeAnswerChange = this.handleTaskCodeAnswerChange.bind(this);
         this.handleTaskTagsChange = this.handleTaskTagsChange.bind(this);
+        this.handleDone = this.handleDone.bind(this);
+        this.handleEnrollTOCourse = this.handleEnrollTOCourse.bind(this)
 
         $.ajaxSetup({
             beforeSend: (xhr) => {
@@ -70,6 +74,7 @@ class CourseDetails extends Component {
             .done((data) => {
                 this.setState({
                     userRole: data.role,
+                    userID: data._id,
                     attendedCourses: data.courses
                 })
             });
@@ -139,10 +144,6 @@ class CourseDetails extends Component {
         this.updateNewTask('question', question.value);
     }
 
-    handleTaskQuestionChange(evt, question) {
-        this.updateNewTask('question', question.value);
-    }
-
     handleTaskSampleChange(evt, sampleCode) {
         this.updateNewTask('sampleCode', sampleCode.value);
     }
@@ -153,6 +154,19 @@ class CourseDetails extends Component {
 
     handleTaskTagsChange(evt, tags) {
         this.updateNewTask('tags', tags.value);
+    }
+
+    handleDone(evt){
+        this.setState({
+            editMode: false
+        })
+    }
+
+    handleEnrollTOCourse() {
+        $.post('http://localhost:8080/api/user/update/' + this.state.userID, this.state.course._id)
+            .done((data) => {
+                console.log("done");
+            });
     }
 
     increment = () => this.setState({
@@ -240,7 +254,7 @@ class CourseDetails extends Component {
                     <Divider/>
 
                     {
-                        this.state.userRole === 'Admin' || this.state.userRole === 'Moderator'
+                        (this.state.userRole === 'Admin' || this.state.userRole === 'Moderator') && this.state.editMode
                             ?
                             <div>
                                 <Header as={'h2'}>
@@ -294,14 +308,15 @@ class CourseDetails extends Component {
                     <Divider/>
                     <Container textAlign='center'>
                         {
-                            this.state.userRole === 'Admin' || this.state.userRole === 'Moderator'
+                            (this.state.userRole === 'Admin' || this.state.userRole === 'Moderator') && this.state.editMode
                                 ? <Button type='submit' positive icon='checkmark' labelPosition='right'
-                                          content="Done" centered />
+                                          content="Done" centered onClick={this.handleDone}/>
                                 : <span>
                             {
                                 this.props._id.indexOf(this.state.attendedCourses) !== -1
                                     ? <Button positive icon='checkmark' labelPosition='right' content="Enroll course"
-                                              centered/>
+                                              centered
+                                onClick={this.handleEnrollTOCourse}/>
                                     : <Link to={"/course/" + this.props.courseID + "/edit"}>
                                     <Label content='Continue with next task.' icon='terminal' color={"green"}
                                            size={"big"}/>
