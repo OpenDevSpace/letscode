@@ -20,10 +20,10 @@ class CreateTask extends Component {
                     </Header>
                 </Accordion.Title>
                 <Accordion.Content>
-                    Some details
+                    {this.state.task.introduction}
                 </Accordion.Content>
             </Accordion>
-        )
+        );
     }
 }
 

@@ -35,7 +35,6 @@ class UserListItem extends Component {
             .done((data) => {
                 console.log("done");
             });
-
     }
 
     updateUser(change, evt) {

@@ -48,8 +48,16 @@ class CourseList extends Component {
 
     updateNewCourse(currentInput, evt){
         var tempCourse = this.state.newcourse;
+
         if(currentInput === "language" || currentInput === "level") {
             tempCourse[currentInput] = evt.value;
+        } else if (currentInput === "task") {
+            tempCourse["task"] = [{
+                title: 'Hello',
+                taskType: 'qanda',
+                question: 'Is this a real task?',
+                answer: 'no'
+            }]
         } else {
             tempCourse[currentInput] = evt.target.value;
         }
@@ -60,6 +68,7 @@ class CourseList extends Component {
 
     handleTitleChange(evt){
         this.updateNewCourse("title", evt);
+        this.updateNewCourse("task", evt);
     }
 
     handleDescChange(evt){
@@ -72,14 +81,16 @@ class CourseList extends Component {
 
     handleLevelSelection(evt, level){
         this.updateNewCourse("level", level);
+        this.updateNewCourse("task", evt);
     }
 
     handleCreateCourse(evt){
-        $.post("http://localhost:8080/api/course/new", this.state.newcourse)
-            .done((data) => {
-            this.fetchCourses();
-            this.close();
-        });
+        console.log(this.state.newcourse);
+            $.post("http://localhost:8080/api/course/new", this.state.newcourse)
+                .done((data) => {
+                    this.fetchCourses();
+                    this.close();
+                })
     }
 
     fetchCourses(){

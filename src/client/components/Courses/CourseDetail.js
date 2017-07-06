@@ -33,20 +33,20 @@ class CourseDetails extends Component {
             course: {},
             userRole: '',
             attendedCourses: [],
-            allTasks: [],
-            taskType: 'coding',
+            radioTaskType: 'coding',
             answerRadio: 1,
-            title: '',
-            introduction: '',
-            question: '',
-            sampleCode: '',
-            answer: '',
-            tags: '',
-            belongsTo: this.props.courseID
+            newTask: {
+                title: '',
+                taskType: 'coding',
+                introduction: '',
+                question: '',
+                sampleCode: '',
+                answer: '',
+                tags: ''
+            }
         };
 
         this.handleTypeChange = this.handleTypeChange.bind(this);
-        this.handleAnswerChange = this.handleAnswerChange.bind(this);
         this.handleAddMoreTasks = this.handleAddMoreTasks.bind(this);
         this.handleTaskTitleChange = this.handleTaskTitleChange.bind(this);
         this.handleTaskIntroductionChange = this.handleTaskIntroductionChange.bind(this);
@@ -60,10 +60,16 @@ class CourseDetails extends Component {
                 xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
             }
         });
+
+    }
+
+    getInitialData () {
         $.get('http://localhost:8080/api/course/coursedetail/' + this.props.courseID)
             .done((course) => {
+                console.log(typeof course);
+                console.log(course);
                 this.setState({
-                    course: course
+                    course: course,
                 });
             });
 
@@ -74,92 +80,79 @@ class CourseDetails extends Component {
             .done((data) => {
                 this.setState({
                     userRole: data.role,
-                    attendedCourses: data.courses,
-
+                    attendedCourses: data.courses
                 })
             });
-        this.fetchTasks();
     }
-
-    fetchTasks(){
-        $.get('http://localhost:8080/api/task/listall/'+this.state.belongsTo)
-            .done((tasks) => {
-            console.log(tasks)
-                this.setState({
-                    allTasks: tasks
-                });
-            });
-    }
-
+    componentDidMount () {
+    this.getInitialData();
+}
 
     handleAddMoreTasks(evt) {
         if ($('#createTaskForm')[0].checkValidity()) {
-            $.post("http://localhost:8080/api/task/new",  {
-                title: this.state.title,
-                taskType: this.state.taskType,
-                introduction: this.state.introduction,
-                question: this.state.question,
-                sampleCode: this.state.sampleCode,
-                answer: this.state.answer,
-                tags: this.state.tags,
-                belongsTo: this.state.belongsTo
-            }).done((data) => {
-                this.fetchTasks();
+            $.post("http://localhost:8080/api/course/addtask/"+this.state.course._id, {
+                _id: this.state.course._id,
+                task: this.state.newTask
+                })
+                .done((data) => {
+                console.log("done");
             });
+            this.setState({
+                newTask: {}
+            });
+            $("#createTaskForm")[0].reset();
         } else {
             console.log("not valid");
         }
     }
 
+    updateNewTask(currentInput, value){
+        let tempTask = this.state.newTask;
+
+        tempTask[currentInput] = value;
+
+        this.setState({
+            newTask: tempTask
+        });
+    }
+
 
     handleTypeChange(evt, type) {
+        this.updateNewTask('taskType', type.value);
         this.setState({
-            taskType: type.value
+            radioTaskType: type.value
         });
-    }
-    ;
+    };
 
-    handleAnswerChange(evt, type) {
-        this.setState({
-            answerRadio: type.value
-        });
-    }
-    ;
+    /* ToDo: write text of selected answer in answer and wrong answers in sampleCode */
+
 
     handleTaskTitleChange(evt, title) {
-        this.setState({
-            title: title.value
-        });
+        this.updateNewTask('title', title.value);
     }
 
     handleTaskIntroductionChange(evt, introduction) {
-        this.setState({
-            introduction: introduction.value
-        });
+        this.updateNewTask('introduction', introduction.value);
     }
 
     handleTaskQuestionChange(evt, question) {
-        this.setState({
-            question: question.value
-        });
+        this.updateNewTask('question', question.value);
+    }
+
+    handleTaskQuestionChange(evt, question) {
+        this.updateNewTask('question', question.value);
     }
 
     handleTaskSampleChange(evt, sampleCode) {
-        this.setState({
-            sampleCode: sampleCode.value
-        });
+        this.updateNewTask('sampleCode', sampleCode.value);
     }
 
     handleTaskCodeAnswerChange(evt, answer) {
-        this.setState({
-            answer: answer.value
-        });
+        this.updateNewTask('answer', answer.value);
     }
 
     handleTaskTagsChange(evt, tags) {
-        this.setState({
-            answer: tags.value
-        });
+        this.updateNewTask('tags', tags.value);
     }
 
     increment = () => this.setState({
@@ -167,12 +160,12 @@ class CourseDetails extends Component {
     })
 
     render() {
-        let taskInfo = this.state.allTasks.map((task, index) => {
-            console.log(task);
-            return <TaskList task={task}/>
-        });
 
-        const {taskType, answerRadio} = this.state;
+        let taskInfo = this.state.course.task.map((value) => {
+                return <TaskList task={value}/>
+            });
+
+        const {radioTaskType, answerRadio} = this.state;
         return (
             <Segment className="courseDetailSegment">
                 <Segment vertical>
@@ -248,10 +241,10 @@ class CourseDetails extends Component {
                                     <Form.Input label='Task Title' required onChange={this.handleTaskTitleChange}/>
                                     <Form.Group grouped required>
                                         <label>Task Type</label>
-                                        <Form.Radio label='Coding' value='coding' checked={taskType === 'coding'}
+                                        <Form.Radio label='Coding' value='coding' checked={radioTaskType === 'coding'}
                                                     onChange={this.handleTypeChange}/>
                                         <Form.Radio label='Question & Answer' value='qanda'
-                                                    checked={taskType === 'qanda'}
+                                                    checked={radioTaskType === 'qanda'}
                                                     onChange={this.handleTypeChange}/>
                                     </Form.Group>
                                     <Form.TextArea label='Introduction' placeholder='What is this task for?'
@@ -259,7 +252,7 @@ class CourseDetails extends Component {
                                     <Form.TextArea label='Question' placeholder='What is the user supposed to do?'
                                                    required onChange={this.handleTaskQuestionChange}/>
                                     {
-                                        (this.state.taskType === "coding")
+                                        (this.state.radioTaskType === "coding")
                                             ?
                                             <Form.Group required widths={2}>
                                                 <Form.TextArea label='Sample code'
@@ -271,25 +264,9 @@ class CourseDetails extends Component {
                                             </Form.Group>
                                             :
                                             <Form.Group required grouped>
-                                                <label>Enter tree options and mark the correct one.</label>
-                                                <Form.Group>
-                                                    <Form.Radio value={1}
-                                                                checked={answerRadio === 1}
-                                                                onChange={this.handleAnswerChange}/>
-                                                    <Form.Input placeholder="Answer 1" required/>
-                                                </Form.Group>
-                                                <Form.Group>
-                                                    <Form.Radio value={2}
-                                                                checked={answerRadio === 2}
-                                                                onChange={this.handleAnswerChange}/>
-                                                    <Form.Input placeholder="Answer 2" required/>
-                                                </Form.Group>
-                                                <Form.Group>
-                                                    <Form.Radio value={3}
-                                                                checked={answerRadio === 3}
-                                                                onChange={this.handleAnswerChange}/>
-                                                    <Form.Input placeholder="Answer 3" required/>
-                                                </Form.Group>
+                                                <Form.Input label='Right Answer' required onChange={this.handleTaskCodeAnswerChange}/>
+                                                <Form.Input label='Wrong Answer 1' required onChange={this.handleTaskSampleChange}/>
+                                                <Form.Input label='Wrong Answer 2' required onChange={this.handleTaskSampleChange}/>
                                             </Form.Group>
                                     }
 
@@ -324,7 +301,9 @@ class CourseDetails extends Component {
                 </Segment>
             </Segment>
         )
+
     }
+
 }
 
 export default CourseDetails

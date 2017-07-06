@@ -16,11 +16,21 @@ routes.post('/new', (req, res) => {
 });
 
 routes.post('/update/:courseID', (req, res) => {
-    //console.log(req.body);
+    console.log('/update/:courseID req.body');
+    console.log(req.body);
     CourseController.update(req.body, (data) => {
-        console.log(data);
+        res.json(data);
     });
 
+    //res.send(res.send(req.params.courseID));
+});
+
+routes.post('/addtask/:courseID', (req, res) => {
+    console.log('/addtask/:courseID req.body');
+    console.log(req.body);
+    CourseController.addTask(req.body, (data) => {
+        res.json(data);
+    });
     //res.send(res.send(req.params.courseID));
 });
 
@@ -48,7 +58,6 @@ routes.get('/coursedetail/:courseID', (req, res) => {
         active: true,
         _id: mongoose.Types.ObjectId(req.params.courseID)
     }, {}, (course) => {
-        console.log(course.data[0]);
         res.json(course.data[0]);
     })
 })

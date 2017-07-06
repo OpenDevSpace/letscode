@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Checkbox, Table, Modal, Button, Form, Menu, Dropdown} from 'semantic-ui-react'
 import '../../../styles/CourseList.css'
+import Truncate from 'react-truncate'
 import $ from 'jquery';
 
 const language = [
@@ -22,12 +23,10 @@ class CourseOverviewItem extends Component {
 
         var testVar = $.extend(true, this.props.course, {});
 
-        console.log(testVar);
-
         this.state = {
             open: false,
             course: this.props.course,
-            tempCourse: {},
+            tempCourse: this.props.course,
             levelText: ''
         }
 
@@ -46,25 +45,25 @@ class CourseOverviewItem extends Component {
     close = () => this.setState({open: false});
 
     updateRequest() {
-        var requestdata = $.extend(true, {}, this.state.course);
+        var requestdata = $.extend(true, {}, this.state.tempCourse);
         requestdata["createdBy"] = this.state.course.createdBy._id;
 
         $.post('http://localhost:8080/api/course/update/'+this.state.course._id, requestdata)
             .done((data) => {
-                console.log(data);
+
             })
             .fail((data) => {
-            console.log(data);
+
             });
     }
 
 
     changeCourse(change, evt) {
-        var temp = $.extend(true, this.state.tempCourse, {});
+        var temp = $.extend(true, this.state.course, {});
         if (change === 'active') {
             temp['active'] = !this.state.course.active;
             this.setState({
-                course: temp
+                tempCourse: temp
             });
             this.updateRequest();
         } else {
@@ -130,7 +129,11 @@ class CourseOverviewItem extends Component {
         return (
             <Table.Row>
                 <Table.Cell>{this.state.course.title}</Table.Cell>
-                <Table.Cell>{this.state.course.description}</Table.Cell>
+                <Table.Cell>
+                    <Truncate lines={1} ellipsis={<span>... <Button size='mini' basic color='orange' onClick={this.show('blurring')}>Read more</Button></span>}>
+                        {this.state.course.description}
+                    </Truncate>
+                    </Table.Cell>
                 <Table.Cell collapsing>{this.state.course.language}</Table.Cell>
                 <Table.Cell collapsing>{this.state.levelText}</Table.Cell>
                 <Table.Cell>{this.state.course.tags}</Table.Cell>
@@ -153,7 +156,7 @@ class CourseOverviewItem extends Component {
                                 <Form.Input id="courseName" label='Enter course Name' type="string"
                                             defaultValue={this.state.course.title} required autoFocus
                                             onChange={this.handleTitleChange}/>
-                                <Form.Input id="courseDesc" label='Please describe the course' type="string"
+                                <Form.TextArea id="courseDesc" label='Please describe the course' type="string"
                                             defaultValue={this.state.course.description} required
                                             onChange={this.handleDescChange}/>
                                 <Menu compact>

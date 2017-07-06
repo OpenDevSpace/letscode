@@ -8,6 +8,15 @@ module.exports = mongoose.model('Course', mongoose.Schema({
         level: {type: Number, enum: [1, 2, 3], required: true},
         timestamp: {type: Date, default: Date.now()},
         createdBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-        active: {type: Boolean, default: false}
+        active: {type: Boolean, default: false},
+        task: [{
+            title: {type: String, required: true},
+            taskType: {type: String, enum: ['coding', 'qanda'], required: true},
+            introduction: {type: String},
+            question: {type: String, required: true},
+            sampleCode: {type: String},
+            answer: {type: String, required: true},
+            tags: {type: String}
+        }]
     }
 ));
