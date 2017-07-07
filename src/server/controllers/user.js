@@ -25,7 +25,13 @@ class User {
 
     waitUntilHashReady(user, data, callback) {
         for (let prop in data) {
-            user[prop] = data[prop];
+            if(prop === "courses"){
+                if(!data.courses.indexOf(user[prop])){
+                    user[prop].push(data.courses);
+                }
+            } else {
+                user[prop] = data[prop];
+            }
         }
         user.save((saveErr, updUser) => {
             if (saveErr) {
@@ -42,10 +48,8 @@ class User {
         });
     }
 
-    update(data, callback) {
-        console.log(data.data);
-
-        UserModel.findById(data._id, (err, user) => {
+    update(id, data, callback) {
+        UserModel.findById(id, (err, user) => {
             if (err) {
                 callback({
                     success: false,
@@ -74,7 +78,7 @@ class User {
                                     delete data.data;
                                     console.log(data);
                                     this.waitUntilHashReady(user, data, (cb) => {
-                                        console.log(cb);
+                                        callback(cb);
                                     });
                                 });
                             });
@@ -82,11 +86,9 @@ class User {
                     });
                 } else {
                     this.waitUntilHashReady(user, data, (cb) => {
-                        console.log(cb);
+                        callback(cb);
                     });
                 }
-
-
             }
         });
     }

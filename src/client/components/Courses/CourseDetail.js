@@ -33,7 +33,7 @@ class CourseDetails extends Component {
             course: {},
             userRole: this.props.role,
             userID: this.props._id,
-            attendedCourses: this.props.course,
+            attendedCourses: this.props.courses,
             radioTaskType: 'coding',
             answerRadio: 1,
             newTask: {
@@ -65,8 +65,6 @@ class CourseDetails extends Component {
                 xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
             }
         });
-
-        this.fetchData();
         $.get("http://localhost:8080/api/user/afterlogin")
             .fail(() => {
                 console.log("Failure!");
@@ -78,6 +76,8 @@ class CourseDetails extends Component {
                     attendedCourses: data.courses
                 })
             });
+        this.fetchData();
+
     }
 
 
@@ -163,9 +163,17 @@ class CourseDetails extends Component {
     }
 
     handleEnrollTOCourse() {
-        $.post('http://localhost:8080/api/user/update/' + this.state.userID, this.state.course._id)
+        $.post('http://localhost:8080/api/user/update/' + this.state.userID, {
+            courses: this.state.course._id
+        })
             .done((data) => {
                 console.log("done");
+                let newCourseList = this.state.attendedCourses;
+                newCourseList.push(this.state.course._id);
+                this.setState({
+                    attendedCourses: newCourseList
+                })
+                console.log(this.state.attendedCourses);
             });
     }
 
@@ -313,14 +321,13 @@ class CourseDetails extends Component {
                                           content="Done" centered onClick={this.handleDone}/>
                                 : <span>
                             {
-                                this.props._id.indexOf(this.state.attendedCourses) !== -1
-                                    ? <Button positive icon='checkmark' labelPosition='right' content="Enroll course"
-                                              centered
-                                onClick={this.handleEnrollTOCourse}/>
-                                    : <Link to={"/course/" + this.props.courseID + "/edit"}>
+                                this.state.attendedCourses.indexOf(this.props.courseID) !== -1
+                                    ? <Link to={"/course/" + this.props.courseID + "/edit"}>
                                     <Label content='Continue with next task.' icon='terminal' color={"green"}
                                            size={"big"}/>
                                 </Link>
+                                    : <Button positive icon='checkmark' labelPosition='right' content="Enroll course"
+                                              centered onClick={this.handleEnrollTOCourse}/>
                             }
                         </span>
                         }

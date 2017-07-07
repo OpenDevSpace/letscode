@@ -29,7 +29,7 @@ class AccountSettings extends Component {
     }
 
     updateEmail(evt) {
-        $.post('http://localhost:8080/api/user/update/'+this.state._id, {
+        $.post('http://localhost:8080/api/user/update/'+this.props._id, {
             _id: this.props._id,
             email: this.state.email
         })
@@ -59,7 +59,7 @@ class AccountSettings extends Component {
     }
 
     updatePassword(evt) {
-        $.post('http://localhost:8080/api/user/update/'+this.state._id, {
+        $.post('http://localhost:8080/api/user/update/'+this.props._id, {
             _id: this.props._id,
             data: this.state.updatePassword
         })
