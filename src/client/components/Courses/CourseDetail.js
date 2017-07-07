@@ -42,7 +42,10 @@ class CourseDetails extends Component {
                 introduction: '',
                 question: '',
                 sampleCode: '',
-                answer: '',
+                options: {
+                    correctAnswers: [],
+                    falseAnswers: []
+                },
                 tags: ''
             },
             retrievedData: false,
@@ -55,7 +58,6 @@ class CourseDetails extends Component {
         this.handleTaskIntroductionChange = this.handleTaskIntroductionChange.bind(this);
         this.handleTaskQuestionChange = this.handleTaskQuestionChange.bind(this);
         this.handleTaskSampleChange = this.handleTaskSampleChange.bind(this);
-        this.handleTaskCodeAnswerChange = this.handleTaskCodeAnswerChange.bind(this);
         this.handleTaskTagsChange = this.handleTaskTagsChange.bind(this);
         this.handleDone = this.handleDone.bind(this);
         this.handleEnrollTOCourse = this.handleEnrollTOCourse.bind(this);
@@ -66,6 +68,7 @@ class CourseDetails extends Component {
             }
         });
 
+        console.log(this.state);
         this.fetchData();
     }
 
@@ -80,17 +83,27 @@ class CourseDetails extends Component {
                     userID: this.props._id,
                     attendedCourses: this.props.courses
                 });
-                console.log(this.props);
-                console.log(this.state);
-                console.log(this.state.attendedCourses.map((e) => {
-                    return e.courseID
-                }).indexOf(this.props.courseID));
-                console.log(this.props.courseID);
             });
-
     }
 
     handleAddMoreTasks(evt) {
+        let answer = this.state.newTask.options.correctAnswers;
+        let options = this.state.newTask.options.falseAnswers;
+
+        if(this.state.radioTaskType === "coding"){
+            answer.push($('#rightAnswerCode').val());
+            options.push($('#answerOptionCode').val());
+        } else {
+            answer.push($('#rightAnswerOption').val());
+            options.push($('#answerOption1').val());
+            options.push($('#answerOption2').val());
+        }
+
+        this.setState({
+            correctAnswers: answer,
+            falseAnswers: options
+        });
+
         if ($('#createTaskForm')[0].checkValidity()) {
             $.post("http://localhost:8080/api/course/addtask/" + this.state.course._id, {
                 _id: this.state.course._id,
@@ -99,9 +112,6 @@ class CourseDetails extends Component {
                 .done((data) => {
                     console.log("done");
                 });
-            this.setState({
-                newTask: {}
-            });
             this.fetchData();
             $("#createTaskForm")[0].reset();
         } else {
@@ -112,7 +122,13 @@ class CourseDetails extends Component {
     updateNewTask(currentInput, value) {
         let tempTask = this.state.newTask;
 
-        tempTask[currentInput] = value;
+        if(currentInput === 'answer' || currentInput === 'options'){
+
+        } else {
+            tempTask[currentInput] = value;
+
+        }
+
 
         this.setState({
             newTask: tempTask
@@ -146,10 +162,6 @@ class CourseDetails extends Component {
         this.updateNewTask('sampleCode', sampleCode.value);
     }
 
-    handleTaskCodeAnswerChange(evt, answer) {
-        this.updateNewTask('answer', answer.value);
-    }
-
     handleTaskTagsChange(evt, tags) {
         this.updateNewTask('tags', tags.value);
     }
@@ -180,11 +192,11 @@ class CourseDetails extends Component {
     })
 
     render() {
-        let taskInfo;
+        let taskList;
 
         if(this.state.retrievedData){
-            taskInfo = this.state.course.task.map((value) => {
-                return <TaskList task={value}/>
+            taskList = this.state.course.task.map((value) => {
+                return <TaskList task={value} courseID={this.state.course._id}/>
             });
         }
 
@@ -251,7 +263,7 @@ class CourseDetails extends Component {
                         <Accordion.Content>
                             {
                                 (this.state.retrievedData)
-                                ? <div>{taskInfo}</div>
+                                ? <div>{taskList}</div>
                                 : null
                             }
 
@@ -284,21 +296,17 @@ class CourseDetails extends Component {
                                         (this.state.radioTaskType === "coding")
                                             ?
                                             <Form.Group required widths={2}>
-                                                <Form.TextArea label='Sample code'
+                                                <Form.TextArea id="answerOptionCode" label='Sample code'
                                                                placeholder='Provide some sample code...' required
                                                                onChange={this.handleTaskSampleChange}/>
-                                                <Form.TextArea label='Answer' placeholder='What is the right answer?'
-                                                               required
-                                                               onChange={this.handleTaskCodeAnswerChange}/>
+                                                <Form.TextArea id="rightAnswerCode" label='Answer' placeholder='What is the right answer?'
+                                                               required />
                                             </Form.Group>
                                             :
                                             <Form.Group required grouped>
-                                                <Form.Input label='Right Answer' required
-                                                            onChange={this.handleTaskCodeAnswerChange}/>
-                                                <Form.Input label='Wrong Answer 1' required
-                                                            onChange={this.handleTaskSampleChange}/>
-                                                <Form.Input label='Wrong Answer 2' required
-                                                            onChange={this.handleTaskSampleChange}/>
+                                                <Form.Input id="rightAnswerOption" label='Right Answer' required/>
+                                                <Form.Input id="answerOption1" label='Wrong Answer 1' required/>
+                                                <Form.Input id="answerOption2" label='Wrong Answer 2' required/>
                                             </Form.Group>
                                     }
 

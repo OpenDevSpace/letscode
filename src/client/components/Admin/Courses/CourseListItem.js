@@ -125,6 +125,13 @@ class CourseOverviewItem extends Component {
     }
 
     render() {
+        let date = (this.state.course.timestamp);
+
+        let myDate = date.substring(8, 10) + "." +
+            date.substring(5, 7) + "." +
+            date.substring(0, 4) + " " +
+            date.substring(11, 16) + " Uhr";
+
         const {open, dimmer} = this.state;
         this.getLevel();
         return (
@@ -138,7 +145,7 @@ class CourseOverviewItem extends Component {
                 <Table.Cell collapsing>{this.state.course.language}</Table.Cell>
                 <Table.Cell collapsing>{this.state.levelText}</Table.Cell>
                 <Table.Cell>{this.state.course.tags}</Table.Cell>
-                <Table.Cell collapsing>{this.state.course.timestamp}</Table.Cell>
+                <Table.Cell collapsing>{myDate}</Table.Cell>
                 <Table.Cell>{this.state.course.createdBy.firstName} {this.state.course.createdBy.lastName}</Table.Cell>
                 <Table.Cell collapsing>
                     <Checkbox toggle checked={this.state.course.active} onChange={this.handleActiveChange}/>

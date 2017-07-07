@@ -176,7 +176,9 @@ class UserListItem extends Component {
                         </Menu>
                     }
                 </Table.Cell>
-                <Table.Cell>{this.state.user.courses}</Table.Cell>
+                <Table.Cell>{this.state.user.courses.map((e) => {
+                    return (e.courseID + "; ")
+                })}</Table.Cell>
 
                 <Table.Cell collapsing>
                     {

@@ -23,7 +23,7 @@ class App extends Component {
             <Switch>
                 <Route exact path="/" component={AuthPage}/>
                 <Route path="/dashboard" component={Dashboard}/>
-                <Route path="/course/:string/edit" component={Task}/>
+                <Route path="/course/:courseString/:taskString/process" component={Task}/>
                 <Route path="/course/:string" component={Course}/>
                 <Route exact path="/admin/courselist" component={AdminCourseList}/>
                 <Route exact path="/admin/userlist" component={AdminUserList}/>

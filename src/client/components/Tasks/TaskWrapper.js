@@ -6,10 +6,25 @@ import taskData from '../../data/Tasks'
 import TaskDefinition from "./TaskDefinition";
 import TaskWorkspace from "./TaskWorkspace";
 
+import $ from 'jquery'
+
 
 class TaskWrapper extends Component {
     constructor(props) {
         super(props);
+
+        $.ajaxSetup({
+            beforeSend: (xhr) => {
+                xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
+            }
+        });
+
+        $.get('http://localhost:8080/api/course/gettask/'+this.props.courseID+'/'+this.props.taskID)
+            .done((data) => {
+            console.log(data);
+            });
+
+        console.log(this.props);
     }
     state = {}
 
@@ -31,7 +46,7 @@ class TaskWrapper extends Component {
                         <TaskWorkspace currentTask={taskData[counter]}/>
                     </Step>
                     {
-                        taskData[counter].type === "coding"
+                        (taskData[counter].type === "coding")
                             ? (
                             <Step className="taskColumn">
                                 <Segment vertical basic={true} color={"yellow"} className="taskSegment">
