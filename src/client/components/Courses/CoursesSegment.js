@@ -7,16 +7,18 @@ import '../../styles/CoursesSegment.css'
 
 import $ from 'jquery'
 
+let courseInfo;
 
 class CoursesSegment extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            courseInfo: courseData,
+            attendedCourses: this.props.courses,
+            userCourses: [],
             itemsToShow: 3,
             expanded: false,
-            courses: []
+            courses: [],
+            dataFetched: false
         }
         this.showMore = this.showMore.bind(this)
 
@@ -30,21 +32,55 @@ class CoursesSegment extends Component {
                 this.setState({
                     courses: courses.data
                 });
+                this.handleCoursesFetched();
             });
+
+
+    }
+
+    handleCoursesFetched(){
+        var foo = this.props.courses.map((value) => {
+            return value.courseID;
+        });
+
+        let bar = this.state.courses.map((value) => {
+            return value._id;
+        });
+
+        for (let temp in foo){
+            console.log(this.state.courses[bar.indexOf(foo[temp])]);
+            let singleCourse = this.state.userCourses;
+            singleCourse.push(this.state.courses[bar.indexOf(foo[temp])]);
+            this.setState({
+                userCourses: singleCourse
+            })
+        }
+
+
+        courseInfo = this.state.userCourses.slice(0, this.state.itemsToShow).map((course, i) =>
+         <Card course={course}/>
+         );
+
+        this.setState({
+            dataFetched: true
+        });
+
+        console.log(this.state.userCourses);
+
+
+
     }
 
     showMore() {
         this.state.itemsToShow === 3 ? (
-            this.setState({itemsToShow: this.state.courseInfo.length, expanded: true})
+            this.setState({itemsToShow: this.props.courses.length, expanded: true})
         ) : (
             this.setState({itemsToShow: 3, expanded: false})
         )
     }
 
     render() {
-        let courseInfo = this.state.courses.map((course, index) => {
-                return <Card course={course}/>
-            });
+
         return <Container fluid className="CoursesSegment">
             <Segment>
                 <h2>Your Courses</h2>
@@ -56,9 +92,13 @@ class CoursesSegment extends Component {
                     </div>
                         :
                         <div>
-                            {this.state.courseInfo.slice(0, this.state.itemsToShow).map((courseInfo, i) =>
-                                <Card course={courseInfo}/>
-                            )}
+                            {
+                                this.state.dataFetched
+                                ? <p>{courseInfo}</p>
+                                    : null
+
+                            }
+
                             <a className="" onClick={this.showMore}>
                                 {this.state.expanded ? (
                                     <ShowMoreLess icon="arrow up" text="Show less courses"/>

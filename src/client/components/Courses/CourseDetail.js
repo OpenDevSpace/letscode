@@ -31,9 +31,9 @@ class CourseDetails extends Component {
         this.state = {
             percent: 43,
             course: {},
-            userRole: this.props.role,
-            userID: this.props._id,
-            attendedCourses: this.props.courses,
+            userRole: '',
+            userID: '',
+            attendedCourses: [],
             radioTaskType: 'coding',
             answerRadio: 1,
             newTask: {
@@ -58,26 +58,15 @@ class CourseDetails extends Component {
         this.handleTaskCodeAnswerChange = this.handleTaskCodeAnswerChange.bind(this);
         this.handleTaskTagsChange = this.handleTaskTagsChange.bind(this);
         this.handleDone = this.handleDone.bind(this);
-        this.handleEnrollTOCourse = this.handleEnrollTOCourse.bind(this)
+        this.handleEnrollTOCourse = this.handleEnrollTOCourse.bind(this);
 
         $.ajaxSetup({
             beforeSend: (xhr) => {
                 xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
             }
         });
-        $.get("http://localhost:8080/api/user/afterlogin")
-            .fail(() => {
-                console.log("Failure!");
-            })
-            .done((data) => {
-                this.setState({
-                    userRole: data.role,
-                    userID: data._id,
-                    attendedCourses: data.courses
-                })
-            });
-        this.fetchData();
 
+        this.fetchData();
     }
 
 
@@ -86,8 +75,17 @@ class CourseDetails extends Component {
             .done((course) => {
                 this.setState({
                     course: course,
-                    retrievedData: true
+                    retrievedData: true,
+                    userRole: this.props.role,
+                    userID: this.props._id,
+                    attendedCourses: this.props.courses
                 });
+                console.log(this.props);
+                console.log(this.state);
+                console.log(this.state.attendedCourses.map((e) => {
+                    return e.courseID
+                }).indexOf(this.props.courseID));
+                console.log(this.props.courseID);
             });
 
     }
@@ -321,7 +319,9 @@ class CourseDetails extends Component {
                                           content="Done" centered onClick={this.handleDone}/>
                                 : <span>
                             {
-                                this.state.attendedCourses.indexOf(this.props.courseID) !== -1
+                                this.state.attendedCourses.map((e) => {
+                                    return e.courseID
+                                }).indexOf(this.props.courseID) !== -1
                                     ? <Link to={"/course/" + this.props.courseID + "/edit"}>
                                     <Label content='Continue with next task.' icon='terminal' color={"green"}
                                            size={"big"}/>

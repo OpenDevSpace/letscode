@@ -26,9 +26,9 @@ class User {
     waitUntilHashReady(user, data, callback) {
         for (let prop in data) {
             if(prop === "courses"){
-                if(!data.courses.indexOf(user[prop])){
-                    user[prop].push(data.courses);
-                }
+                user[prop].push({
+                    courseID: data.courses
+                });
             } else {
                 user[prop] = data[prop];
             }
