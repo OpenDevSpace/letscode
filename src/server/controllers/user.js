@@ -26,9 +26,26 @@ class User {
     waitUntilHashReady(user, data, callback) {
         for (let prop in data) {
             if(prop === "courses"){
-                user[prop].push({
-                    courseID: data.courses
-                });
+                if(user.courses.map((course, index) => {
+                        return course.courseID.toString();
+                    }).indexOf(data.courses.toString()) !== -1){
+
+                    let courseIndex = user.courses.map((course, index) => {
+                        return course.courseID.toString();
+                    }).indexOf(data.courses.toString());
+
+                    console.log(data.taskID);
+
+                    user.courses[courseIndex].taskID.push(data.taskID)
+
+                    console.log(user.courses[courseIndex].taskID);
+
+                } else {
+                    user[prop].push({
+                        courseID: data.courses
+                    });
+                }
+
             } else {
                 user[prop] = data[prop];
             }

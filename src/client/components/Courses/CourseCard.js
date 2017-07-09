@@ -63,15 +63,14 @@ class CourseCard extends Component {
                                 </div>
                             </Card.Meta>
                             <Card.Description>
-                                <Truncate lines={5} ellipsis={<span>... <br/><Link to={"/course/"+this.props.course.id}>Read more</Link></span>}>
+                                <Truncate lines={5} ellipsis={<span>... <br/>Read more</span>}>
                                     {this.props.course.description}
                                 </Truncate>
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
                             <div className="centeredStyle">
-                                <Link to={"/course/"+this.props.course.id+"/edit"}>
-                                    <Button animated='fade' color='green' type='submit' centered>
+                                    <Button animated='fade' color='green' type='submit'>
                                         <Button.Content visible>
                                             Learn Programming?
                                         </Button.Content>
@@ -79,7 +78,6 @@ class CourseCard extends Component {
                                             Start Course
                                         </Button.Content>
                                     </Button>
-                                </Link>
                             </div>
                         </Card.Content>
                     </Card>

@@ -47,8 +47,11 @@ class Frame extends Component {
 
     renderChildren(props) {
         return React.Children.map(props.children, child => {
-            if(child.type === CoursesSegment || child.type === DiscoverCoursesSegment
-                || child.type === AccountSettings || child.type === CourseDetail || child.type === TaskWrapper)  {
+            if(child.type === CoursesSegment
+                || child.type === DiscoverCoursesSegment
+                || child.type === AccountSettings
+                || child.type === CourseDetail
+                || child.type === TaskWrapper )  {
                 return React.cloneElement(child, {
                     _id: this.state._id,
                     firstName: this.state.firstName,
@@ -71,7 +74,7 @@ class Frame extends Component {
                     <div className="sidebarDiv" >
                         <Sidebar userRole={this.state.role} type={this.props.type}/>
                     </div>
-                    <div className="dashboardContent">
+                    <div id="myContent" className="dashboardContent">
                         {this.renderChildren(this.props)}
                     </div>
                 </div>

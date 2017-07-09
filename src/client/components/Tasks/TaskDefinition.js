@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Step, Icon, Segment, Header}from 'semantic-ui-react'
+import {Icon, Segment, Header}from 'semantic-ui-react'
 import '../../styles/TaskWrapper.css'
 
 
@@ -15,13 +15,14 @@ class TaskDefinition extends Component {
                     <Header.Content>
                         {this.props.currentTask.title}
                         <Header.Subheader>
-                            Some tasks
+                            Answer the task
                         </Header.Subheader>
                     </Header.Content>
                 </Header>
                 <p className="taskText">
-                    {this.props.currentTask.description}
+                    {this.props.currentTask.introduction}
                 </p>
+                <br/>
             </Segment>
         )
     }

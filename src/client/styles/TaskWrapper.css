@@ -14,3 +14,6 @@
 .taskText {
   display: inline-block;
   position: absolute; }
+
+.ui.form textarea {
+  min-height: 15rem; }

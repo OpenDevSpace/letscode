@@ -2,16 +2,20 @@ import React, {Component} from 'react'
 import TaskStep from './TaskStep'
 import {Step, Icon, Segment, Header, Form, Checkbox, Radio, Button}from 'semantic-ui-react'
 import '../../styles/TaskWrapper.css'
-import taskData from '../../data/Tasks'
 import TaskDefinition from "./TaskDefinition";
 import TaskWorkspace from "./TaskWorkspace";
 
 import $ from 'jquery'
 
-
 class TaskWrapper extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            currentTask: {},
+            options: []
+        }
+
+        this.handleFetchedValues = this.handleFetchedValues.bind(this);
 
         $.ajaxSetup({
             beforeSend: (xhr) => {
@@ -21,32 +25,70 @@ class TaskWrapper extends Component {
 
         $.get('http://localhost:8080/api/course/gettask/'+this.props.courseID+'/'+this.props.taskID)
             .done((data) => {
-            console.log(data);
+                this.handleFetchedValues(data)
             });
 
-        console.log(this.props);
+        console.log(this.props)
+
     }
-    state = {}
+
+    shuffle(array) {
+        let currentIndex = array.length, temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            // And swap it with the current element.
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+    }
+
+    handleFetchedValues(data){
+        let options = this.state.options;
+
+        if(data.data.taskType === 'coding'){
+            for (let i = 0; i < data.data.options.falseAnswers.length; i++){
+                options.push(data.data.options.falseAnswers[i]);
+            }
+        } else {
+            for (let i = 0; i < data.data.options.falseAnswers.length; i++){
+                options.push(data.data.options.falseAnswers[i]);
+            }
+            for (let i = 0; i < data.data.options.correctAnswers.length; i++){
+                options.push(data.data.options.correctAnswers[i]);
+            }
+        }
+
+        this.setState({
+            currentTask: data.data,
+            options: this.shuffle(options)
+        })
+    }
 
     handleChange = (e, { value }) => this.setState({ value })
 
     render() {
-        const { value } = this.state
-        let counter = 1
-        let taskInfo = taskData.map((task, index) => {
-            return <TaskStep task={task}/>;
-        });
+        const { value } = this.state;
+
         return (
             <div className="taskWrapper">
                 <Step.Group fluid={true}>
                     <Step className="taskColumn">
-                        <TaskDefinition currentTask={taskData[counter]}/>
+                        <TaskDefinition currentTask={this.state.currentTask}/>
                     </Step>
                     <Step className="taskColumn">
-                        <TaskWorkspace currentTask={taskData[counter]}/>
+                        <TaskWorkspace currentTask={this.state.currentTask} options={this.state.options} userID={this.props._id} courseID={this.props.courseID}/>
                     </Step>
                     {
-                        (taskData[counter].type === "coding")
+                        (this.state.currentTask.taskType === "coding")
                             ? (
                             <Step className="taskColumn">
                                 <Segment vertical basic={true} color={"yellow"} className="taskSegment">
@@ -59,8 +101,11 @@ class TaskWrapper extends Component {
                                             </Header.Subheader>
                                         </Header.Content>
                                     </Header>
-                                    <Button basic color='green' onClick={[].forEach.call(document.querySelectorAll('.myCheckbox:checked'), function (cb) {
-                                    })} >Click me</Button>
+                                    <Form >
+                                        <Form.TextArea />
+                                        <Button basic fluid color='green' onClick={[].forEach.call(document.querySelectorAll('.myCheckbox:checked'), function (cb) {
+                                    })} >Check answer</Button>
+                                    </Form>
                                 </Segment>
                             </Step>
                         ) : null

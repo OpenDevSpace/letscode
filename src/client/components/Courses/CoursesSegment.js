@@ -94,7 +94,7 @@ class CoursesSegment extends Component {
                         <div>
                             {
                                 this.state.dataFetched
-                                ? <p>{courseInfo}</p>
+                                ? <span>{courseInfo}</span>
                                     : null
 
                             }

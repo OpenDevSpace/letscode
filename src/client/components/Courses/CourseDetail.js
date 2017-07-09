@@ -183,7 +183,6 @@ class CourseDetails extends Component {
                 this.setState({
                     attendedCourses: newCourseList
                 })
-                console.log(this.state.attendedCourses);
             });
     }
 
@@ -193,11 +192,26 @@ class CourseDetails extends Component {
 
     render() {
         let taskList;
+        let taskIDs;
+        let nextCourse;
+
 
         if(this.state.retrievedData){
             taskList = this.state.course.task.map((value) => {
                 return <TaskList task={value} courseID={this.state.course._id}/>
             });
+
+            taskIDs = this.state.course.task.map((e) => {
+                return e._id
+            })
+
+            for (let i = 0; i < taskIDs.length; i++){
+
+                if(!(taskIDs[i].indexOf(this.props.courseID) !== -1)){
+                    nextCourse = taskIDs[i];
+                    i = taskIDs.length;
+                }
+            }
         }
 
 
@@ -324,18 +338,19 @@ class CourseDetails extends Component {
                         {
                             (this.state.userRole === 'Admin' || this.state.userRole === 'Moderator') && this.state.editMode
                                 ? <Button type='submit' positive icon='checkmark' labelPosition='right'
-                                          content="Done" centered onClick={this.handleDone}/>
+                                          content="Done" onClick={this.handleDone}/>
                                 : <span>
                             {
                                 this.state.attendedCourses.map((e) => {
                                     return e.courseID
                                 }).indexOf(this.props.courseID) !== -1
-                                    ? <Link to={"/course/" + this.props.courseID + "/edit"}>
+                                    ? <Link to={"/course/" +
+                                this.props.courseID + "/" + nextCourse + "/process"}>
                                     <Label content='Continue with next task.' icon='terminal' color={"green"}
                                            size={"big"}/>
                                 </Link>
                                     : <Button positive icon='checkmark' labelPosition='right' content="Enroll course"
-                                              centered onClick={this.handleEnrollTOCourse}/>
+                                              onClick={this.handleEnrollTOCourse}/>
                             }
                         </span>
                         }

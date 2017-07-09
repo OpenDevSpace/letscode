@@ -8,8 +8,6 @@ routes.post('/update/:userID', (req, res) => {
         res.status(401).end();
     } else {
         UserController.update(req.params.userID, req.body, (data) => {
-            console.log("data");
-            console.log(data);
             res.json(data);
         });
     }

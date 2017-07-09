@@ -90,7 +90,7 @@ class Course {
         });
     }
 
-    getTask(courseID, selectedTask, userData, callback){
+    getTask(courseID, selectedTask, userData, callback) {
         CourseModel.findById(courseID, (err, course) => {
             if (err) {
                 callback({
@@ -102,22 +102,44 @@ class Course {
                     success: false,
                     message: 'Requested course not found!'
                 });
-            } else {
-                if(!course.active || userData.courses.map((e) => {
-                    return e.courseID
-                    }).indexOf(course._id) === -1){
-                    callback({
-                        success: false,
-                        message: 'Course not active or not enrolled'
-                    })
-                } else {
-                    callback({
-                        success: true,
-                        task: course.task.id(selectedTask)
-                    })
-                }
-            };
+            }
+            /*
+             else {
+             if (!course.active || userData.courses.map((e) => {
+             return e.courseID
+             }).indexOf(course._id) === -1 ) {
+             callback({
+             success: false,
+             message: 'Course not active or not enrolled'
+             })
+             } else {
+             console.log(selectedTask);
+             callback({
+             success: true,
+             task: course.task.map((e) => {
+             return e[selectedTask]
+             })
+             })
+             }
+             }
+             */
         })
+            .populate('task', {})
+            .exec((err, res) => {
+
+                let temp;
+
+                for (let i = 0; i < res.task.length; i++) {
+                    if (res.task[i]._id.toString() === selectedTask.toString()){
+                        temp = res.task[i];
+                    }
+                }
+                if (err) throw err;
+                callback({
+                    success: true,
+                    data: temp
+                });
+            })
     }
 
 

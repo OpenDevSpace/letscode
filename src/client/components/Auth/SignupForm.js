@@ -88,7 +88,7 @@ class Signup extends Component {
                                     required/>
                         <Form.Input label='Enter Password' type='password' placeholder='s3cur3Pa55w0rd' onChange={this.handlePasswordChange} required/>
                         <Form.Input label='Repeat Password' type='password' placeholder='s3cur3Pa55w0rd' required/>
-                        <Button animated='fade' color='green' type='submit' size='big' centered onClick={this.handleSignupAction.bind(this)}>
+                        <Button animated='fade' color='green' type='submit' size='big' onClick={this.handleSignupAction.bind(this)}>
                             <Button.Content visible>
                                 Ready?
                             </Button.Content>
