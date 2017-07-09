@@ -33,6 +33,12 @@ routes.get('/afterlogin', (req, res) => {
     UserController.doAfterLogin(req.user.userID, (user) => {
         res.json(user);
     })
-})
+});
+
+routes.get('/unenroll/:courseID', (req, res) => {
+    UserController.unenroll(req.user.userID, courseID, (newCourses) => {
+        res.json(newCourses);
+    });
+});
 
 module.exports = routes;

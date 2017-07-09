@@ -148,6 +148,41 @@ class User {
             })
         })
     }
+
+    unenroll(userID, courseID, callback) {
+        UserModel.findById(userID, (err, user) =>{
+            if (err) throw err;
+            if (!user) {
+                callback({
+                    success: false,
+                    message: 'User not found'
+                });
+            } else {
+                if (user.courses.map((e) => { return e.courseID}).indexOf(courseID) === -1) {
+                    callback({
+                        success: false,
+                        message: 'User is not enrolled in the course.'
+                    });
+                } else {
+                    user.courses.splice(user.courses.map((e) => { return e.courseID}).indexOf(courseID), 1);
+                    user.save((updErr, updUser) => {
+                        if (updErr) {
+                            callback({
+                                success: false,
+                                message: 'Error while storing to DB.'
+                            });
+                        } else {
+                            callback({
+                                success: true,
+                                message: 'Course deleted.',
+                                courses: updUser.courses
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
 }
 
 module.exports = User;
