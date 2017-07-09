@@ -29,7 +29,7 @@ class CourseDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            percent: 43,
+            percent: 0,
             course: {},
             userRole: '',
             userID: '',
@@ -62,6 +62,8 @@ class CourseDetails extends Component {
         this.handleTaskTagsChange = this.handleTaskTagsChange.bind(this);
         this.handleDone = this.handleDone.bind(this);
         this.handleEnrollTOCourse = this.handleEnrollTOCourse.bind(this);
+        this.dataFetched = this.dataFetched.bind(this);
+        this.handleLeaveCourse = this.handleLeaveCourse.bind(this);
 
         $.ajaxSetup({
             beforeSend: (xhr) => {
@@ -70,6 +72,23 @@ class CourseDetails extends Component {
         });
 
         this.fetchData();
+
+    }
+
+    dataFetched(){
+        console.log(this.state.attendedCourses);
+
+            let courseIndex = this.state.attendedCourses.map((course, index) => {
+                return course.courseID.toString();
+            }).indexOf(this.props.courseID.toString());
+
+        console.log(this.state.attendedCourses[courseIndex].taskID.length)
+        console.log(this.state.course.task.length)
+
+        this.setState({
+            percent: ((this.state.attendedCourses[courseIndex].taskID.length)/(this.state.course.task.length))*100
+        })
+
     }
 
 
@@ -83,6 +102,7 @@ class CourseDetails extends Component {
                     userID: this.props._id,
                     attendedCourses: this.props.courses
                 });
+                this.dataFetched();
             });
     }
 
@@ -126,7 +146,6 @@ class CourseDetails extends Component {
 
         } else {
             tempTask[currentInput] = value;
-
         }
 
         this.setState({
@@ -147,9 +166,6 @@ class CourseDetails extends Component {
             radioTaskType: type.value
         });
     };
-
-    /* ToDo: write text of selected answer in answer and wrong answers in sampleCode */
-
 
     handleTaskTitleChange(evt, title) {
         this.updateNewTask('title', title.value);
@@ -188,8 +204,13 @@ class CourseDetails extends Component {
                 this.setState({
                     attendedCourses: newCourseList
                 })
+                console.log(this.state.attendedCourses);
             });
     }
+    handleLeaveCourse(){
+        console.log("Leave course");
+    }
+
 
     increment = () => this.setState({
         percent: this.state.percent >= 100 ? 0 : this.state.percent + 20,
@@ -225,6 +246,15 @@ class CourseDetails extends Component {
             <Segment className="courseDetailSegment">
                 <Segment vertical>
                     <Header as='h2'>
+                        {
+                            this.state.attendedCourses.map((e) => {
+                                return e.courseID
+                            }).indexOf(this.props.courseID) !== -1
+                                ? <Button color='red' icon='delete'
+                                          label={{basic: true, color: 'red', pointing: 'left', content: 'Leave Course'}}
+                                          floated='right' onClick={this.handleLeaveCourse} />
+                                : null
+                        }
                         {
                             (this.state.userRole === 'Admin' || this.state.userRole === 'Moderator') && !this.state.editMode
                                 ? <Button color='orange' icon='plus'

@@ -41,6 +41,7 @@ class User {
                     console.log(user.courses[courseIndex].taskID);
 
                 } else {
+                    console.log("user[prop].push(courseID: data.courses");
                     user[prop].push({
                         courseID: data.courses
                     });
