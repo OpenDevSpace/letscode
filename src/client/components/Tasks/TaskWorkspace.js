@@ -32,9 +32,6 @@ class TaskWorkspace extends Component {
                     console.log("done");
                 });
 
-            alert(this.props.currentTask._id);
-
-
         } else {
             alert("Totally wrong");
         }

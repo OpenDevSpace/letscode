@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Card, Button} from 'semantic-ui-react'
+import {Card, Button, Label} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import '../../styles/CourseCard.css'
 import Truncate from 'react-truncate'
@@ -13,12 +13,21 @@ import Web from "../Icons/WEB";
 
 
 class CourseCard extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            dateToday: (new Date())
+        }
+    }
     render() {
         return (
             <div className="courseCards">
                 <Link to={"/course/"+this.props.course._id}>
                     <Card className="courseCard" fluid={true} color={"blue"}>
                         <Card.Content>
+
+                            <Label color='red' ribbon='right'>NEW</Label>
+
                             <div className="centeredStyle">
                                 {(() => {
                                     switch (this.props.course.language) {
