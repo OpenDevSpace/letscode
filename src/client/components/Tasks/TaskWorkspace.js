@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Button, Icon, Segment, Header, Form, Checkbox, Radio}from 'semantic-ui-react'
+import {Button, Icon, Segment, Header, Form, Message, Radio}from 'semantic-ui-react'
 import '../../styles/TaskWrapper.css'
 import $ from 'jquery'
 
@@ -7,7 +7,11 @@ import $ from 'jquery'
 class TaskWorkspace extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            answerRight: false,
+            answerWrong: false,
+            rightAnswer: ''
+        }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleCheckAnswer = this.handleCheckAnswer.bind(this);
@@ -23,7 +27,10 @@ class TaskWorkspace extends Component {
         //console.log(this.props.currentTask.options.correctAnswers);
 
         if(this.props.options[$('input[name=radioName]:checked').val()] === this.props.currentTask.options.correctAnswers[0]){
-
+            this.setState({
+                answerRight: true,
+                answerWrong: false
+            });
             $.post('http://localhost:8080/api/user/update/' + this.props.userID, {
                 courses: this.props.courseID,
                 taskID: this.props.currentTask._id
@@ -33,7 +40,11 @@ class TaskWorkspace extends Component {
                 });
 
         } else {
-            alert("Totally wrong");
+            this.setState({
+                answerWrong: true,
+                answerRight: false,
+                rightAnswer: this.props.currentTask.options.correctAnswers[0]
+            })
         }
     }
 
@@ -66,12 +77,23 @@ class TaskWorkspace extends Component {
                         <Form.TextArea defaultValue={this.props.currentTask.sampleCode} />
                     </Form>
                         :
-                        <Form.Group id="radioGroup" inline>
+                        <Form success={this.state.answerRight} error={this.state.answerWrong}>
+                        <Form.Group id="radioGroup" grouped>
                             <label>{this.props.currentTask.question}</label>
                             {myItem}
-                            <Button basic fluid color='green'
-                                    onClick={this.handleCheckAnswer}>Click me</Button>
+                            <Message
+                                success
+                                header='That`s right'
+                            />
+                            <Message
+                                error
+                                header='Wrong. The right answer is:  '
+                                content={this.state.rightAnswer}
+                            />
+                            <Button basic color='green'
+                                    onClick={this.handleCheckAnswer}>Check answer</Button>
                         </Form.Group>
+                        </Form>
                 }
 
             </Segment>
