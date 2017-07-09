@@ -97,8 +97,10 @@ class Signup extends Component {
 
     handleSignupAction(evt) {
 
-
-        if(!this.state.errorMessage && !this.state.wrongPassword && !this.state.passwordMatch && $('#signupForm')[0].checkValidity()){
+        console.log(this.state.passwordWarning);
+        console.log(this.state.wrongPassword);
+        console.log(this.state.passwordMatch);
+        if(!this.state.passwordWarning && !this.state.wrongPassword && this.state.passwordMatch && $('#signupForm')[0].checkValidity()){
             this.setState(prevState => ({
                 requestActive: !prevState.requestActive
             }));
