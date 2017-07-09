@@ -151,6 +151,18 @@ class User {
     }
 
     unenroll(userID, courseID, callback) {
+
+        UserModel.findByIdAndUpdate(userID, {
+            $pull: {
+                courses: { courseID: courseID }
+            }
+        }, {'new': true}, (err, result) => {
+            if (err) throw err;
+            callback({
+                data: result
+            });
+        });
+/*
         UserModel.findById(userID, (err, user) =>{
             if (err) throw err;
             if (!user) {
@@ -159,13 +171,20 @@ class User {
                     message: 'User not found'
                 });
             } else {
-                if (user.courses.map((e) => { return e.courseID}).indexOf(courseID) === -1) {
+                console.log(user.courses.map((e) => {return e.courseID.toString()}).indexOf(courseID));
+                console.log(user.courses);
+                if (user.courses.map((e) => { return e.courseID.toString()}).indexOf(courseID) === -1) {
                     callback({
                         success: false,
                         message: 'User is not enrolled in the course.'
                     });
                 } else {
-                    user.courses.splice(user.courses.map((e) => { return e.courseID}).indexOf(courseID), 1);
+                    let newCourseList = '';
+                    newCourseList.push(user.courses);
+                    console.log("Lala");
+                    console.log(newCourseList);
+                    newCourseList.splice(newCourseList.map((e) => { return e.courseID.toString() }).indexOf(courseID), 1);
+                    console.log(newCourseList);
                     user.save((updErr, updUser) => {
                         if (updErr) {
                             callback({
@@ -182,7 +201,7 @@ class User {
                     });
                 }
             }
-        });
+        });*/
     }
 }
 

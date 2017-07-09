@@ -82,12 +82,12 @@ class CourseDetails extends Component {
                 return course.courseID.toString();
             }).indexOf(this.props.courseID.toString());
 
-        console.log(this.state.attendedCourses[courseIndex].taskID.length)
-        console.log(this.state.course.task.length)
+            if (courseIndex !== -1) {
+                this.setState({
+                    percent: ((this.state.attendedCourses[courseIndex].taskID.length)/(this.state.course.task.length))*100
+                })
+            }
 
-        this.setState({
-            percent: ((this.state.attendedCourses[courseIndex].taskID.length)/(this.state.course.task.length))*100
-        })
 
     }
 
@@ -208,7 +208,12 @@ class CourseDetails extends Component {
             });
     }
     handleLeaveCourse(){
-        console.log("Leave course");
+        console.log("Course Leave Clicked");
+        console.log(this.props);
+        $.get('http://localhost:8080/api/user/unenroll/'+this.props.courseID)
+            .done((data) => {
+            console.log(data);
+            });
     }
 
 

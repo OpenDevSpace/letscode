@@ -36,7 +36,7 @@ routes.get('/afterlogin', (req, res) => {
 });
 
 routes.get('/unenroll/:courseID', (req, res) => {
-    UserController.unenroll(req.user.userID, courseID, (newCourses) => {
+    UserController.unenroll(req.user.userID, req.params.courseID, (newCourses) => {
         res.json(newCourses);
     });
 });

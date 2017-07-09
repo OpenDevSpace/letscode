@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var courses = mongoose.Schema({
-    courseID: {type: mongoose.Schema.Types.ObjectId, ref: 'Course', unique: true},
+    courseID: {type: mongoose.Schema.Types.ObjectId, ref: 'Course'},
     taskID: {type: Array}
 }, {_id: false});
 
