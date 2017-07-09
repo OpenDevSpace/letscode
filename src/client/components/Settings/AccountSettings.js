@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Accordion, Icon, Header, Form, Button} from 'semantic-ui-react'
+import {Accordion, Icon, Header, Form, Button, Message} from 'semantic-ui-react'
 import $ from 'jquery'
 
 class AccountSettings extends Component {
@@ -11,7 +11,11 @@ class AccountSettings extends Component {
             updatePassword: {
                 oldPassword: '',
                 newPassword: '',
-                confirm: ''
+                confirm: '',
+                wrongPassword: false,
+                passwordMatch: false,
+                errorMessage: '',
+                passwordWarning: false
             },
             email: ''
         }
@@ -20,6 +24,8 @@ class AccountSettings extends Component {
         this.handleOldPasswordChange = this.handleOldPasswordChange.bind(this);
         this.handleNewPasswordChange = this.handleNewPasswordChange.bind(this);
         this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleRepeatPasswordChange = this.handleRepeatPasswordChange.bind(this);
     }
 
     handleEmailChange(evt) {
@@ -29,12 +35,12 @@ class AccountSettings extends Component {
     }
 
     updateEmail(evt) {
-        $.post('http://localhost:8080/api/user/update/'+this.props._id, {
+        $.post('http://localhost:8080/api/user/update/' + this.props._id, {
             _id: this.props._id,
             email: this.state.email
         })
             .done((data) => {
-            console.log(data);
+                console.log(data);
             });
     }
 
@@ -52,14 +58,65 @@ class AccountSettings extends Component {
 
     handleNewPasswordChange(evt) {
         this.passwordChange('newPassword', evt);
+        this.handlePasswordChange(evt);
     }
 
     handleConfirmPasswordChange(evt) {
         this.passwordChange('confirm', evt);
+        this.handleRepeatPasswordChange(evt);
+    }
+
+    handlePasswordChange(evt) {
+        if ($('#password').val().length < 6) {
+            this.setState({
+                errorMessage: 'The entered password is too short.',
+                passwordWarning: true
+            })
+        } else if ($('#password').val().length > 71) {
+            this.setState({
+                errorMessage: 'The entered password is too long, sorry.',
+                passwordWarning: true
+            })
+        } else if ($('#password').val().search(/\d/) === -1) {
+            this.setState({
+                errorMessage: 'Please use numbers as well.',
+                passwordWarning: true
+            })
+        } else if ($('#password').val().search(/[a-zA-Z]/) === -1) {
+            this.setState({
+                errorMessage: 'Please use letters as well.',
+                passwordWarning: true
+            })
+        } else {
+            this.setState({
+                password: evt.target.value,
+                passwordWarning: false
+            });
+        }
+    }
+
+    handleRepeatPasswordChange(evt) {
+        if (($('#password').val().length === $('#repeatPassword').val().length) && ($('#password').val() !== $('#repeatPassword').val())) {
+            this.setState({
+                passwordMatch: false,
+                wrongPassword: true
+            })
+        } else if (($('#password').val().length === $('#repeatPassword').val().length) && ($('#password').val() === $('#repeatPassword').val())) {
+            this.setState({
+                wrongPassword: false,
+                passwordMatch: true
+            })
+        }
+        else {
+            this.setState({
+                passwordMatch: false,
+                wrongPassword: false
+            })
+        }
     }
 
     updatePassword(evt) {
-        $.post('http://localhost:8080/api/user/update/'+this.props._id, {
+        $.post('http://localhost:8080/api/user/update/' + this.props._id, {
             _id: this.props._id,
             data: this.state.updatePassword
         })
@@ -80,8 +137,9 @@ class AccountSettings extends Component {
                 <Accordion.Content>
                     <p>
                         <Form>
-                            <Form.Input label="Update your email" placeholder="my@fancymail.com" onChange={this.handleEmailChange} />
-                            <Button label="Update Email" onClick={this.updateEmail.bind(this)} />
+                            <Form.Input label="Update your email" placeholder="my@fancymail.com"
+                                        onChange={this.handleEmailChange}/>
+                            <Button positive content="Update Email" onClick={this.updateEmail.bind(this)}/>
                         </Form>
                     </p>
                 </Accordion.Content>
@@ -93,11 +151,36 @@ class AccountSettings extends Component {
                 </Accordion.Title>
                 <Accordion.Content>
                     <p>
-                        <Form id="changePasswordForm">
-                            <Form.Input type="password" label="Old password" placeholder="s3cur3Pa55w0rd" onChange={this.handleOldPasswordChange} />
-                            <Form.Input type="password" label="New password" placeholder="s3cur3Pa55w0rd" onChange={this.handleNewPasswordChange} />
-                            <Form.Input type="password" label="Confirm password" placeholder="s3cur3Pa55w0rd" onChange={this.handleConfirmPasswordChange} />
-                            <Button label="Update Password" onClick={this.updatePassword.bind(this)} />
+                        <Form id="changePasswordForm" error={this.state.wrongPassword}
+                              success={this.state.passwordMatch} warning={this.state.passwordWarning}>
+                            <Form.Input type="password" label="Old password" placeholder="s3cur3Pa55w0rd"
+                                        onChange={this.handleOldPasswordChange}/>
+
+
+                            <Form.Input id="password" type="password" label="New password" placeholder="s3cur3Pa55w0rd"
+                                        onChange={this.handleNewPasswordChange}
+                                        error={this.state.wrongPassword}
+                                        success={this.state.passwordMatch}/>
+                            <Message
+                                warning
+                                header={this.state.errorMessage}
+                            />
+
+                            <Form.Input id="repeatPassword" type="password" label="Confirm password"
+                                        placeholder="s3cur3Pa55w0rd" onChange={this.handleConfirmPasswordChange}
+                                        error={this.state.wrongPassword}
+                                        success={this.state.passwordMatch}/>
+
+                            <Message
+                                success
+                                header='Form Completed'
+                            />
+                            <Message
+                                error
+                                header='Passwords don`t match'
+                                content='Please check your passwords'
+                            />
+                            <Button positive content="Update Password" onClick={this.updatePassword.bind(this)}/>
                         </Form>
                     </p>
                 </Accordion.Content>
