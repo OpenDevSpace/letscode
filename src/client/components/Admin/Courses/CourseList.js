@@ -141,12 +141,16 @@ class CourseList extends Component {
                             <Table.HeaderCell />
                             <Table.HeaderCell />
                             <Table.HeaderCell />
-                            <Table.HeaderCell  colSpan='3'>
-                                <Button color='blue' icon='plus'
-                                        label={{basic: true, color: 'blue', pointing: 'left', content: 'Add Course'}}
-                                        onClick={this.show('blurring')}
-                                />
-                            </Table.HeaderCell>
+                                {
+                                    this.state.courses.length > 5
+                                    ?  <Table.HeaderCell  colSpan='3'><Button color='blue' icon='plus'
+                                    label={{basic: true, color: 'blue', pointing: 'left', content: 'Add Course'}}
+                                    onClick={this.show('blurring')}
+                                    />
+                                    </Table.HeaderCell>
+                                        : <Table.HeaderCell />
+
+                                }
                         </Table.Row>
                     </Table.Footer>
                 </Table>
