@@ -49,11 +49,12 @@ class CourseDetails extends Component {
                 tags: ''
             },
             retrievedData: false,
-            editMode: true
+            editMode: false
         };
 
         this.handleTypeChange = this.handleTypeChange.bind(this);
         this.handleAddMoreTasks = this.handleAddMoreTasks.bind(this);
+        this.handleAddTasks = this.handleAddTasks.bind(this);
         this.handleTaskTitleChange = this.handleTaskTitleChange.bind(this);
         this.handleTaskIntroductionChange = this.handleTaskIntroductionChange.bind(this);
         this.handleTaskQuestionChange = this.handleTaskQuestionChange.bind(this);
@@ -68,7 +69,6 @@ class CourseDetails extends Component {
             }
         });
 
-        console.log(this.state);
         this.fetchData();
     }
 
@@ -129,10 +129,15 @@ class CourseDetails extends Component {
 
         }
 
-
         this.setState({
             newTask: tempTask
         });
+    }
+
+    handleAddTasks(evt){
+        this.setState({
+            editMode: true
+        })
     }
 
 
@@ -220,6 +225,14 @@ class CourseDetails extends Component {
             <Segment className="courseDetailSegment">
                 <Segment vertical>
                     <Header as='h2'>
+                        {
+                            (this.state.userRole === 'Admin' || this.state.userRole === 'Moderator') && !this.state.editMode
+                                ? <Button color='orange' icon='plus'
+                                          label={{basic: true, color: 'orange', pointing: 'left', content: 'Add Tasks'}}
+                                          floated='right' onClick={this.handleAddTasks}
+                            />
+                                : null
+                        }
                         <Image id="courseHeaderIcon">
                             {(() => {
                                 switch (this.state.course.language) {
