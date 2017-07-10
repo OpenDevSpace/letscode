@@ -90,6 +90,19 @@ class Course {
         });
     }
 
+    editTask(course, task, data, callback) {
+        CourseModel.findOneAndUpdate({'_id': course, 'task._id': task}, {
+            '$set': {
+                'task.$': data
+            }
+        }, (err, result) => {
+            if (err) throw err;
+            callback({
+                data: result
+            });
+        });
+    }
+
     getTask(courseID, selectedTask, userData, callback) {
         CourseModel.findById(courseID, (err, course) => {
             if (err) {

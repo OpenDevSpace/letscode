@@ -30,6 +30,15 @@ routes.post('/addtask/:courseID', (req, res) => {
     //res.send(res.send(req.params.courseID));
 });
 
+routes.post('/updatetask/:courseID/:taskID', (req, res) => {
+    if (req.user.role !== 'Admin' && req.user.role !== 'Moderator') {
+        res.status(401).end();
+    }
+    CourseController.editTask(req.params.courseID, req.params.taskID, req.body, (data) => {
+        res.json(data);
+    });
+});
+
 routes.get('/listall', (req, res) => {
     if (req.user.role !== 'Admin' && req.user.role !== 'Moderator') {
         res.status(401).end();
