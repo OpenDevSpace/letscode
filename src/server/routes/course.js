@@ -34,7 +34,7 @@ routes.post('/updatetask/:courseID/:taskID', (req, res) => {
     if (req.user.role !== 'Admin' && req.user.role !== 'Moderator') {
         res.status(401).end();
     }
-    CourseController.editTask(req.params.courseID, req.params.taskID, req.body, (data) => {
+    CourseController.editTask(req.params.courseID, req.params.taskID, req.body.task, (data) => {
         res.json(data);
     });
 });

@@ -31,8 +31,6 @@ class CreateTask extends Component {
             }
         }
 
-        console.log(this.props);
-
         this.setState({
             userRole: this.props.userRole
         })
