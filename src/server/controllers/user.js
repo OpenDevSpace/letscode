@@ -102,6 +102,22 @@ class User {
                             });
                         }
                     });
+                } else if (data.email && data.userSettingsUpdate) {
+                    bcrypt.compare(data.password, user.password, (errPassCheck, successPassCheck) => {
+                        if (errPassCheck) throw errPassCheck;
+                        if (!successPassCheck) {
+                            callback({
+                                success: false,
+                                message: 'Cannot change email. Password wrong.'
+                            });
+                        } else {
+                            this.waitUntilHashReady(user, {
+                                email: data.email
+                            }, (cb) => {
+                                callback(cb);
+                            });
+                        }
+                    });
                 } else {
                     this.waitUntilHashReady(user, data, (cb) => {
                         callback(cb);
@@ -162,46 +178,7 @@ class User {
                 data: result
             });
         });
-/*
-        UserModel.findById(userID, (err, user) =>{
-            if (err) throw err;
-            if (!user) {
-                callback({
-                    success: false,
-                    message: 'User not found'
-                });
-            } else {
-                console.log(user.courses.map((e) => {return e.courseID.toString()}).indexOf(courseID));
-                console.log(user.courses);
-                if (user.courses.map((e) => { return e.courseID.toString()}).indexOf(courseID) === -1) {
-                    callback({
-                        success: false,
-                        message: 'User is not enrolled in the course.'
-                    });
-                } else {
-                    let newCourseList = '';
-                    newCourseList.push(user.courses);
-                    console.log("Lala");
-                    console.log(newCourseList);
-                    newCourseList.splice(newCourseList.map((e) => { return e.courseID.toString() }).indexOf(courseID), 1);
-                    console.log(newCourseList);
-                    user.save((updErr, updUser) => {
-                        if (updErr) {
-                            callback({
-                                success: false,
-                                message: 'Error while storing to DB.'
-                            });
-                        } else {
-                            callback({
-                                success: true,
-                                message: 'Course deleted.',
-                                courses: updUser.courses
-                            });
-                        }
-                    });
-                }
-            }
-        });*/
+
     }
 }
 

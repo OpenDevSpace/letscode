@@ -21,6 +21,7 @@ class AccountSettings extends Component {
         }
 
         this.handleEmailChange = this.handleEmailChange.bind(this);
+        this.handleEmailPasswordChange = this.handleEmailPasswordChange.bind(this);
         this.handleOldPasswordChange = this.handleOldPasswordChange.bind(this);
         this.handleNewPasswordChange = this.handleNewPasswordChange.bind(this);
         this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this);
@@ -34,10 +35,19 @@ class AccountSettings extends Component {
         });
     }
 
+    handleEmailPasswordChange(evt) {
+        this.setState({
+            password: evt.target.value
+        });
+
+    }
+
     updateEmail(evt) {
         $.post('http://localhost:8080/api/user/update/' + this.props._id, {
             _id: this.props._id,
-            email: this.state.email
+            email: this.state.email,
+            password: this.state.password,
+            userSettingsUpdate: true
         })
             .done((data) => {
                 console.log(data);
@@ -139,6 +149,8 @@ class AccountSettings extends Component {
                         <Form>
                             <Form.Input label="Update your email" placeholder="my@fancymail.com"
                                         onChange={this.handleEmailChange}/>
+                            <Form.Input label="Enter your password" type="password" placeholder="s3cur3Pa55w0rd"
+                                        onChange={this.handleEmailPasswordChange}/>
                             <Button positive content="Update Email" onClick={this.updateEmail.bind(this)}/>
                         </Form>
                     </p>
