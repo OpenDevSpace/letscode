@@ -11,7 +11,7 @@ module.exports = mongoose.model('Course', mongoose.Schema({
         active: {type: Boolean, default: false},
         task: [{
             title: {type: String, required: true},
-            taskType: {type: String, enum: ['coding', 'qanda'], required: true},
+            taskType: {type: String, enum: ['coding', 'qanda', 'cloze'], required: true},
             introduction: {type: String},
             question: {type: String, required: true},
             sampleCode: {type: String},

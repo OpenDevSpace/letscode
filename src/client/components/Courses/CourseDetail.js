@@ -105,13 +105,31 @@ class CourseDetails extends Component {
             answer.push($('#rightAnswerCode').val());
             options.push($('#answerOptionCode').val());
         } else {
-            answer.push($('#rightAnswerOption1').val());
-            if($('#rightAnswerOption2').val().length > 0) {answer.push($('#rightAnswerOption2').val())};
-            if($('#rightAnswerOption3').val().length > 0) {answer.push($('#rightAnswerOption3').val())};
+            if($('#rightAnswerOption1').val()
+                !== this.state.newTask.options.correctAnswers[0]){
+                answer.push($('#rightAnswerOption1').val());
+            };
+            if($('#rightAnswerOption2').val().length > 0
+                && $('#rightAnswerOption2').val() !== this.state.newTask.options.correctAnswers[1]) {
+                answer.push($('#rightAnswerOption2').val())
+            };
+            if($('#rightAnswerOption3').val().length > 0
+                && $('#rightAnswerOption2').val() !== this.state.newTask.options.correctAnswers[2]) {
+                answer.push($('#rightAnswerOption3').val())
+            };
 
-            options.push($('#answerOption1').val());
-            if($('#answerOption2').val().length > 0) {options.push($('#answerOption2').val())};
-            if($('#answerOption3').val().length > 0) {options.push($('#answerOption3').val())};
+            if($('#answerOption1').val()
+                !== this.state.newTask.options.falseAnswers[0]){
+            options.push($('#answerOption1').val())
+            };
+            if($('#answerOption2').val().length > 0
+                && $('#answerOption2').val() !== this.state.newTask.options.falseAnswers[1]) {
+                options.push($('#answerOption2').val())
+            };
+            if($('#answerOption3').val().length > 0
+                && $('#answerOption3').val() !== this.state.newTask.options.falseAnswers[2]) {
+                options.push($('#answerOption3').val())
+            };
         }
 
         this.setState({
@@ -165,8 +183,6 @@ class CourseDetails extends Component {
         let taskIndex = this.state.course.task.map((task, index) => {
             return task._id.toString();
         }).indexOf(task.value);
-
-        this.handleAddAnswerInputButton();
 
         if (taskIndex !== -1) {
             console.log(this.state.course.task[taskIndex]);
@@ -398,7 +414,7 @@ class CourseDetails extends Component {
                                     <Form.TextArea label='Question' defaultValue={this.state.newTask.question} placeholder='What is the user supposed to do?'
                                                    required onChange={this.handleTaskQuestionChange}/>
                                     {
-                                        (this.state.radioTaskType === "coding")
+                                        (this.state.radioTaskType === "coding" || this.state.radioTaskType === "cloze")
                                             ?
                                             <Form.Group required widths={2}>
                                                 <Form.TextArea id="answerOptionCode" label='Sample code'
