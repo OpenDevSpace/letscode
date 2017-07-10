@@ -18,6 +18,7 @@ class CourseCard extends Component {
         this.state = {
             dateToday: (new Date())
         }
+        console.log(this.props.course.timestamp)
     }
     render() {
         return (

@@ -98,15 +98,20 @@ class CoursesSegment extends Component {
                                     : null
 
                             }
+                            {
+                                this.props.courses.length > 3
+                                ? <a className="" onClick={this.showMore}>
+                                    {this.state.expanded ? (
+                                        <ShowMoreLess icon="arrow up" text="Show less courses"/>
+                                    ) : (
+                                        <ShowMoreLess icon="arrow down" text="Show more courses"/>
+                                    )
+                                    }
+                                </a>
+                                    : null
+                            }
 
-                            <a className="" onClick={this.showMore}>
-                                {this.state.expanded ? (
-                                    <ShowMoreLess icon="arrow up" text="Show less courses"/>
-                                ) : (
-                                    <ShowMoreLess icon="arrow down" text="Show more courses"/>
-                                )
-                                }
-                            </a>
+
                         </div>
                 }
 

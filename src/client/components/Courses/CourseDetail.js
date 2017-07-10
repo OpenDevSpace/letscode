@@ -49,7 +49,8 @@ class CourseDetails extends Component {
                 tags: ''
             },
             retrievedData: false,
-            editMode: false
+            editMode: false,
+            enrolledToCourse: false
         };
 
         this.handleTypeChange = this.handleTypeChange.bind(this);
@@ -64,6 +65,7 @@ class CourseDetails extends Component {
         this.handleEnrollTOCourse = this.handleEnrollTOCourse.bind(this);
         this.dataFetched = this.dataFetched.bind(this);
         this.handleLeaveCourse = this.handleLeaveCourse.bind(this);
+        this.handleEditTaskClick = this.handleEditTaskClick.bind(this);
 
         $.ajaxSetup({
             beforeSend: (xhr) => {
@@ -75,24 +77,21 @@ class CourseDetails extends Component {
 
     }
 
-    dataFetched(){
-        console.log(this.state.attendedCourses);
+    dataFetched() {
+        let courseIndex = this.state.attendedCourses.map((course, index) => {
+            return course.courseID.toString();
+        }).indexOf(this.props.courseID.toString());
 
-            let courseIndex = this.state.attendedCourses.map((course, index) => {
-                return course.courseID.toString();
-            }).indexOf(this.props.courseID.toString());
-
-            if (courseIndex !== -1) {
-                this.setState({
-                    percent: ((this.state.attendedCourses[courseIndex].taskID.length)/(this.state.course.task.length))*100
-                })
-            }
-
-
+        if (courseIndex !== -1) {
+            this.setState({
+                percent: ((this.state.attendedCourses[courseIndex].taskID.length) / (this.state.course.task.length)) * 100,
+                enrolledToCourse: true
+            })
+        }
     }
 
 
-    fetchData(){
+    fetchData() {
         $.get('http://localhost:8080/api/course/coursedetail/' + this.props.courseID)
             .done((course) => {
                 this.setState({
@@ -110,7 +109,7 @@ class CourseDetails extends Component {
         let answer = this.state.newTask.options.correctAnswers;
         let options = this.state.newTask.options.falseAnswers;
 
-        if(this.state.radioTaskType === "coding"){
+        if (this.state.radioTaskType === "coding") {
             answer.push($('#rightAnswerCode').val());
             options.push($('#answerOptionCode').val());
         } else {
@@ -142,7 +141,7 @@ class CourseDetails extends Component {
     updateNewTask(currentInput, value) {
         let tempTask = this.state.newTask;
 
-        if(currentInput === 'answer' || currentInput === 'options'){
+        if (currentInput === 'answer' || currentInput === 'options') {
 
         } else {
             tempTask[currentInput] = value;
@@ -153,10 +152,26 @@ class CourseDetails extends Component {
         });
     }
 
-    handleAddTasks(evt){
+    handleAddTasks(evt) {
         this.setState({
             editMode: true
         })
+    }
+
+    handleEditTaskClick(evt, task) {
+        let taskIndex = this.state.course.task.map((task, index) => {
+            return task._id.toString();
+        }).indexOf(task.value);
+
+        if (taskIndex !== -1) {
+            console.log(this.state.course.task[taskIndex]);
+            this.setState({
+                newTask: this.state.course.task[taskIndex],
+                radioTaskType: this.state.course.task[taskIndex].taskType,
+                taskType: this.state.course.task[taskIndex].taskType,
+                editMode: true
+            })
+        }
     }
 
 
@@ -187,7 +202,7 @@ class CourseDetails extends Component {
         this.updateNewTask('tags', tags.value);
     }
 
-    handleDone(evt){
+    handleDone(evt) {
         this.setState({
             editMode: false
         })
@@ -207,12 +222,13 @@ class CourseDetails extends Component {
                 console.log(this.state.attendedCourses);
             });
     }
-    handleLeaveCourse(){
+
+    handleLeaveCourse() {
         console.log("Course Leave Clicked");
         console.log(this.props);
-        $.get('http://localhost:8080/api/user/unenroll/'+this.props.courseID)
+        $.get('http://localhost:8080/api/user/unenroll/' + this.props.courseID)
             .done((data) => {
-            console.log(data);
+                console.log(data);
             });
     }
 
@@ -227,21 +243,36 @@ class CourseDetails extends Component {
         let nextCourse;
 
 
-        if(this.state.retrievedData){
-            taskList = this.state.course.task.map((value) => {
-                return <TaskList task={value} courseID={this.state.course._id}/>
-            });
+        if (this.state.retrievedData) {
+            let completedTasks = [];
+            let courseIndex = this.state.attendedCourses.map((course, index) => {
+                return course.courseID.toString();
+            }).indexOf(this.props.courseID.toString());
 
-            taskIDs = this.state.course.task.map((e) => {
-                return e._id
-            })
 
-            for (let i = 0; i < taskIDs.length; i++){
+            if (courseIndex !== -1) {
+                completedTasks.push(this.state.attendedCourses[courseIndex].taskID);
 
-                if(!(taskIDs[i].indexOf(this.props.courseID) !== -1)){
-                    nextCourse = taskIDs[i];
-                    i = taskIDs.length;
+                taskList = this.state.course.task.map((value) => {
+                    return <TaskList task={value}
+                                     courseID={this.state.course._id}
+                                     userRole={this.state.userRole}
+                                     completedTasks={completedTasks}
+                                     onClick={this.handleEditTaskClick}/>
+                });
+
+                taskIDs = this.state.course.task.map((e) => {
+                    return e._id
+                })
+
+                for (let i = 0; i < taskIDs.length; i++) {
+
+                    if (!(taskIDs[i].indexOf(this.props.courseID) !== -1)) {
+                        nextCourse = taskIDs[i];
+                        i = taskIDs.length;
+                    }
                 }
+
             }
         }
 
@@ -257,7 +288,7 @@ class CourseDetails extends Component {
                             }).indexOf(this.props.courseID) !== -1
                                 ? <Button color='red' icon='delete'
                                           label={{basic: true, color: 'red', pointing: 'left', content: 'Leave Course'}}
-                                          floated='right' onClick={this.handleLeaveCourse} />
+                                          floated='right' onClick={this.handleLeaveCourse}/>
                                 : null
                         }
                         {
@@ -325,23 +356,23 @@ class CourseDetails extends Component {
                         <Accordion.Content>
                             {
                                 (this.state.retrievedData)
-                                ? <div>{taskList}</div>
-                                : null
+                                    ? <div>{taskList}</div>
+                                    : null
                             }
 
                         </Accordion.Content>
                     </Accordion>
-                    <Divider/>
-
+                    <br/>
                     {
                         (this.state.userRole === 'Admin' || this.state.userRole === 'Moderator') && this.state.editMode
                             ?
                             <div>
+                                <Divider/>
                                 <Header as={'h2'}>
                                     Add a task
                                 </Header>
                                 <Form id="createTaskForm">
-                                    <Form.Input label='Task Title' required onChange={this.handleTaskTitleChange}/>
+                                    <Form.Input label='Task Title' defaultValue={this.state.newTask.title} required onChange={this.handleTaskTitleChange}/>
                                     <Form.Group grouped required>
                                         <label>Task Type</label>
                                         <Form.Radio label='Coding' value='coding' checked={radioTaskType === 'coding'}
@@ -350,9 +381,9 @@ class CourseDetails extends Component {
                                                     checked={radioTaskType === 'qanda'}
                                                     onChange={this.handleTypeChange}/>
                                     </Form.Group>
-                                    <Form.TextArea label='Introduction' placeholder='What is this task for?'
+                                    <Form.TextArea label='Introduction' defaultValue={this.state.newTask.introduction} placeholder='What is this task for?'
                                                    onChange={this.handleTaskIntroductionChange}/>
-                                    <Form.TextArea label='Question' placeholder='What is the user supposed to do?'
+                                    <Form.TextArea label='Question' defaultValue={this.state.newTask.question} placeholder='What is the user supposed to do?'
                                                    required onChange={this.handleTaskQuestionChange}/>
                                     {
                                         (this.state.radioTaskType === "coding")
@@ -360,15 +391,18 @@ class CourseDetails extends Component {
                                             <Form.Group required widths={2}>
                                                 <Form.TextArea id="answerOptionCode" label='Sample code'
                                                                placeholder='Provide some sample code...' required
+                                                               defaultValue={this.state.newTask.sampleCode}
                                                                onChange={this.handleTaskSampleChange}/>
-                                                <Form.TextArea id="rightAnswerCode" label='Answer' placeholder='What is the right answer?'
-                                                               required />
+                                                <Form.TextArea id="rightAnswerCode" label='Answer'
+                                                               placeholder='What is the right answer?'
+                                                               defaultValue={this.state.newTask.options.correctAnswers[0]}
+                                                               required/>
                                             </Form.Group>
                                             :
                                             <Form.Group required grouped>
-                                                <Form.Input id="rightAnswerOption" label='Right Answer' required/>
-                                                <Form.Input id="answerOption1" label='Wrong Answer 1' required/>
-                                                <Form.Input id="answerOption2" label='Wrong Answer 2' required/>
+                                                <Form.Input id="rightAnswerOption" label='Right Answer' required defaultValue={this.state.newTask.options.correctAnswers[0]} />
+                                                <Form.Input id="answerOption1" label='Wrong Answer 1' required defaultValue={this.state.newTask.options.falseAnswers[0]} />
+                                                <Form.Input id="answerOption2" label='Wrong Answer 2' required defaultValue={this.state.newTask.options.falseAnswers[1]} />
                                             </Form.Group>
                                     }
 
@@ -376,9 +410,16 @@ class CourseDetails extends Component {
                                     <Form.Button positive onClick={this.handleAddMoreTasks}>Add more tasks</Form.Button>
                                 </Form>
                             </div>
-                            : <Progress percent={this.state.percent} active indicating>
-                            Your Progess
-                        </Progress>
+                            : <span>
+                            {
+                                this.state.enrolledToCourse
+                                    ? <Progress percent={this.state.percent} active indicating>
+                                    Your Progess
+                                </Progress>
+                                    : null
+                            }
+
+                                </span>
 
                     }
                     <Divider/>

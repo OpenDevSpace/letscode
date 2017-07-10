@@ -36,7 +36,7 @@ class User {
 
                     console.log(data.taskID);
 
-                    user.courses[courseIndex].taskID.push(data.taskID)
+                    user.courses[courseIndex].taskID.push(data.taskID);
 
                     console.log(user.courses[courseIndex].taskID);
 

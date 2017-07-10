@@ -13,5 +13,8 @@ module.exports = mongoose.model('User', new mongoose.Schema({
     role: {type: String, enum: ['Standard', 'Moderator', 'Admin'], default: 'Standard'},
     courses: [courses],
     created: {type: Date, default: Date.now()},
-    active: {type: Boolean, default: true}
+    active: {type: Boolean, default: true},
+    notifications: {type: Boolean, default: false},
+    publicProfile: {type: Boolean, default: false},
+    courseSuggestions: {type: Boolean, default: false}
 }));

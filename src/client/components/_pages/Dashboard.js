@@ -16,8 +16,10 @@ class Dashboard extends Component {
         return (
             <DashboardFrame>
                 <CoursesSegment courseNumber="2"/>
+                {/*
                 <Divider />
                 <DiscoverCoursesSegment/>
+                */}
             </DashboardFrame>
         )
     }
