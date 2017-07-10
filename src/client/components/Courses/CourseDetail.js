@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Segment, Progress, Label, Accordion, Icon, Header, Divider, Image, Container, Form, Button, Dropdown} from 'semantic-ui-react'
+import {Segment, Progress, Label, Accordion, Icon, Header, Divider, Image, Container, Form, Button, Message} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import '../../styles/CourseDetail.css'
 import TaskList from "./TaskList";
@@ -12,10 +12,6 @@ import C from "../Icons/C";
 import Web from "../Icons/WEB";
 
 import $ from 'jquery'
-
-const options = [
-    { key: 'None', text: 'None', value: 'None' }
-    ]
 
 class CourseDetails extends Component {
     constructor(props) {
@@ -45,7 +41,7 @@ class CourseDetails extends Component {
             enrolledToCourse: false,
             isTaskEdited: false,
             taskToEdit: '',
-            options
+            cancelWarning: false
         };
 
         this.handleDone = this.handleDone.bind(this);
@@ -225,9 +221,11 @@ class CourseDetails extends Component {
     }
 
     handleDone(evt) {
-        this.setState({
-            editMode: false
-        })
+        if (!$('#createTaskForm')[0].checkValidity()) {
+            this.setState({
+                editMode: false,
+            })
+        }
     }
 
     handleEnrollTOCourse() {
@@ -399,7 +397,7 @@ class CourseDetails extends Component {
                                 <Header as={'h2'}>
                                     Add a task
                                 </Header>
-                                <Form id="createTaskForm">
+                                <Form id="createTaskForm" warning={this.state.cancelWarning}>
                                     <Form.Input label='Task Title' defaultValue={this.state.newTask.title} required onChange={this.handleTaskTitleChange} width={6}/>
                                     <Form.Group grouped required>
                                         <label>Task Type</label>
@@ -407,6 +405,9 @@ class CourseDetails extends Component {
                                                     onChange={this.handleTypeChange}/>
                                         <Form.Radio label='Question & Answer' value='qanda'
                                                     checked={radioTaskType === 'qanda'}
+                                                    onChange={this.handleTypeChange}/>
+                                        <Form.Radio label='Fill-in-the-blank' value='cloze'
+                                                    checked={radioTaskType === 'cloze'}
                                                     onChange={this.handleTypeChange}/>
                                     </Form.Group>
                                     <Form.TextArea label='Introduction' defaultValue={this.state.newTask.introduction} placeholder='What is this task for?'
@@ -445,6 +446,10 @@ class CourseDetails extends Component {
                                     }
                                     <Form.Input label='Tags' inline onChange={this.handleTaskTagsChange}/>
                                     <Form.Button positive onClick={this.handleAddMoreTasks}>Add more tasks</Form.Button>
+                                    <Message
+                                        warning
+                                        header="Do you want to leave, without saving? Use the close edit button"
+                                    />
                                 </Form>
                             </div>
                             : <span>

@@ -14,21 +14,18 @@ class CreateTask extends Component {
     }
 
     componentDidMount() {
-        let task = this.props.completedTasks.map((task, index) => {
+        let task = this.props.completedTasks[0].map((task, index) => {
             return task;
         });
 
-        for (let i = 0; i < task.length; i++) {
-            if (task[i].toString() === this.props.task._id.toString()) {
-                this.setState({
-                    completed: true
-                })
-            } else {
-                this.setState({
-                    completed: false
-                })
-
-            }
+        if(task.indexOf(this.props.task._id) !== -1) {
+            this.setState({
+                completed: true
+            })
+        } else {
+            this.setState({
+                completed: false
+            })
         }
 
         this.setState({
