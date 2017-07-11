@@ -71,6 +71,8 @@ class CourseDetails extends Component {
             return course.courseID.toString();
         }).indexOf(this.props.courseID.toString());
 
+        console.log(this.state.attendedCourses);
+
         if (courseIndex !== -1) {
             this.setState({
                 percent: ((this.state.attendedCourses[courseIndex].taskID.length) / (this.state.course.task.length)) * 100,
@@ -234,12 +236,16 @@ class CourseDetails extends Component {
         })
             .done((data) => {
                 console.log("done");
-                let newCourseList = this.state.attendedCourses;
-                newCourseList.push(this.state.course._id);
+                let tempCourse = {
+                    courseID: this.state.course._id,
+                    taskID: []
+                };
+                let tempAttendedCourses = this.state.attendedCourses;
+                tempAttendedCourses.push(tempCourse);
                 this.setState({
-                    attendedCourses: newCourseList
-                })
-                console.log(this.state.attendedCourses);
+                    attendedCourses: tempAttendedCourses
+                });
+                this.fetchData();
             });
     }
 
