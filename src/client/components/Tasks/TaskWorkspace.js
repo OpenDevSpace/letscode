@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Button, Icon, Segment, Header, Form, Message, Radio, Input}from 'semantic-ui-react'
+import {Button, Icon, Segment, Header, Form, Message, Radio, Checkbox, Input}from 'semantic-ui-react'
 import '../../styles/TaskWrapper.css'
 import $ from 'jquery'
 
@@ -25,6 +25,8 @@ class TaskWorkspace extends Component {
     handleCheckAnswer(evt){
         //console.log(this.props.options[$('input[name=radioName]:checked').val()]);
         //console.log(this.props.currentTask.options.correctAnswers);
+
+
 
         if(this.props.options[$('input[name=radioName]:checked').val()] === this.props.currentTask.options.correctAnswers[0]){
             this.setState({
@@ -53,10 +55,21 @@ class TaskWorkspace extends Component {
         const {value} = this.state;
 
         let myItem = this.props.options.map((option, index) => {
-            return <Form.Field name="radioName" control={Radio} label={option} value={index} checked={this.state.value === index}
-                               onChange={this.handleChange}>
-                <br/>
-            </Form.Field>
+            if (this.props.currentTask.options.correctAnswers.length <= 1) {
+                return (
+                    <Form.Field name="radioName" control={Radio} label={option} value={index}
+                                checked={this.state.value === index}
+                                onChange={this.handleChange}>
+                        <br/>
+                    </Form.Field>
+                )
+            } else {
+                return (
+                    <Form.Field name="radioName" control={Checkbox} label={option} value={index} >
+                        <br/>
+                    </Form.Field>
+                )
+            }
         });
 
         return (
@@ -79,7 +92,7 @@ class TaskWorkspace extends Component {
                         : null
                 }
                 {
-                    (this.props.currentTask.taskType === "qnada")
+                    (this.props.currentTask.taskType === "qanda")
                         ?  <Form success={this.state.answerRight} error={this.state.answerWrong}>
                         <Form.Group id="radioGroup" grouped>
                             <label>{this.props.currentTask.question}</label>

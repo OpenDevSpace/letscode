@@ -53,16 +53,22 @@ routes.get('/gettask/:selectedcourse/:selectedtask', (req, res) => {
     CourseController.getTask(req.params.selectedcourse, req.params.selectedtask, req.user, (task) => {
         res.json(task);
     });
-})
+});
+
+routes.get('/getnexttask/:selectedcourse/:selectedtask', (req, res) => {
+    CourseController.getNextTask(req.params.selectedcourse, req.params.selectedtask, req.user, (task) => {
+        res.json(task);
+    });
+});
 
 routes.get('/listactive', (req, res) => {
     CourseController.list({
         active: true
     }, {title: 1}, (courses) => {
-        courses['createdBy'] = null
+        courses['createdBy'] = null;
         res.json(courses);
     })
-})
+});
 
 routes.get('/coursedetail/:courseID', (req, res) => {
     CourseController.list({

@@ -9,7 +9,8 @@ class CreateTask extends Component {
         this.state = {
             task: this.props.task,
             completed: false,
-            userRole: ''
+            userRole: '',
+            nextTaskID: ''
         }
     }
 
@@ -30,6 +31,14 @@ class CreateTask extends Component {
 
         this.setState({
             userRole: this.props.userRole
+        })
+
+        let nextTask = this.props.taskListIDs.map((task, index) => {
+            return task.toString();
+        }).indexOf(this.props.task._id.toString())+1;
+
+        this.setState({
+            nextTaskID: nextTask
         })
     }
 

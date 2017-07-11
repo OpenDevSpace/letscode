@@ -170,7 +170,6 @@ class CourseDetails extends Component {
                     task: this.state.newTask
                 })
             } else {
-                console.log('pushing new task')
                 $.post("http://localhost:8080/api/course/addtask/" + this.state.course._id, {
                     _id: this.state.course._id,
                     task: this.state.newTask
@@ -201,8 +200,6 @@ class CourseDetails extends Component {
         this.setState({
             newTask: tempTask
         });
-
-        console.log(this.state.newTask);
     }
 
     handleAddTasks(evt) {
@@ -297,14 +294,13 @@ class CourseDetails extends Component {
     }
 
     handleLeaveCourse() {
-        console.log("Course Leave Clicked");
-        console.log(this.props);
         $.get('http://localhost:8080/api/user/unenroll/' + this.props.courseID)
             .done((data) => {
                 console.log(data);
             });
     }
 
+    /*
     handleAddition = (e, { value }) => {
         this.setState({
             options: [{ text: value, value }, ...this.state.options],
@@ -318,13 +314,16 @@ class CourseDetails extends Component {
         console.log(this.state.options);
     }
 
+    */
+
     render() {
         const { currentValues } = this.state;
         const {radioTaskType, answerRadio} = this.state;
 
-        let taskList;
+        let taskListItem;
         let taskIDs;
-        let nextCourse;
+        let continueWitchNextTask;
+        let taskAfterTaskId;
 
         if (this.state.retrievedData) {
             let completedTasks = [];
@@ -333,14 +332,19 @@ class CourseDetails extends Component {
             }).indexOf(this.props.courseID.toString());
 
 
+            let taskListIDs = this.state.course.task.map((value, index) => {
+                return value._id
+            });
+
             if (courseIndex !== -1) {
                 completedTasks.push(this.state.attendedCourses[courseIndex].taskID);
 
-                taskList = this.state.course.task.map((value) => {
+                taskListItem = this.state.course.task.map((value) => {
                     return <TaskList task={value}
                                      courseID={this.state.course._id}
                                      userRole={this.state.userRole}
                                      completedTasks={completedTasks}
+                                     taskListIDs = {taskListIDs}
                                      onClick={this.handleEditTaskClick}/>
                 });
 
@@ -350,7 +354,7 @@ class CourseDetails extends Component {
 
                 for (let i = 0; i < taskIDs.length; i++) {
                     if (!(taskIDs[i].indexOf(this.props.courseID) !== -1)) {
-                        nextCourse = taskIDs[i];
+                        continueWitchNextTask = taskIDs[i];
                         i = taskIDs.length;
                     }
                 }
@@ -444,7 +448,7 @@ class CourseDetails extends Component {
                         <Accordion.Content>
                             {
                                 (this.state.retrievedData)
-                                    ? <div>{taskList}</div>
+                                    ? <div>{taskListItem}</div>
                                     : null
                             }
 
@@ -553,7 +557,7 @@ class CourseDetails extends Component {
                                     return e.courseID
                                 }).indexOf(this.props.courseID) !== -1
                                     ? <Link to={"/course/" +
-                                this.props.courseID + "/" + nextCourse + "/process"}>
+                                this.props.courseID + "/" + continueWitchNextTask + "/process"}>
                                     <Label content='Continue with next task.' icon='terminal' color={"green"}
                                            size={"big"}/>
                                 </Link>

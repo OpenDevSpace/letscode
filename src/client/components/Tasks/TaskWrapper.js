@@ -15,6 +15,7 @@ class TaskWrapper extends Component {
             options: []
         }
 
+        this.handleGetNextTask = this.handleGetNextTask.bind(this);
         this.handleFetchedValues = this.handleFetchedValues.bind(this);
 
         $.ajaxSetup({
@@ -27,9 +28,6 @@ class TaskWrapper extends Component {
             .done((data) => {
                 this.handleFetchedValues(data)
             });
-
-        console.log(this.props)
-
     }
 
     shuffle(array) {
@@ -47,8 +45,14 @@ class TaskWrapper extends Component {
             array[currentIndex] = array[randomIndex];
             array[randomIndex] = temporaryValue;
         }
-
         return array;
+    }
+
+    handleGetNextTask(){
+        $.get('http://localhost:8080/api/course/getnexttask/'+this.props.courseID+'/'+this.props.taskID)
+            .done((data) => {
+                this.handleFetchedValues(data)
+            });
     }
 
     handleFetchedValues(data){
@@ -85,7 +89,11 @@ class TaskWrapper extends Component {
                         <TaskDefinition currentTask={this.state.currentTask}/>
                     </Step>
                     <Step className="taskColumn">
-                        <TaskWorkspace currentTask={this.state.currentTask} options={this.state.options} userID={this.props._id} courseID={this.props.courseID}/>
+                        <TaskWorkspace currentTask={this.state.currentTask}
+                                       options={this.state.options}
+                                       userID={this.props._id}
+                                       courseID={this.props.courseID}
+                                       onClick={this.handleGetNextTask} />
                     </Step>
                     {
                         (this.state.currentTask.taskType === "coding")

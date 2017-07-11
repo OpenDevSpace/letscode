@@ -34,11 +34,13 @@ class User {
                         return course.courseID.toString();
                     }).indexOf(data.courses.toString());
 
-                    console.log(data.taskID);
-
-                    user.courses[courseIndex].taskID.push(data.taskID);
-
-                    console.log(user.courses[courseIndex].taskID);
+                    if(user.courses[courseIndex].taskID.map((task, index) => {
+                            return task;
+                        }).indexOf(data.taskID.toString()) === -1){
+                        user.courses[courseIndex].taskID.push(data.taskID);
+                    } else {
+                        console.log("already in list");
+                    }
 
                 } else {
                     console.log("user[prop].push(courseID: data.courses");

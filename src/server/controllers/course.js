@@ -154,6 +154,68 @@ class Course {
                 });
             })
     }
+    getTaskAnswer(courseID, selectedTask, userData, callback) {
+        CourseModel.findById(courseID, (err, course) => {
+            if (err) {
+                callback({
+                    success: false,
+                    message: 'An error occurred!'
+                });
+            } else if (!course) {
+                callback({
+                    success: false,
+                    message: 'Requested course not found!'
+                });
+            }
+        })
+            .populate('task', {})
+            .exec((err, res) => {
+
+                let temp;
+
+                for (let i = 0; i < res.task.length; i++) {
+                    if (res.task[i]._id.toString() === selectedTask.toString()){
+                        temp = res.task[i];
+                    }
+                }
+                if (err) throw err;
+                callback({
+                    success: true,
+                    data: temp
+                });
+            })
+    }
+    getNextTask(courseID, selectedTask, userData, callback) {
+        CourseModel.findById(courseID, (err, course) => {
+            if (err) {
+                callback({
+                    success: false,
+                    message: 'An error occurred!'
+                });
+            } else if (!course) {
+                callback({
+                    success: false,
+                    message: 'Requested course not found!'
+                });
+            }
+        })
+            .populate('task', {})
+            .exec((err, res) => {
+
+                let temp;
+
+                for (let i = 0; i < res.task.length-1; i++) {
+                    if (res.task[i]._id.toString() === selectedTask.toString()){
+                        temp = res.task[i+1];
+                    }
+                }
+                if (err) throw err;
+                callback({
+                    success: true,
+                    data: temp
+                });
+            })
+    }
 
 
     list(filter, order, callback) {
