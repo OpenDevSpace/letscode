@@ -15,6 +15,11 @@ module.exports = mongoose.model('Course', mongoose.Schema({
             introduction: {type: String},
             question: {type: String, required: true},
             sampleCode: {type: String},
+            cloze: {
+                clozePart1: [{type: String}],
+                clozeWord: [{type: String}],
+                clozePart2: [{type: String}]
+            },
             options: {
                 correctAnswers: [{type: String}],
                 falseAnswers: [{type: String}]

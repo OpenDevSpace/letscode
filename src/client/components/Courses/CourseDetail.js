@@ -13,6 +13,7 @@ import Web from "../Icons/WEB";
 
 import $ from 'jquery'
 
+
 class CourseDetails extends Component {
     constructor(props) {
         super(props);
@@ -30,6 +31,11 @@ class CourseDetails extends Component {
                 introduction: '',
                 question: '',
                 sampleCode: '',
+                cloze: {
+                    clozePart1: '',
+                    clozeWord: '',
+                    clozePart2: ''
+                },
                 options: {
                     correctAnswers: [],
                     falseAnswers: []
@@ -47,8 +53,10 @@ class CourseDetails extends Component {
         this.handleDone = this.handleDone.bind(this);
         this.dataFetched = this.dataFetched.bind(this);
         this.handleAddTasks = this.handleAddTasks.bind(this);
+        this.clearCurrentTask = this.clearCurrentTask.bind(this);
         this.handleTypeChange = this.handleTypeChange.bind(this);
         this.handleLeaveCourse = this.handleLeaveCourse.bind(this);
+        this.handleClozeChange = this.handleClozeChange.bind(this);
         this.handleAddMoreTasks = this.handleAddMoreTasks.bind(this);
         this.handleEditTaskClick = this.handleEditTaskClick.bind(this);
         this.handleEnrollTOCourse = this.handleEnrollTOCourse.bind(this);
@@ -66,12 +74,32 @@ class CourseDetails extends Component {
         this.fetchData();
     }
 
+    clearCurrentTask(){
+        this.setState({
+            newTask: {
+                title: '',
+                taskType: 'coding',
+                introduction: '',
+                question: '',
+                sampleCode: '',
+                cloze: {
+                    clozePart1: '',
+                    clozeWord: '',
+                    clozePart2: ''
+                },
+                options: {
+                    correctAnswers: [],
+                    falseAnswers: []
+                },
+                tags: ''
+            }
+        })
+    }
+
     dataFetched() {
         let courseIndex = this.state.attendedCourses.map((course, index) => {
             return course.courseID.toString();
         }).indexOf(this.props.courseID.toString());
-
-        console.log(this.state.attendedCourses);
 
         if (courseIndex !== -1) {
             this.setState({
@@ -102,7 +130,7 @@ class CourseDetails extends Component {
         if (this.state.radioTaskType === "coding") {
             answer.push($('#rightAnswerCode').val());
             options.push($('#answerOptionCode').val());
-        } else {
+        } else if (this.state.newTask.taskType === 'qanda') {
             if($('#rightAnswerOption1').val()
                 !== this.state.newTask.options.correctAnswers[0]){
                 answer.push($('#rightAnswerOption1').val());
@@ -142,15 +170,18 @@ class CourseDetails extends Component {
                     task: this.state.newTask
                 })
             } else {
+                console.log('pushing new task')
                 $.post("http://localhost:8080/api/course/addtask/" + this.state.course._id, {
                     _id: this.state.course._id,
                     task: this.state.newTask
                 })
                     .done((data) => {
                         console.log("done");
+                        //$("#createTaskForm")[0].reset();
+                        //$("#createTaskForm").trigger("reset");
+                        this.clearCurrentTask()
                     });
                 this.fetchData();
-                $("#createTaskForm")[0].reset();
             }
         } else {
             console.log("not valid");
@@ -160,7 +191,8 @@ class CourseDetails extends Component {
     updateNewTask(currentInput, value) {
         let tempTask = this.state.newTask;
 
-        if (currentInput === 'answer' || currentInput === 'options') {
+        if (currentInput === 'clozePart1' || currentInput === 'clozeWord' || currentInput === 'clozePart2') {
+            tempTask.cloze[currentInput] = value;
 
         } else {
             tempTask[currentInput] = value;
@@ -169,21 +201,31 @@ class CourseDetails extends Component {
         this.setState({
             newTask: tempTask
         });
+
+        console.log(this.state.newTask);
     }
 
     handleAddTasks(evt) {
-        this.setState({
-            editMode: true
-        })
+        this.setState(prevState => ({
+            editMode: !prevState.editMode
+        }));
     }
 
     handleEditTaskClick(evt, task) {
+        console.log(task.value);
         let taskIndex = this.state.course.task.map((task, index) => {
             return task._id.toString();
         }).indexOf(task.value);
 
+
+        console.log(this.state.course.task[taskIndex]);
+
         if (taskIndex !== -1) {
-            console.log(this.state.course.task[taskIndex]);
+            this.clearCurrentTask();
+
+            console.log("this.state.newTask");
+            console.log(this.state.newTask);
+
             this.setState({
                 newTask: this.state.course.task[taskIndex],
                 radioTaskType: this.state.course.task[taskIndex].taskType,
@@ -193,6 +235,7 @@ class CourseDetails extends Component {
                 taskToEdit: this.state.course.task[taskIndex]._id
             })
         }
+        console.log(this.state.newTask);
     }
 
     handleTypeChange(evt, type) {
@@ -220,6 +263,10 @@ class CourseDetails extends Component {
 
     handleTaskTagsChange(evt, tags) {
         this.updateNewTask('tags', tags.value);
+    }
+
+    handleClozeChange(evt, target){
+        this.updateNewTask(target.id, target.value);
     }
 
     handleDone(evt) {
@@ -324,11 +371,20 @@ class CourseDetails extends Component {
                                 : null
                         }
                         {
-                            (this.state.userRole === 'Admin' || this.state.userRole === 'Moderator') && !this.state.editMode
-                                ? <Button color='orange' icon='plus'
-                                          label={{basic: true, color: 'orange', pointing: 'left', content: 'Add Tasks'}}
-                                          floated='right' onClick={this.handleAddTasks}
-                            />
+                            (this.state.userRole === 'Admin' || this.state.userRole === 'Moderator')
+                                ? <div>
+                                    {
+                                        !this.state.editMode
+                                        ? <Button color='orange' icon='plus'
+                                        label={{basic: true, color: 'orange', pointing: 'left', content: 'Add Tasks'}}
+                                        floated='right' onClick={this.handleAddTasks}
+                                        />
+                                            : <Button color='orange' icon='remove' floated='right'
+                                                      label={{basic: true, color: 'orange', pointing: 'left', content: 'Exit'}}
+                                                      onClick={this.handleAddTasks}
+                                        />
+                                    }
+                                </div>
                                 : null
                         }
                         <Image id="courseHeaderIcon">
@@ -422,17 +478,34 @@ class CourseDetails extends Component {
                                                    required onChange={this.handleTaskQuestionChange}/>
                                     {
                                         (this.state.radioTaskType === "coding" || this.state.radioTaskType === "cloze")
-                                            ?
-                                            <Form.Group required widths={2}>
-                                                <Form.TextArea id="answerOptionCode" label='Sample code'
-                                                               placeholder='Provide some sample code...' required
-                                                               defaultValue={this.state.newTask.sampleCode}
-                                                               onChange={this.handleTaskSampleChange}/>
-                                                <Form.TextArea id="rightAnswerCode" label='Answer'
-                                                               placeholder='What is the right answer?'
-                                                               defaultValue={this.state.newTask.options.correctAnswers[0]}
-                                                               required/>
-                                            </Form.Group>
+                                            ?<span>
+                                                {
+                                                    this.state.radioTaskType === "coding"
+                                                    ? <Form.Group required widths={2}>
+                                                        <Form.TextArea id="answerOptionCode" label='Sample code'
+                                                                       placeholder='Provide some sample code...' required
+                                                                       defaultValue={this.state.newTask.sampleCode}
+                                                                       onChange={this.handleTaskSampleChange}/>
+                                                        <Form.TextArea id="rightAnswerCode" label='Answer'
+                                                                       placeholder='What is the right answer?'
+                                                                       defaultValue={this.state.newTask.options.correctAnswers[0]}
+                                                                       required/>
+                                                    </Form.Group>
+                                                        :
+                                                        <Form.Group required widths={3}>
+                                                            <Form.Input id="clozePart1" label='First part'
+                                                                        defaultValue={this.state.newTask.cloze.clozePart1}
+                                                                        onChange={this.handleClozeChange}/>
+                                                            <Form.Input id="clozeWord" label='Cloze word'
+                                                                        defaultValue={this.state.newTask.cloze.clozeWord}
+                                                                        onChange={this.handleClozeChange}/>
+                                                            <Form.Input id="clozePart2" label='Second part'
+                                                                        defaultValue={this.state.newTask.cloze.clozePart2}
+                                                                        onChange={this.handleClozeChange}/>
+                                                        </Form.Group>
+                                                }
+                                            </span>
+
                                             :
                                             <Form.Group grouped widths='equal'>
                                                 <Form.Input id="rightAnswerOption1" label='Right Answer 1' required

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Button, Icon, Segment, Header, Form, Message, Radio}from 'semantic-ui-react'
+import {Button, Icon, Segment, Header, Form, Message, Radio, Input}from 'semantic-ui-react'
 import '../../styles/TaskWrapper.css'
 import $ from 'jquery'
 
@@ -76,8 +76,11 @@ class TaskWorkspace extends Component {
                         <label>{this.props.currentTask.question}</label>
                         <Form.TextArea defaultValue={this.props.currentTask.sampleCode} />
                     </Form>
-                        :
-                        <Form success={this.state.answerRight} error={this.state.answerWrong}>
+                        : null
+                }
+                {
+                    (this.props.currentTask.taskType === "qnada")
+                        ?  <Form success={this.state.answerRight} error={this.state.answerWrong}>
                         <Form.Group id="radioGroup" grouped>
                             <label>{this.props.currentTask.question}</label>
                             {myItem}
@@ -93,7 +96,26 @@ class TaskWorkspace extends Component {
                             <Button basic color='green'
                                     onClick={this.handleCheckAnswer}>Check answer</Button>
                         </Form.Group>
+                    </Form>
+                        : null
+                }
+                {
+                    (this.props.currentTask.taskType === "cloze")
+                        ?  <div>
+                        <Header as={'h3'} content={this.props.currentTask.question}/>
+                        <Form inverted>
+                            <Form.Field inline>
+                                <Header as={'h4'}>
+                                {this.props.currentTask.cloze.clozePart1}
+                                <Input placeholder='Fill in the missing word' autoFocus/>
+                                    {this.props.currentTask.cloze.clozePart2}
+                                </Header>
+                            </Form.Field>
+                            <Button basic color='green'
+                                    onClick={this.handleCheckAnswer}>Check answer</Button>
                         </Form>
+                    </div>
+                        : null
                 }
 
             </Segment>
