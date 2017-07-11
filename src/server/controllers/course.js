@@ -1,4 +1,6 @@
 var CourseModel = require('../models/course');
+var _ = require('lodash');
+var extend = require('util')._extend;
 
 class Course {
     create(data, userID, callback) {
@@ -115,106 +117,40 @@ class Course {
                     success: false,
                     message: 'Requested course not found!'
                 });
-            }
-            /*
-             else {
-             if (!course.active || userData.courses.map((e) => {
-             return e.courseID
-             }).indexOf(course._id) === -1 ) {
-             callback({
-             success: false,
-             message: 'Course not active or not enrolled'
-             })
-             } else {
-             console.log(selectedTask);
-             callback({
-             success: true,
-             task: course.task.map((e) => {
-             return e[selectedTask]
-             })
-             })
-             }
-             }
-             */
-        })
-            .populate('task', {})
-            .exec((err, res) => {
+            } else {
+                let newTaskList = _.clone(course.task);
 
-                let temp;
+                for (let i = 0; i < newTaskList.length; i++) {
+                    console.log(newTaskList[i].taskType);
 
-                for (let i = 0; i < res.task.length; i++) {
-                    if (res.task[i]._id.toString() === selectedTask.toString()){
-                        temp = res.task[i];
+                    let answers = [];
+
+                    if (newTaskList[i].taskType === 'qanda') {
+                        answers.push(_.concat(newTaskList[i].options.falseAnswers, newTaskList[i].options.correctAnswers).sort());
+                        console.log(answers);
+                    } else if (newTaskList[i].taskType === 'cloze') {
+                        answers.push(newTaskList[i].cloze.clozeWord);
+                        console.log(answers);
+                    } else {
+                        answers.push(newTaskList[i].options.falseAnswers);
+                        console.log(answers);
                     }
+
+
+
+                    newTaskList[i] = extend(newTaskList[i], { answers: answers });
+
+                    console.log(newTaskList[i]);
                 }
-                if (err) throw err;
+
+                console.log(newTaskList)
+
                 callback({
                     success: true,
-                    data: temp
-                });
-            })
-    }
-    getTaskAnswer(courseID, selectedTask, userData, callback) {
-        CourseModel.findById(courseID, (err, course) => {
-            if (err) {
-                callback({
-                    success: false,
-                    message: 'An error occurred!'
-                });
-            } else if (!course) {
-                callback({
-                    success: false,
-                    message: 'Requested course not found!'
-                });
+                    data: course.task
+                })
             }
         })
-            .populate('task', {})
-            .exec((err, res) => {
-
-                let temp;
-
-                for (let i = 0; i < res.task.length; i++) {
-                    if (res.task[i]._id.toString() === selectedTask.toString()){
-                        temp = res.task[i];
-                    }
-                }
-                if (err) throw err;
-                callback({
-                    success: true,
-                    data: temp
-                });
-            })
-    }
-    getNextTask(courseID, selectedTask, userData, callback) {
-        CourseModel.findById(courseID, (err, course) => {
-            if (err) {
-                callback({
-                    success: false,
-                    message: 'An error occurred!'
-                });
-            } else if (!course) {
-                callback({
-                    success: false,
-                    message: 'Requested course not found!'
-                });
-            }
-        })
-            .populate('task', {})
-            .exec((err, res) => {
-
-                let temp;
-
-                for (let i = 0; i < res.task.length-1; i++) {
-                    if (res.task[i]._id.toString() === selectedTask.toString()){
-                        temp = res.task[i+1];
-                    }
-                }
-                if (err) throw err;
-                callback({
-                    success: true,
-                    data: temp
-                });
-            })
     }
 
 
