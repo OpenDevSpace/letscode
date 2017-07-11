@@ -77,7 +77,17 @@ routes.get('/coursedetail/:courseID', (req, res) => {
     }, {}, (course) => {
         res.json(course.data[0]);
     })
-})
+});
+
+routes.post('/checktask/:courseID/:taskID', (req, res) => {
+    CourseController.checkAnswer(req.params.courseID, req.params.taskID, req.body.answers, (cb) => {
+        if (cb.success === true) {
+            console.log("Answers correct");
+        } else {
+            console.log("Answers false");
+        }
+    });
+});
 
 module.exports = routes;
 

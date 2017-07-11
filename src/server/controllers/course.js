@@ -242,6 +242,35 @@ class Course {
                 });
             });
     }
+
+    checkAnswer(courseID, taskID, givenAnswers, callback) {
+        CourseModel.findById(courseID, (err, course) => {
+            if (err) throw err;
+            if (!course) {
+                callback({
+                    success: false,
+                    answersChecked: false,
+                    message: 'Course not found'
+                });
+            } else {
+                givenAnswers = givenAnswers.sort();
+                let correctAnswers = course.task[course.task.map((e) => { return e._id.toString() }).indexOf(taskID)].options.correctAnswers.sort();
+                for (let answerIndex in correctAnswers) {
+                    if (givenAnswers[answerIndex] !== correctAnswers[answerIndex]) {
+                        callback({
+                            success: false,
+                            answersChecked: true,
+                            message: 'Not correct'
+                        });
+                    } else {
+                        callback({
+                            success: true
+                        });
+                    }
+                }
+            }
+        });
+    }
 }
 
 module.exports = Course;
