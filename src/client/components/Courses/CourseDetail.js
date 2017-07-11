@@ -62,7 +62,6 @@ class CourseDetails extends Component {
         this.handleEnrollTOCourse = this.handleEnrollTOCourse.bind(this);
         this.handleTaskTagsChange = this.handleTaskTagsChange.bind(this);
         this.handleTaskTitleChange = this.handleTaskTitleChange.bind(this);
-        this.handleTaskSampleChange = this.handleTaskSampleChange.bind(this);
         this.handleTaskQuestionChange = this.handleTaskQuestionChange.bind(this);
         this.handleTaskIntroductionChange = this.handleTaskIntroductionChange.bind(this);
 
@@ -93,7 +92,8 @@ class CourseDetails extends Component {
                 },
                 tags: ''
             }
-        })
+        },
+            console.log(this.state.newTask))
     }
 
     dataFetched() {
@@ -209,20 +209,16 @@ class CourseDetails extends Component {
     }
 
     handleEditTaskClick(evt, task) {
+        this.clearCurrentTask();
+        console.log(this.state.newTask);
         console.log(task.value);
         let taskIndex = this.state.course.task.map((task, index) => {
             return task._id.toString();
         }).indexOf(task.value);
 
-
         console.log(this.state.course.task[taskIndex]);
 
         if (taskIndex !== -1) {
-            this.clearCurrentTask();
-
-            console.log("this.state.newTask");
-            console.log(this.state.newTask);
-
             this.setState({
                 newTask: this.state.course.task[taskIndex],
                 radioTaskType: this.state.course.task[taskIndex].taskType,
@@ -252,10 +248,6 @@ class CourseDetails extends Component {
 
     handleTaskQuestionChange(evt, question) {
         this.updateNewTask('question', question.value);
-    }
-
-    handleTaskSampleChange(evt, sampleCode) {
-        this.updateNewTask('sampleCode', sampleCode.value);
     }
 
     handleTaskTagsChange(evt, tags) {
@@ -487,9 +479,9 @@ class CourseDetails extends Component {
                                                     this.state.radioTaskType === "coding"
                                                     ? <Form.Group required widths={2}>
                                                         <Form.TextArea id="answerOptionCode" label='Sample code'
-                                                                       placeholder='Provide some sample code...' required
+                                                                       placeholder='Provide some sample code...'
                                                                        defaultValue={this.state.newTask.sampleCode}
-                                                                       onChange={this.handleTaskSampleChange}/>
+                                                                       required/>
                                                         <Form.TextArea id="rightAnswerCode" label='Answer'
                                                                        placeholder='What is the right answer?'
                                                                        defaultValue={this.state.newTask.options.correctAnswers[0]}

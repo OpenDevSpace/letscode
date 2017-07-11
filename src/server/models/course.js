@@ -14,7 +14,6 @@ module.exports = mongoose.model('Course', mongoose.Schema({
             taskType: {type: String, enum: ['coding', 'qanda', 'cloze'], required: true},
             introduction: {type: String},
             question: {type: String, required: true},
-            sampleCode: {type: String},
             cloze: {
                 clozePart1: [{type: String}],
                 clozeWord: [{type: String}],

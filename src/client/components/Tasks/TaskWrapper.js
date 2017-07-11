@@ -26,6 +26,7 @@ class TaskWrapper extends Component {
 
         $.get('http://localhost:8080/api/course/gettask/'+this.props.courseID+'/'+this.props.taskID)
             .done((data) => {
+            console.log(data)
                 this.handleFetchedValues(data)
             });
     }
@@ -49,10 +50,7 @@ class TaskWrapper extends Component {
     }
 
     handleGetNextTask(){
-        $.get('http://localhost:8080/api/course/getnexttask/'+this.props.courseID+'/'+this.props.taskID)
-            .done((data) => {
-                this.handleFetchedValues(data)
-            });
+
     }
 
     handleFetchedValues(data){
