@@ -7,6 +7,9 @@ var routes = require('express').Router();
 
 var mongoose = require('mongoose');
 
+/**
+ * Route to add a new course, calls CourseController method
+ */
 routes.post('/new', (req, res) => {
     if (req.user.role !== 'Admin' && req.user.role !== 'Moderator') {
         res.status(401).end();
@@ -17,14 +20,18 @@ routes.post('/new', (req, res) => {
     }
 });
 
+/**
+ * Update a course, add ID to URL
+ */
 routes.post('/update/:courseID', (req, res) => {
     CourseController.update(req.body, (data) => {
         res.json(data);
     });
-
-    //res.send(res.send(req.params.courseID));
 });
 
+/**
+ * Add a task to a Course, requires courseID in URL
+ */
 routes.post('/addtask/:courseID', (req, res) => {
     CourseController.addTask(req.body, (data) => {
         res.json(data);
@@ -32,6 +39,9 @@ routes.post('/addtask/:courseID', (req, res) => {
     //res.send(res.send(req.params.courseID));
 });
 
+/**
+ * Update a task, requires course and task id in URL
+ */
 routes.post('/updatetask/:courseID/:taskID', (req, res) => {
     if (req.user.role !== 'Admin' && req.user.role !== 'Moderator') {
         res.status(401).end();
@@ -41,6 +51,9 @@ routes.post('/updatetask/:courseID/:taskID', (req, res) => {
     });
 });
 
+/**
+ * Lists all courses if user is Admin or Mod
+ */
 routes.get('/listall', (req, res) => {
     if (req.user.role !== 'Admin' && req.user.role !== 'Moderator') {
         res.status(401).end();
@@ -51,12 +64,18 @@ routes.get('/listall', (req, res) => {
     }
 });
 
+/**
+ * Gets all the tasks of a selected course
+ */
 routes.get('/gettask/:selectedcourse/:selectedtask', (req, res) => {
     CourseController.getTask(req.params.selectedcourse, req.params.selectedtask, req.user, (tasks) => {
         res.json(tasks);
     });
 });
 
+/**
+ * Sends all active courses as JSON, sorted by title
+ */
 routes.get('/listactive', (req, res) => {
     CourseController.list({
         active: true
@@ -66,6 +85,9 @@ routes.get('/listactive', (req, res) => {
     })
 });
 
+/**
+ * Gets info for coursedetails
+ */
 routes.get('/coursedetail/:courseID', (req, res) => {
     CourseController.list({
         active: true,
@@ -75,6 +97,10 @@ routes.get('/coursedetail/:courseID', (req, res) => {
     })
 });
 
+/**
+ * Check if a task is solved. req.body.answers required as array
+ * if everything is correct, UserController will be called to save it into the User Collection
+ */
 routes.post('/checktask/:courseID/:taskID', (req, res) => {
     CourseController.checkAnswer(req.params.courseID, req.params.taskID, req.body.answers, (cb) => {
         if (cb.success) {

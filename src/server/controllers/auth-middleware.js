@@ -1,6 +1,13 @@
 var jwt = require('jsonwebtoken');
 var User = require('../models/user');
 
+
+/**
+ * Middleware. Used to check if a user owns a valid token. If yes: write signed data to req.user
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports = (req, res, next) => {
 
     if (!req.headers.authentication) {

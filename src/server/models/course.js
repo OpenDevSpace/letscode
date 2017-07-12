@@ -1,5 +1,8 @@
 var mongoose = require('mongoose');
 
+/**
+ * Model represents Course collection, createdBy references to User Collecting
+ */
 module.exports = mongoose.model('Course', mongoose.Schema({
         title: {type: String, required: true},
         description: String,

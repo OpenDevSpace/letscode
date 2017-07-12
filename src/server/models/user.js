@@ -1,10 +1,16 @@
 var mongoose = require('mongoose');
 
+/**
+ * sub schema for the courses, a user is enrolled. An object stores corresponding course id and the ids of solved tasks as an array
+ */
 var courses = mongoose.Schema({
     courseID: {type: mongoose.Schema.Types.ObjectId, ref: 'Course'},
     taskID: {type: Array}
 }, {_id: false});
 
+/**
+ * Model represents User collection, courses added as Sub-schema
+ */
 module.exports = mongoose.model('User', new mongoose.Schema({
     email: {type: String, required: true, index: {unique: true}},
     password: {type: String, required: true},

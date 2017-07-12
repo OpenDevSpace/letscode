@@ -14,6 +14,10 @@ var courseRoutes = require('./routes/course');
 
 var authMiddleware = require('./controllers/auth-middleware');
 
+/**
+ * Starts an expressJS server, in production frontend will run on the same port
+ */
+
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
 app.use(cors({
@@ -24,6 +28,7 @@ console.log(path.join(__dirname, '../../build'));
 
 app.use(express.static(path.join(__dirname, '../../build')))
 
+// Middleware: all routes behind API require an auth!
 app.use('/api', authMiddleware);
 
 app.use('/api/user', userRoutes);

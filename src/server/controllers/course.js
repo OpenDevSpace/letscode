@@ -3,6 +3,13 @@ var _ = require('lodash');
 var extend = require('util')._extend;
 
 class Course {
+
+    /**
+     * Creates a new course.
+     * @param Object with all data for course model, see models/course
+     * @param userID current userID
+     * @param callback
+     */
     create(data, userID, callback) {
         var course = new CourseModel(data);
         course.createdBy = userID;
@@ -21,7 +28,11 @@ class Course {
         });
     }
 
-
+    /**
+     * Used to update a course
+     * @param data data, which changed
+     * @param callback
+     */
     update(data, callback) {
         CourseModel.findById(data._id, (err, course) => {
             if (err) {
@@ -57,6 +68,11 @@ class Course {
         });
     }
 
+    /**
+     * Adds a new task to a course
+     * @param data
+     * @param callback
+     */
     addTask(data, callback) {
         CourseModel.findById(data._id, (err, course) => {
             if (err) {
@@ -90,6 +106,13 @@ class Course {
         });
     }
 
+    /**
+     * Edits a task
+     * @param course CourseID
+     * @param task TaskID
+     * @param data task data (object required)
+     * @param callback
+     */
     editTask(course, task, data, callback) {
         CourseModel.findOneAndUpdate({'_id': course, 'task._id': task}, {
             '$set': {
@@ -103,6 +126,13 @@ class Course {
         });
     }
 
+    /**
+     * Sends tasks of a given course to a client, combines correct and false answers
+     * @param courseID current course, id
+     * @param selectedTask
+     * @param userData
+     * @param callback
+     */
     getTask(courseID, selectedTask, userData, callback) {
         CourseModel.findById(courseID, (err, course) => {
             if (err) {
@@ -141,7 +171,12 @@ class Course {
         })
     }
 
-
+    /**
+     * List courses, with filtering
+     * @param filter Object for filtering results
+     * @param order Object for ordering results
+     * @param callback
+     */
     list(filter, order, callback) {
         CourseModel.find(filter)
             .sort(order)
@@ -155,18 +190,13 @@ class Course {
             });
     }
 
-    courseDetail(filter, callback) {
-        CourseModel.find(filter)
-            .populate('_id')
-            .exec((err, res) => {
-                if (err) throw err;
-                callback({
-                    success: true,
-                    data: res
-                });
-            });
-    }
-
+    /**
+     * Checks if the given answers of a task are correct
+     * @param courseID Which course is a user editing?
+     * @param taskID Which task is a user working on?
+     * @param givenAnswers Array with all given answers (string)
+     * @param callback
+     */
     checkAnswer(courseID, taskID, givenAnswers, callback) {
         CourseModel.findById(courseID, (err, course) => {
             if (err) throw err;

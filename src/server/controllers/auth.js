@@ -4,6 +4,12 @@ var jwt = require('jsonwebtoken');
 
 class Auth {
 
+    /**
+     * Handles login requests using bcrypt, if success: sending token to client
+     * @param user username / email
+     * @param password user password, unencrypted
+     * @param callback
+     */
     login(user, password, callback) {
         UserModel.findOne({email: user}, (err, user) => {
             if (err) throw err;
@@ -38,6 +44,14 @@ class Auth {
         });
     }
 
+    /**
+     * Handles user registration, all fields are required
+     * @param firstName First name of the user
+     * @param lastName Second name
+     * @param email email
+     * @param password password in plaintext
+     * @param callback
+     */
     register(firstName, lastName, email, password, callback) {
 
         UserModel.findOne({email: email}, (err, user) => {
