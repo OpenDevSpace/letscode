@@ -12,10 +12,12 @@ class TaskWrapper extends Component {
         super(props);
         this.state = {
             currentTask: {},
-            options: []
+            options: [],
+            answerRight: false,
+            answerWrong: false,
         }
 
-        this.handleGetNextTask = this.handleGetNextTask.bind(this);
+        this.handleCheckAnswer = this.handleCheckAnswer.bind(this);
         this.handleFetchedValues = this.handleFetchedValues.bind(this);
 
         $.ajaxSetup({
@@ -24,30 +26,33 @@ class TaskWrapper extends Component {
             }
         });
 
-        $.get('http://localhost:8080/api/course/gettask/'+this.props.courseID+'/'+this.props.taskID)
+        $.get('http://localhost:8080/api/course/gettask/' + this.props.courseID + '/' + this.props.taskID)
             .done((data) => {
-                let fetchedTasks = data.data.map((task, index) => {
-                    return task
-                });
+                console.log(data.tasks)
+                /*
+                 let fetchedTasks = data.map((task, index) => {
+                 return task
+                 });
 
-                for(let i = 0; i < fetchedTasks.length; i++){
-                    let tempAnswers = []
+                 for(let i = 0; i < fetchedTasks.length; i++){
+                 let tempAnswers = []
 
-                    if (fetchedTasks[i].taskType === 'qanda') {
-                        for(let j = 0; j < fetchedTasks[i].options.falseAnswers.length; j++) {
-                            tempAnswers.push(fetchedTasks[i].options.falseAnswers[j]);
-                        }
-                        for(let j = 0; j < fetchedTasks[i].options.correctAnswers.length; j++) {
-                            tempAnswers.push(fetchedTasks[i].options.correctAnswers[j]);
-                        }
-                    } else if (fetchedTasks[i].taskType === 'cloze') {
-                        tempAnswers.push(fetchedTasks[i].cloze.clozeWord[0]);
-                    } else {
-                        tempAnswers.push(fetchedTasks[i].options.falseAnswers[0]);
-                    }
-                    fetchedTasks[i].options = tempAnswers;
-                }
-                this.handleFetchedValues(fetchedTasks);
+                 if (fetchedTasks[i].taskType === 'qanda') {
+                 for(let j = 0; j < fetchedTasks[i].options.falseAnswers.length; j++) {
+                 tempAnswers.push(fetchedTasks[i].options.falseAnswers[j]);
+                 }
+                 for(let j = 0; j < fetchedTasks[i].options.correctAnswers.length; j++) {
+                 tempAnswers.push(fetchedTasks[i].options.correctAnswers[j]);
+                 }
+                 } else if (fetchedTasks[i].taskType === 'cloze') {
+                 tempAnswers.push(fetchedTasks[i].cloze.clozeWord[0]);
+                 } else {
+                 tempAnswers.push(fetchedTasks[i].options.falseAnswers[0]);
+                 }
+                 fetchedTasks[i].options = tempAnswers;
+                 }
+                 */
+                this.handleFetchedValues(data.tasks);
             });
     }
 
@@ -69,25 +74,54 @@ class TaskWrapper extends Component {
         return array;
     }
 
-    handleGetNextTask(){
+    handleCheckAnswer(answers) {
+        console.log("check answer");
+        console.log(answers);
+
+        /*
+        if (answers.length === 1) {
+            console.log("answer right");
+            this.setState({
+                    answerRight: true
+                },
+                console.log("state set"));
+        }
+        */
+
+        $.post('http://localhost:8080/api/course/checktask/' + this.props.courseID + "/" + this.props.taskID, {
+            answers: answers
+        })
+            .done((data) => {
+            if(data === "right"){
+                this.setState({
+                    answerWrong: false,
+                    answerRight: true
+                });
+            } else {
+                this.setState({
+                    answerRight: false,
+                    answerWrong: true
+                });
+            }
+            });
 
     }
 
-    handleFetchedValues(data){
+    handleFetchedValues(data) {
         let taskIndex = data.map((task, index) => {
             return task._id.toString();
         }).indexOf(this.props.taskID.toString());
 
         this.setState({
             currentTask: data[taskIndex],
-            options: this.shuffle(data[taskIndex].options)
+            options: this.shuffle(data[taskIndex].combinedTasks)
         })
     }
 
-    handleChange = (e, { value }) => this.setState({ value })
+    handleChange = (e, {value}) => this.setState({value})
 
     render() {
-        const { value } = this.state;
+        const {value} = this.state;
 
         return (
             <div className="taskWrapper">
@@ -100,7 +134,11 @@ class TaskWrapper extends Component {
                                        options={this.state.options}
                                        userID={this.props._id}
                                        courseID={this.props.courseID}
-                                       onClick={this.handleGetNextTask} />
+                                       answerRight={this.state.answerRight}
+                                       answerWrong={this.state.answerWrong}
+                                       checkTheAnswer={(answers) => {
+                                           this.handleCheckAnswer(answers)
+                                       }}/>
                     </Step>
                     {
                         (this.state.currentTask.taskType === "coding")
@@ -117,9 +155,11 @@ class TaskWrapper extends Component {
                                         </Header.Content>
                                     </Header>
                                     <Form >
-                                        <Form.TextArea />
-                                        <Button basic fluid color='green' onClick={[].forEach.call(document.querySelectorAll('.myCheckbox:checked'), function (cb) {
-                                    })} >Check answer</Button>
+                                        <label>Here you can see the code</label>
+                                        <Form.TextArea readOnly/>
+                                        <Button basic fluid color='green'
+                                                onClick={[].forEach.call(document.querySelectorAll('.myCheckbox:checked'), function (cb) {
+                                                })}>Check answer</Button>
                                     </Form>
                                 </Segment>
                             </Step>

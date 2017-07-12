@@ -8,8 +8,6 @@ class TaskWorkspace extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            answerRight: false,
-            answerWrong: false,
             rightAnswer: ''
         }
 
@@ -25,7 +23,15 @@ class TaskWorkspace extends Component {
     handleCheckAnswer(evt){
         //console.log(this.props.options[$('input[name=radioName]:checked').val()]);
         //console.log(this.props.currentTask.options.correctAnswers);
+        let answers = [];
+        $("#qandaForm input:checkbox:checked").each(function() {
+            answers.push($(this).next("label").text());
+        });
+        this.props.checkTheAnswer(
+           answers
+        );
 
+        /*
             this.setState({
                 answerRight: true,
                 answerWrong: false
@@ -44,6 +50,7 @@ class TaskWorkspace extends Component {
                 answerRight: false,
                 rightAnswer: this.props.currentTask.options.correctAnswers[0]
             })
+            */
     }
 
     render() {
@@ -89,7 +96,7 @@ class TaskWorkspace extends Component {
                 }
                 {
                     (this.props.currentTask.taskType === "qanda")
-                        ?  <Form id="qandaForm" success={this.state.answerRight} error={this.state.answerWrong} required>
+                        ?  <Form id="qandaForm" success={this.props.answerRight} error={this.props.answerWrong} required>
                         <Form.Group id="radioGroup" grouped>
                             <label>{this.props.currentTask.question}</label>
                             {myItem}

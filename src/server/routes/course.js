@@ -77,8 +77,10 @@ routes.post('/checktask/:courseID/:taskID', (req, res) => {
     CourseController.checkAnswer(req.params.courseID, req.params.taskID, req.body.answers, (cb) => {
         if (cb.success === true) {
             console.log("Answers correct");
+            res.send("right");
         } else {
             console.log("Answers false");
+            res.send("wrong");
         }
     });
 });

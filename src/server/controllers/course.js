@@ -118,14 +118,19 @@ class Course {
                     message: 'Requested course not found!'
                 });
             } else {
-                let combinedTasks = [];
                 let newCourse = course.toObject();
 
 
                 _.forEach(course.task, (value, key) => {
-                    combinedTasks.push(value.options.falseAnswers.join(','), value.options.correctAnswers.join(','));
+                    let combinedTasks = [];
+                        _.forEach(value.options.falseAnswers, (value) => {
+                            combinedTasks.push(value)
+                        });
+                    _.forEach(value.options.correctAnswers, (value) => {
+                            combinedTasks.push(value)
+                        });
                     _.extend(newCourse.task[key], {
-                        combinedTasks: combinedTasks
+                        combinedTasks: combinedTasks.sort()
                     });
                     delete newCourse.task[key].options;
                 });
@@ -175,20 +180,32 @@ class Course {
                 });
             } else {
                 givenAnswers = givenAnswers.sort();
+                console.log(course.task[course.task.map((e) => { return e._id.toString() }).indexOf(taskID)].options.correctAnswers.sort());
+                console.log(givenAnswers);
                 let correctAnswers = course.task[course.task.map((e) => { return e._id.toString() }).indexOf(taskID)].options.correctAnswers.sort();
-                for (let answerIndex in correctAnswers) {
-                    if (givenAnswers[answerIndex] !== correctAnswers[answerIndex]) {
-                        callback({
-                            success: false,
-                            answersChecked: true,
-                            message: 'Not correct'
-                        });
-                    } else {
-                        callback({
-                            success: true
-                        });
-                    }
+
+                if(correctAnswers.length !== givenAnswers.length){
+                    callback({
+                        success: false,
+                        answersChecked: true,
+                        message: 'Not correct'
+                    });
+                } else {
+                    _.forEach(correctAnswers, (value, key) => {
+                        if (givenAnswers[key] !== correctAnswers[key]) {
+                            callback({
+                                success: false,
+                                answersChecked: true,
+                                message: 'Not correct'
+                            });
+                        }
+                    });
+
+                    callback({
+                        success: true
+                    });
                 }
+
             }
         });
     }
