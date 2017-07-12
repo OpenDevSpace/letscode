@@ -15,11 +15,14 @@ class TaskWrapper extends Component {
             options: [],
             answerRight: false,
             answerWrong: false,
+            nextTaskID: '',
+            allTasks: []
         }
 
+
+        this.handleNextTask = this.handleNextTask.bind(this);
         this.handleCheckAnswer = this.handleCheckAnswer.bind(this);
         this.handleFetchedValues = this.handleFetchedValues.bind(this);
-
         $.ajaxSetup({
             beforeSend: (xhr) => {
                 xhr.setRequestHeader("Authentication", "Bearer " + localStorage.getItem("odslearncode"));
@@ -28,7 +31,6 @@ class TaskWrapper extends Component {
 
         $.get('http://localhost:8080/api/course/gettask/' + this.props.courseID + '/' + this.props.taskID)
             .done((data) => {
-                console.log(data.tasks)
                 /*
                  let fetchedTasks = data.map((task, index) => {
                  return task
@@ -103,6 +105,7 @@ class TaskWrapper extends Component {
                     answerWrong: true
                 });
             }
+
             });
 
     }
@@ -113,9 +116,27 @@ class TaskWrapper extends Component {
         }).indexOf(this.props.taskID.toString());
 
         this.setState({
+            allTasks: data,
             currentTask: data[taskIndex],
-            options: this.shuffle(data[taskIndex].combinedTasks)
+            options: this.shuffle(data[taskIndex].combinedTasks),
         })
+    }
+
+    handleNextTask(){
+        let taskIndex = this.state.allTasks.map((task, index) => {
+            return task._id.toString();
+        }).indexOf(this.props.taskID.toString());
+
+        if(taskIndex < this.state.allTasks.length - 1){
+            this.setState({
+                answerWrong: false,
+                answerRight: false,
+                currentTask: this.state.allTasks[taskIndex+1],
+                options: this.shuffle(this.state.allTasks[taskIndex+1].combinedTasks),
+            })
+        } else {
+            console.log("All Tasks finished")
+        }
     }
 
     handleChange = (e, {value}) => this.setState({value})
@@ -136,6 +157,7 @@ class TaskWrapper extends Component {
                                        courseID={this.props.courseID}
                                        answerRight={this.state.answerRight}
                                        answerWrong={this.state.answerWrong}
+                                       loadNewTask={() => {this.handleNextTask()}}
                                        checkTheAnswer={(answers) => {
                                            this.handleCheckAnswer(answers)
                                        }}/>
@@ -157,9 +179,6 @@ class TaskWrapper extends Component {
                                     <Form >
                                         <label>Here you can see the code</label>
                                         <Form.TextArea readOnly/>
-                                        <Button basic fluid color='green'
-                                                onClick={[].forEach.call(document.querySelectorAll('.myCheckbox:checked'), function (cb) {
-                                                })}>Check answer</Button>
                                     </Form>
                                 </Segment>
                             </Step>
