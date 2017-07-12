@@ -55,12 +55,6 @@ routes.get('/gettask/:selectedcourse/:selectedtask', (req, res) => {
     });
 });
 
-routes.get('/getnexttask/:selectedcourse/:selectedtask', (req, res) => {
-    CourseController.getNextTask(req.params.selectedcourse, req.params.selectedtask, req.user, (task) => {
-        res.json(task);
-    });
-});
-
 routes.get('/listactive', (req, res) => {
     CourseController.list({
         active: true
