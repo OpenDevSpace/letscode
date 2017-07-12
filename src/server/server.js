@@ -2,7 +2,6 @@ var express = require('express');
 var bodyparser = require('body-parser');
 var path = require('path');
 var mongoose = require('mongoose');
-var jwt = require('jsonwebtoken');
 var cors = require('cors');
 
 var app = express();
@@ -10,7 +9,6 @@ var app = express();
 var authRoutes = require('./routes/auth');
 var userRoutes = require('./routes/user');
 var courseRoutes = require('./routes/course');
-
 
 var authMiddleware = require('./controllers/auth-middleware');
 
