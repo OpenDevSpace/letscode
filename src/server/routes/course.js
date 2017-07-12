@@ -103,7 +103,7 @@ routes.get('/coursedetail/:courseID', (req, res) => {
  */
 routes.post('/checktask/:courseID/:taskID', (req, res) => {
     CourseController.checkAnswer(req.params.courseID, req.params.taskID, req.body.answers, (cb) => {
-        if (cb.success === true) {
+        if (cb.success) {
             if (cb.isCoding) {
                 res.json({
                     success: true,

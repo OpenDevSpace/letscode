@@ -94,8 +94,7 @@ class CourseDetails extends Component {
                 },
                 tags: ''
             }
-        },
-            console.log(this.state.newTask))
+        })
     }
 
     dataFetched() {
@@ -103,21 +102,22 @@ class CourseDetails extends Component {
             return course.courseID.toString();
         }).indexOf(this.props.courseID.toString());
 
-        let completedTasks = this.state.attendedCourses[courseIndex].taskID;
+        let completedTasks;
+        if(this.state.attendedCourses.length > 0) {
+            completedTasks = this.state.attendedCourses[courseIndex].taskID;
+        } else {
+            completedTasks = [];
+        }
 
 
         let taskListIDs = this.state.course.task.map((value, index) => {
             return value._id
         });
 
-        console.log(taskListIDs);
-        console.log(completedTasks);
-
         let tempTasks = [];
 
         for(let i = 0; i < taskListIDs.length; i++){
             if(completedTasks.indexOf(taskListIDs[i]) === -1){
-                console.log("Task fund: ");
                 tempTasks.push(taskListIDs[i]);
             }
         }
@@ -187,7 +187,6 @@ class CourseDetails extends Component {
 
         if ($('#createTaskForm')[0].checkValidity()) {
             if(this.state.isTaskEdited){
-                console.log(this.state.newTask);
                 $.post("http://localhost:8080/api/course/updatetask/" + this.state.course._id + "/" + this.state.taskToEdit, {
                     task: this.state.newTask
                 })
@@ -238,8 +237,6 @@ class CourseDetails extends Component {
             return task._id.toString();
         }).indexOf(task.value);
 
-        console.log(this.state.course.task[taskIndex]);
-
         if (taskIndex !== -1) {
             this.setState({
                 newTask: this.state.course.task[taskIndex],
@@ -250,7 +247,6 @@ class CourseDetails extends Component {
                 taskToEdit: this.state.course.task[taskIndex]._id
             })
         }
-        console.log(this.state.newTask);
     }
 
     handleTypeChange(evt, type) {
@@ -293,7 +289,6 @@ class CourseDetails extends Component {
             courses: this.state.course._id
         })
             .done((data) => {
-                console.log("done");
                 let tempCourse = {
                     courseID: this.state.course._id,
                     taskID: []
@@ -335,11 +330,9 @@ class CourseDetails extends Component {
     */
 
     render() {
-        const { currentValues } = this.state;
-        const {radioTaskType, answerRadio} = this.state;
+        const {radioTaskType} = this.state;
 
         let taskListItem;
-        let continueWitchNextTask;
 
         if (this.state.retrievedData) {
             let completedTasks = [];
@@ -433,7 +426,7 @@ class CourseDetails extends Component {
                                         case 3:
                                             return "Advanced"
                                         default :
-                                            null
+                                            return null
                                     }
                                 })()}
                             </span>

@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {Container} from 'semantic-ui-react'
-import courseData from '../../data/Courses'
 import Card from './CourseCard'
 
 import $ from 'jquery'

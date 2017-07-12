@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {Form, Button, Modal, Header, Dimmer, Loader, Message} from 'semantic-ui-react'
 import "../../styles/SignupForm.css"
 import $ from 'jquery'
-var bcrypt = require('bcryptjs')
 
 class Signup extends Component {
     constructor(props) {
@@ -96,10 +95,6 @@ class Signup extends Component {
     }
 
     handleSignupAction(evt) {
-
-        console.log(this.state.passwordWarning);
-        console.log(this.state.wrongPassword);
-        console.log(this.state.passwordMatch);
         if(!this.state.passwordWarning && !this.state.wrongPassword && this.state.passwordMatch && $('#signupForm')[0].checkValidity()){
             this.setState(prevState => ({
                 requestActive: !prevState.requestActive

@@ -21,6 +21,8 @@ class UserListItem extends Component {
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handleRoleSelection = this.handleRoleSelection.bind(this);
+        this.switchRoleTextToValue = this.switchRoleTextToValue.bind(this);
+        this.switchRoleValueToText = this.switchRoleValueToText.bind(this);
     }
 
     handleEditClick() {
@@ -32,9 +34,6 @@ class UserListItem extends Component {
     updateRequest() {
         var requestdata = $.extend(true, {}, this.state.tempUser);
         $.post('http://localhost:8080/api/user/update/' + this.state.user._id, requestdata)
-            .done((data) => {
-                console.log("done");
-            });
     }
 
     updateUser(change, evt) {

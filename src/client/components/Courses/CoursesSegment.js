@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import Card from './CourseCard'
 import ShowMoreLess from './ShowMoreCard'
 import {Segment, Container} from 'semantic-ui-react'
-import courseData from '../../data/Courses'
 import '../../styles/CoursesSegment.css'
 
 import $ from 'jquery'
@@ -39,23 +38,22 @@ class CoursesSegment extends Component {
     }
 
     handleCoursesFetched(){
-        var foo = this.props.courses.map((value) => {
+        let courseIDs = this.props.courses.map((value) => {
             return value.courseID;
         });
 
-        let bar = this.state.courses.map((value) => {
+        let IDArray = this.state.courses.map((value) => {
             return value._id;
         });
 
-        for (let temp in foo){
-            console.log(this.state.courses[bar.indexOf(foo[temp])]);
+        for (let temp in courseIDs){
+            console.log(this.state.courses[IDArray.indexOf(courseIDs[temp])]);
             let singleCourse = this.state.userCourses;
-            singleCourse.push(this.state.courses[bar.indexOf(foo[temp])]);
+            singleCourse.push(this.state.courses[IDArray.indexOf(courseIDs[temp])]);
             this.setState({
                 userCourses: singleCourse
             })
         }
-
 
         courseInfo = this.state.userCourses.slice(0, this.state.itemsToShow).map((course, i) =>
          <Card course={course}/>
@@ -64,11 +62,6 @@ class CoursesSegment extends Component {
         this.setState({
             dataFetched: true
         });
-
-        console.log(this.state.userCourses);
-
-
-
     }
 
     showMore() {

@@ -24,8 +24,6 @@ class Course {
                     success: true,
                     course: newcourse
                 });
-                console.log("Success");
-                console.log(newcourse);
             }
         });
     }
@@ -210,10 +208,6 @@ class Course {
                 });
             } else {
                 givenAnswers = givenAnswers.sort();
-                console.log(course.task[course.task.map((e) => {
-                    return e._id.toString()
-                }).indexOf(taskID)].options.correctAnswers.sort());
-                console.log(givenAnswers);
 
                 let correctAnswers = course.task[course.task.map((e) => {
                     return e._id.toString()
@@ -226,6 +220,7 @@ class Course {
                 if (course.task[course.task.map((e) => {
                         return e._id.toString()
                     }).indexOf(taskID)].taskType === "cloze") {
+
                     if (givenAnswers[0] !== clozeWord[0]) {
                         callback({
                             success: false,
@@ -260,12 +255,12 @@ class Course {
                                     answersChecked: true,
                                     message: 'Not correct'
                                 });
-                            } else {
-                                callback({
-                                    success: true
-                                });
                             }
                         });
+                        callback({
+                            success: true
+                        });
+
                     }
                 }
 
