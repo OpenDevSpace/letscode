@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
-import TaskStep from './TaskStep'
-import {Step, Icon, Segment, Header, Form, Checkbox, Radio, Button}from 'semantic-ui-react'
-import '../../styles/TaskWrapper.css'
+import {Step, Icon, Segment, Header, Form}from 'semantic-ui-react'
+import '../../../styles/TaskWrapper.css'
 import TaskDefinition from "./TaskDefinition";
 import TaskWorkspace from "./TaskWorkspace";
 
@@ -31,29 +30,6 @@ class TaskWrapper extends Component {
 
         $.get('http://localhost:8080/api/course/gettask/' + this.props.courseID + '/' + this.props.taskID)
             .done((data) => {
-                /*
-                 let fetchedTasks = data.map((task, index) => {
-                 return task
-                 });
-
-                 for(let i = 0; i < fetchedTasks.length; i++){
-                 let tempAnswers = []
-
-                 if (fetchedTasks[i].taskType === 'qanda') {
-                 for(let j = 0; j < fetchedTasks[i].options.falseAnswers.length; j++) {
-                 tempAnswers.push(fetchedTasks[i].options.falseAnswers[j]);
-                 }
-                 for(let j = 0; j < fetchedTasks[i].options.correctAnswers.length; j++) {
-                 tempAnswers.push(fetchedTasks[i].options.correctAnswers[j]);
-                 }
-                 } else if (fetchedTasks[i].taskType === 'cloze') {
-                 tempAnswers.push(fetchedTasks[i].cloze.clozeWord[0]);
-                 } else {
-                 tempAnswers.push(fetchedTasks[i].options.falseAnswers[0]);
-                 }
-                 fetchedTasks[i].options = tempAnswers;
-                 }
-                 */
                 this.handleFetchedValues(data.tasks);
             });
     }
@@ -77,35 +53,21 @@ class TaskWrapper extends Component {
     }
 
     handleCheckAnswer(answers) {
-        console.log("check answer");
-        console.log(answers);
-
-        /*
-        if (answers.length === 1) {
-            console.log("answer right");
-            this.setState({
-                    answerRight: true
-                },
-                console.log("state set"));
-        }
-        */
-
         $.post('http://localhost:8080/api/course/checktask/' + this.props.courseID + "/" + this.props.taskID, {
             answers: answers
         })
             .done((data) => {
-            if(data === "right"){
-                this.setState({
-                    answerWrong: false,
-                    answerRight: true
-                });
-            } else {
-                this.setState({
-                    answerRight: false,
-                    answerWrong: true
-                });
-            }
-
+                if (data.success) {
+                    this.setState({
+                        answerWrong: false,
+                        answerRight: true
+                    });
+                } else {
+                    this.setState({
+                        answerRight: false,
+                        answerWrong: true
+                    });
+                }
             });
 
     }
@@ -122,24 +84,22 @@ class TaskWrapper extends Component {
         })
     }
 
-    handleNextTask(){
+    handleNextTask() {
         let taskIndex = this.state.allTasks.map((task, index) => {
             return task._id.toString();
         }).indexOf(this.props.taskID.toString());
 
-        if(taskIndex < this.state.allTasks.length - 1){
+        if (taskIndex < this.state.allTasks.length - 1) {
             this.setState({
                 answerWrong: false,
                 answerRight: false,
-                currentTask: this.state.allTasks[taskIndex+1],
-                options: this.shuffle(this.state.allTasks[taskIndex+1].combinedTasks),
+                currentTask: this.state.allTasks[taskIndex + 1],
+                options: this.shuffle(this.state.allTasks[taskIndex + 1].combinedTasks),
             })
         } else {
             console.log("All Tasks finished")
         }
     }
-
-    handleChange = (e, {value}) => this.setState({value})
 
     render() {
         const {value} = this.state;
@@ -157,7 +117,9 @@ class TaskWrapper extends Component {
                                        courseID={this.props.courseID}
                                        answerRight={this.state.answerRight}
                                        answerWrong={this.state.answerWrong}
-                                       loadNewTask={() => {this.handleNextTask()}}
+                                       loadNewTask={() => {
+                                           this.handleNextTask()
+                                       }}
                                        checkTheAnswer={(answers) => {
                                            this.handleCheckAnswer(answers)
                                        }}/>

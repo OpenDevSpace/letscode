@@ -49,9 +49,6 @@ class AccountSettings extends Component {
             password: this.state.password,
             userSettingsUpdate: true
         })
-            .done((data) => {
-                console.log(data);
-            });
     }
 
     passwordChange(field, evt) {

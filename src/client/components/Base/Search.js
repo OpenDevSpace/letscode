@@ -26,10 +26,9 @@ class SearchComponent extends Component {
 
         $.get('http://localhost:8080/api/course/listall')
             .done((data) => {
-            this.setState({
-                source: data.data
-            });
-            console.log(this.state.source);
+                this.setState({
+                    source: data.data
+                });
             });
     }
 
@@ -38,7 +37,6 @@ class SearchComponent extends Component {
             resultID: selResult._id,
             redirect: true
         });
-        console.log("Result selected: " + selResult.title);
     }
 
     handleSearchChange(evt, value) {
@@ -51,7 +49,6 @@ class SearchComponent extends Component {
             //if (this.state.value.length < 1) return this.resetComponent();
 
             const re = new RegExp(_.escapeRegExp(this.state.value), 'i');
-            console.log(re);
             const isMatch = (result) => re.test(result.title);
 
             this.setState({

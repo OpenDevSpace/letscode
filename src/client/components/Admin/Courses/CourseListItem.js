@@ -21,9 +21,6 @@ const level = [
 class CourseOverviewItem extends Component {
     constructor(props) {
         super(props);
-
-        var testVar = $.extend(true, this.props.course, {});
-
         this.state = {
             open: false,
             course: this.props.course,
@@ -36,6 +33,7 @@ class CourseOverviewItem extends Component {
         this.handleDescChange = this.handleDescChange.bind(this);
         this.handleLangSelection = this.handleLangSelection.bind(this);
         this.handleLevelSelection = this.handleLevelSelection.bind(this);
+        this.getLevel = this.getLevel.bind(this);
     }
 
     show = (dimmer) => () => {
@@ -111,16 +109,22 @@ class CourseOverviewItem extends Component {
     getLevel() {
         switch (this.state.course.level) {
             case 1:
-                this.state.levelText = "easy";
+                this.setState({
+                    levelText: "easy"
+                });
                 break;
             case 2:
-                this.state.levelText =  "medium";
+                this.setState({
+                    levelText:  "medium"
+                });
                 break;
             case 3:
-                this.state.levelText = "advanced";
+                this.setState({
+                    levelText: "advanced"
+                });
                 break;
             default :
-                null;
+                return null;
         }
     }
 

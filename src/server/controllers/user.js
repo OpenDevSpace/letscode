@@ -43,7 +43,6 @@ class User {
                     }
 
                 } else {
-                    console.log("user[prop].push(courseID: data.courses");
                     user[prop].push({
                         courseID: data.courses
                     });
@@ -96,7 +95,6 @@ class User {
                                     if (hashErr) throw hashErr;
                                     data.password = hash;
                                     delete data.data;
-                                    console.log(data);
                                     this.waitUntilHashReady(user, data, (cb) => {
                                         callback(cb);
                                     });

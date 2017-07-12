@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Button, Table, Modal, Menu, Form, Input, Dropdown} from 'semantic-ui-react'
+import {Button, Table, Modal, Menu, Form, Dropdown} from 'semantic-ui-react'
 import CourseListItem from './CourseListItem'
 import '../../../styles/CourseList.css'
 import $ from 'jquery'
@@ -76,7 +76,6 @@ class CourseList extends Component {
     }
 
     handleCreateCourse(evt){
-        console.log(this.state.newcourse);
             $.post("http://localhost:8080/api/course/new", this.state.newcourse)
                 .done((data) => {
                     this.fetchCourses();

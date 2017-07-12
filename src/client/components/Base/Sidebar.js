@@ -12,13 +12,17 @@ class Sidebar extends Component {
             isToggleOn: true
         };
 
-        if (this.props.type === "task") {
-            this.state.isToggleOn = false
-        }
+
 
         this.handleClick = this.handleClick.bind(this);
     }
 
+    componentDidMount(){
+        if (this.props.type === "task") {
+            this.handleClick();
+        }
+
+    }
 
     handleClick() {
         this.setState(prevState => ({
@@ -30,7 +34,7 @@ class Sidebar extends Component {
                 'padding-right': '1rem',
             }, "fast")
             $('.dashboardContent').animate({
-                'padding': '5rem 1rem 1rem 7rem'
+                'padding': '5rem 1rem 1rem 6rem'
             }, "fast")
         }
         else {
@@ -38,7 +42,7 @@ class Sidebar extends Component {
                 'padding-right': '1.5rem',
             }, "fast")
             $('.dashboardContent').animate({
-                'padding': '5rem 1rem 1rem 15rem'
+                'padding': '5rem 1rem 1rem 14.5rem'
             }, "fast")
         }
     }

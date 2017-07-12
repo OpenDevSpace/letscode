@@ -1,12 +1,9 @@
 import React, {Component} from 'react'
 import {Icon, Segment, Header}from 'semantic-ui-react'
-import '../../styles/TaskWrapper.css'
+import '../../../styles/TaskWrapper.css'
 
 
 class TaskDefinition extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         return (
             <Segment vertical basic={true} color={"red"} className="taskSegment">

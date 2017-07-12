@@ -5,7 +5,6 @@ import '../../styles/Header.css'
 
 class Header extends Component {
     render() {
-        console.log(this.props);
         return (
             <div className="headerBar">
                 <SearchComponent className="SearchComponent"/>

@@ -25,7 +25,7 @@ class AuthPage extends Component {
         document.getElementsByTagName('body')[0].style.overflow = 'hidden'
         return (
             <div className="loginScreen">
-                <img className="loginScreenImage" src='blur.jpg'/>
+                <img className="loginScreenImage" src='blur.jpg' alt="Image of a notebook with code"/>
                 <div className="pageName">
                     <Header icon textAlign='center'>
                         <Icon name='laptop' circular size='massive' color='blue' className="titleIcon"/>

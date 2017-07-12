@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Button, Icon, Segment, Header, Form, Message, Radio, Checkbox, Input}from 'semantic-ui-react'
-import '../../styles/TaskWrapper.css'
+import '../../../styles/TaskWrapper.css'
 import $ from 'jquery'
 
 
@@ -21,8 +21,6 @@ class TaskWorkspace extends Component {
     }
 
     handleCheckAnswer(evt){
-        //console.log(this.props.options[$('input[name=radioName]:checked').val()]);
-        //console.log(this.props.currentTask.options.correctAnswers);
         let answers = [];
         if(this.props.currentTask.taskType === "cloze"){
             answers.push($("#clozeWord").val());
@@ -37,26 +35,6 @@ class TaskWorkspace extends Component {
         this.props.checkTheAnswer(
            answers
         );
-        /*
-            this.setState({
-                answerRight: true,
-                answerWrong: false
-            });
-            $.post('http://localhost:8080/api/user/update/' + this.props.userID, {
-                courses: this.props.courseID,
-                taskID: this.props.currentTask._id
-            })
-                .done((data) => {
-                    console.log("done");
-                });
-
-        } else {
-            this.setState({
-                answerWrong: true,
-                answerRight: false,
-                rightAnswer: this.props.currentTask.options.correctAnswers[0]
-            })
-            */
     }
 
     render() {

@@ -47,8 +47,7 @@ class LoginForm extends Component {
             window.location.replace('/dashboard');
         })
             .fail(
-                this.show('blurring'),
-                console.log("fail")
+                this.show('blurring')
             );
     }
 

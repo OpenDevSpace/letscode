@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Step, Icon, Segment, Header}from 'semantic-ui-react'
-import '../../styles/TaskWrapper.css'
+import '../../../styles/TaskWrapper.css'
 
 
 class TaskStep extends Component {
