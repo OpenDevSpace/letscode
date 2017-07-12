@@ -150,6 +150,11 @@ class TaskWorkspace extends Component {
                         : null
                 }
 
+                {
+                    this.props.answerRight
+                    ? <Button floated='right' positive onClick={this.props.loadNewTask}>Next Task</Button>
+                        : null
+                }
             </Segment>
         )
     }
