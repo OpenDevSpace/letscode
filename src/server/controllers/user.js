@@ -46,7 +46,7 @@ class User {
             if (saveErr) {
                 callback({
                     success: false,
-                    message: 'Error while updating user: ' + err
+                    message: 'Error while updating user: ' + saveErr
                 });
             } else {
                 callback({
