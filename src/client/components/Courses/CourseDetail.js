@@ -140,10 +140,12 @@ class CourseDetails extends Component {
             this.setState({
                 percent: ((this.state.attendedCourses[courseIndex].taskID.length) / (this.state.course.task.length)) * 100,
                 enrolledToCourse: true,
-                nextTask: tempTasks,
-                retrievedData: true
+                nextTask: tempTasks
             })
         }
+        this.setState({
+            retrievedData: true
+        })
     }
 
     fetchData() {
