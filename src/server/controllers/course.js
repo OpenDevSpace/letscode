@@ -118,37 +118,22 @@ class Course {
                     message: 'Requested course not found!'
                 });
             } else {
-                let newTaskList = _.clone(course.task);
-
-                for (let i = 0; i < newTaskList.length; i++) {
-                    console.log(newTaskList[i].taskType);
-
-                    let answers = [];
-
-                    if (newTaskList[i].taskType === 'qanda') {
-                        answers.push(_.concat(newTaskList[i].options.falseAnswers, newTaskList[i].options.correctAnswers).sort());
-                        console.log(answers);
-                    } else if (newTaskList[i].taskType === 'cloze') {
-                        answers.push(newTaskList[i].cloze.clozeWord);
-                        console.log(answers);
-                    } else {
-                        answers.push(newTaskList[i].options.falseAnswers);
-                        console.log(answers);
-                    }
+                let combinedTasks = [];
+                let newCourse = course.toObject();
 
 
-
-                    newTaskList[i] = extend(newTaskList[i], { answers: answers });
-
-                    console.log(newTaskList[i]);
-                }
-
-                console.log(newTaskList)
+                _.forEach(course.task, (value, key) => {
+                    combinedTasks.push(value.options.falseAnswers.join(','), value.options.correctAnswers.join(','));
+                    _.extend(newCourse.task[key], {
+                        combinedTasks: combinedTasks
+                    });
+                    delete newCourse.task[key].options;
+                });
 
                 callback({
                     success: true,
-                    data: course.task
-                })
+                    tasks: newCourse.task
+                });
             }
         })
     }

@@ -50,8 +50,8 @@ routes.get('/listall', (req, res) => {
 });
 
 routes.get('/gettask/:selectedcourse/:selectedtask', (req, res) => {
-    CourseController.getTask(req.params.selectedcourse, req.params.selectedtask, req.user, (task) => {
-        res.json(task);
+    CourseController.getTask(req.params.selectedcourse, req.params.selectedtask, req.user, (tasks) => {
+        res.json(tasks);
     });
 });
 
