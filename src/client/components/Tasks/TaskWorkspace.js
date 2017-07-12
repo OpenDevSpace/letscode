@@ -26,9 +26,6 @@ class TaskWorkspace extends Component {
         //console.log(this.props.options[$('input[name=radioName]:checked').val()]);
         //console.log(this.props.currentTask.options.correctAnswers);
 
-
-
-        if(this.props.options[$('input[name=radioName]:checked').val()] === this.props.currentTask.options.correctAnswers[0]){
             this.setState({
                 answerRight: true,
                 answerWrong: false
@@ -47,7 +44,6 @@ class TaskWorkspace extends Component {
                 answerRight: false,
                 rightAnswer: this.props.currentTask.options.correctAnswers[0]
             })
-        }
     }
 
     render() {
@@ -55,7 +51,7 @@ class TaskWorkspace extends Component {
         const {value} = this.state;
 
         let myItem = this.props.options.map((option, index) => {
-            if (this.props.currentTask.options.correctAnswers.length <= 1) {
+            if (option.length <= 1) {
                 return (
                     <Form.Field name="radioName" control={Radio} label={option} value={index}
                                 checked={this.state.value === index}
@@ -93,7 +89,7 @@ class TaskWorkspace extends Component {
                 }
                 {
                     (this.props.currentTask.taskType === "qanda")
-                        ?  <Form success={this.state.answerRight} error={this.state.answerWrong}>
+                        ?  <Form id="qandaForm" success={this.state.answerRight} error={this.state.answerWrong} required>
                         <Form.Group id="radioGroup" grouped>
                             <label>{this.props.currentTask.question}</label>
                             {myItem}

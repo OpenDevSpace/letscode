@@ -147,7 +147,7 @@ class Course {
 
                 callback({
                     success: true,
-                    data: course.task
+                    data: newTaskList
                 })
             }
         })

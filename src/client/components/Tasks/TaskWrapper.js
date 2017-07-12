@@ -26,7 +26,28 @@ class TaskWrapper extends Component {
 
         $.get('http://localhost:8080/api/course/gettask/'+this.props.courseID+'/'+this.props.taskID)
             .done((data) => {
-                this.handleFetchedValues(data)
+                let fetchedTasks = data.data.map((task, index) => {
+                    return task
+                });
+
+                for(let i = 0; i < fetchedTasks.length; i++){
+                    let tempAnswers = []
+
+                    if (fetchedTasks[i].taskType === 'qanda') {
+                        for(let j = 0; j < fetchedTasks[i].options.falseAnswers.length; j++) {
+                            tempAnswers.push(fetchedTasks[i].options.falseAnswers[j]);
+                        }
+                        for(let j = 0; j < fetchedTasks[i].options.correctAnswers.length; j++) {
+                            tempAnswers.push(fetchedTasks[i].options.correctAnswers[j]);
+                        }
+                    } else if (fetchedTasks[i].taskType === 'cloze') {
+                        tempAnswers.push(fetchedTasks[i].cloze.clozeWord[0]);
+                    } else {
+                        tempAnswers.push(fetchedTasks[i].options.falseAnswers[0]);
+                    }
+                    fetchedTasks[i].options = tempAnswers;
+                }
+                this.handleFetchedValues(fetchedTasks);
             });
     }
 
@@ -56,24 +77,13 @@ class TaskWrapper extends Component {
     }
 
     handleFetchedValues(data){
-        let options = this.state.options;
-
-        if(data.data.taskType === 'coding'){
-            for (let i = 0; i < data.data.options.falseAnswers.length; i++){
-                options.push(data.data.options.falseAnswers[i]);
-            }
-        } else {
-            for (let i = 0; i < data.data.options.falseAnswers.length; i++){
-                options.push(data.data.options.falseAnswers[i]);
-            }
-            for (let i = 0; i < data.data.options.correctAnswers.length; i++){
-                options.push(data.data.options.correctAnswers[i]);
-            }
-        }
+        let taskIndex = data.map((task, index) => {
+            return task._id.toString();
+        }).indexOf(this.props.taskID.toString());
 
         this.setState({
-            currentTask: data.data,
-            options: this.shuffle(options)
+            currentTask: data[taskIndex],
+            options: this.shuffle(data[taskIndex].options)
         })
     }
 
