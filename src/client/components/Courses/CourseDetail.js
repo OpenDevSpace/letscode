@@ -103,7 +103,8 @@ class CourseDetails extends Component {
         }).indexOf(this.props.courseID.toString());
 
         let completedTasks;
-        if(this.state.attendedCourses.length > 0) {
+        console.log(courseIndex);
+        if(courseIndex !== -1) {
             completedTasks = this.state.attendedCourses[courseIndex].taskID;
         } else {
             completedTasks = [];
