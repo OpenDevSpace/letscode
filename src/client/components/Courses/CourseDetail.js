@@ -1,5 +1,18 @@
 import React, {Component} from 'react'
-import {Segment, Progress, Label, Accordion, Icon, Header, Divider, Image, Container, Form, Button, Message} from 'semantic-ui-react'
+import {
+    Segment,
+    Progress,
+    Label,
+    Accordion,
+    Icon,
+    Header,
+    Divider,
+    Image,
+    Container,
+    Form,
+    Button,
+    Message
+} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import '../../styles/CourseDetail.css'
 import TaskList from "./TaskList";
@@ -75,7 +88,7 @@ class CourseDetails extends Component {
         this.fetchData();
     }
 
-    clearCurrentTask(){
+    clearCurrentTask() {
         this.setState({
             newTask: {
                 title: '',
@@ -103,8 +116,8 @@ class CourseDetails extends Component {
         }).indexOf(this.props.courseID.toString());
 
         let completedTasks;
-        console.log(courseIndex);
-        if(courseIndex !== -1) {
+
+        if (courseIndex !== -1) {
             completedTasks = this.state.attendedCourses[courseIndex].taskID;
         } else {
             completedTasks = [];
@@ -117,8 +130,8 @@ class CourseDetails extends Component {
 
         let tempTasks = [];
 
-        for(let i = 0; i < taskListIDs.length; i++){
-            if(completedTasks.indexOf(taskListIDs[i]) === -1){
+        for (let i = 0; i < taskListIDs.length; i++) {
+            if (completedTasks.indexOf(taskListIDs[i]) === -1) {
                 tempTasks.push(taskListIDs[i]);
             }
         }
@@ -128,7 +141,7 @@ class CourseDetails extends Component {
                 percent: ((this.state.attendedCourses[courseIndex].taskID.length) / (this.state.course.task.length)) * 100,
                 enrolledToCourse: true,
                 nextTask: tempTasks,
-                retrievedData: true,
+                retrievedData: true
             })
         }
     }
@@ -154,31 +167,37 @@ class CourseDetails extends Component {
             answer.push($('#rightAnswerCode').val());
             options.push($('#answerOptionCode').val());
         } else if (this.state.newTask.taskType === 'qanda') {
-            if($('#rightAnswerOption1').val()
-                !== this.state.newTask.options.correctAnswers[0]){
+            if ($('#rightAnswerOption1').val()
+                !== this.state.newTask.options.correctAnswers[0]) {
                 answer.push($('#rightAnswerOption1').val());
-            };
-            if($('#rightAnswerOption2').val().length > 0
+            }
+            ;
+            if ($('#rightAnswerOption2').val().length > 0
                 && $('#rightAnswerOption2').val() !== this.state.newTask.options.correctAnswers[1]) {
                 answer.push($('#rightAnswerOption2').val())
-            };
-            if($('#rightAnswerOption3').val().length > 0
+            }
+            ;
+            if ($('#rightAnswerOption3').val().length > 0
                 && $('#rightAnswerOption2').val() !== this.state.newTask.options.correctAnswers[2]) {
                 answer.push($('#rightAnswerOption3').val())
-            };
+            }
+            ;
 
-            if($('#answerOption1').val()
-                !== this.state.newTask.options.falseAnswers[0]){
-            options.push($('#answerOption1').val())
-            };
-            if($('#answerOption2').val().length > 0
+            if ($('#answerOption1').val()
+                !== this.state.newTask.options.falseAnswers[0]) {
+                options.push($('#answerOption1').val())
+            }
+            ;
+            if ($('#answerOption2').val().length > 0
                 && $('#answerOption2').val() !== this.state.newTask.options.falseAnswers[1]) {
                 options.push($('#answerOption2').val())
-            };
-            if($('#answerOption3').val().length > 0
+            }
+            ;
+            if ($('#answerOption3').val().length > 0
                 && $('#answerOption3').val() !== this.state.newTask.options.falseAnswers[2]) {
                 options.push($('#answerOption3').val())
-            };
+            }
+            ;
         }
 
         this.setState({
@@ -187,7 +206,7 @@ class CourseDetails extends Component {
         });
 
         if ($('#createTaskForm')[0].checkValidity()) {
-            if(this.state.isTaskEdited){
+            if (this.state.isTaskEdited) {
                 $.post("http://localhost:8080/api/course/updatetask/" + this.state.course._id + "/" + this.state.taskToEdit, {
                     task: this.state.newTask
                 })
@@ -236,7 +255,7 @@ class CourseDetails extends Component {
 
     handleEditTaskClick(evt, task) {
 
-        if(this.state.editMode){
+        if (this.state.editMode) {
             $("#createTaskForm")[0].reset();
         }
         this.clearCurrentTask();
@@ -286,7 +305,7 @@ class CourseDetails extends Component {
         this.updateNewTask('tags', tags.value);
     }
 
-    handleClozeChange(evt, target){
+    handleClozeChange(evt, target) {
         this.updateNewTask(target.id, target.value);
     }
 
@@ -344,16 +363,15 @@ class CourseDetails extends Component {
 
             if (courseIndex !== -1) {
                 completedTasks = this.state.attendedCourses[courseIndex].taskID;
-
-                taskListItem = this.state.course.task.map((value) => {
-                    return <TaskList task={value}
-                                     courseID={this.state.course._id}
-                                     userRole={this.state.userRole}
-                                     completedTasks={completedTasks}
-                                     taskListIDs = {taskListIDs}
-                                     onClick={this.handleEditTaskClick}/>
-                });
             }
+            taskListItem = this.state.course.task.map((value) => {
+                return <TaskList task={value}
+                                 courseID={this.state.course._id}
+                                 userRole={this.state.userRole}
+                                 completedTasks={completedTasks}
+                                 taskListIDs={taskListIDs}
+                                 onClick={this.handleEditTaskClick}/>
+            });
         }
 
         return (
@@ -375,18 +393,28 @@ class CourseDetails extends Component {
                         {
                             (this.state.userRole === 'Admin' || this.state.userRole === 'Moderator')
                                 ? <div>
-                                    {
-                                        !this.state.editMode
+                                {
+                                    !this.state.editMode
                                         ? <Button color='orange' icon='plus'
-                                        label={{basic: true, color: 'orange', pointing: 'left', content: 'Add Tasks'}}
-                                        floated='right' onClick={this.handleAddTasks}
-                                        />
-                                            : <Button color='orange' icon='remove' floated='right'
-                                                      label={{basic: true, color: 'orange', pointing: 'left', content: 'Exit'}}
-                                                      onClick={this.handleAddTasks}
-                                        />
-                                    }
-                                </div>
+                                                  label={{
+                                                      basic: true,
+                                                      color: 'orange',
+                                                      pointing: 'left',
+                                                      content: 'Add Tasks'
+                                                  }}
+                                                  floated='right' onClick={this.handleAddTasks}
+                                    />
+                                        : <Button color='orange' icon='remove' floated='right'
+                                                  label={{
+                                                      basic: true,
+                                                      color: 'orange',
+                                                      pointing: 'left',
+                                                      content: 'Exit'
+                                                  }}
+                                                  onClick={this.handleAddTasks}
+                                    />
+                                }
+                            </div>
                                 : null
                         }
                         <Image id="courseHeaderIcon">
@@ -475,16 +503,18 @@ class CourseDetails extends Component {
                                                     checked={radioTaskType === 'cloze'}
                                                     onChange={this.handleTypeChange}/>
                                     </Form.Group>
-                                    <Form.TextArea label='Introduction' defaultValue={this.state.newTask.introduction} placeholder='What is this task for?'
+                                    <Form.TextArea label='Introduction' defaultValue={this.state.newTask.introduction}
+                                                   placeholder='What is this task for?'
                                                    onChange={this.handleTaskIntroductionChange}/>
-                                    <Form.TextArea label='Question' defaultValue={this.state.newTask.question} placeholder='What is the user supposed to do?'
+                                    <Form.TextArea label='Question' defaultValue={this.state.newTask.question}
+                                                   placeholder='What is the user supposed to do?'
                                                    required onChange={this.handleTaskQuestionChange}/>
                                     {
                                         (this.state.radioTaskType === "coding" || this.state.radioTaskType === "cloze")
-                                            ?<span>
+                                            ? <span>
                                                 {
                                                     this.state.radioTaskType === "coding"
-                                                    ? <Form.Group required widths={2}>
+                                                        ? <Form.Group required widths={2}>
                                                         <Form.TextArea id="answerOptionCode" label='Sample code'
                                                                        placeholder='Provide some sample code...'
                                                                        defaultValue={this.state.newTask.sampleCode}
@@ -512,19 +542,25 @@ class CourseDetails extends Component {
                                             :
                                             <Form.Group grouped widths='equal'>
                                                 <Form.Input id="rightAnswerOption1" label='Right Answer 1' required
-                                                            defaultValue={this.state.newTask.options.correctAnswers[0]} width={6}/>
+                                                            defaultValue={this.state.newTask.options.correctAnswers[0]}
+                                                            width={6}/>
                                                 <Form.Input id="rightAnswerOption2" label='Right Answer 2'
-                                                            defaultValue={this.state.newTask.options.correctAnswers[1]} width={6}/>
+                                                            defaultValue={this.state.newTask.options.correctAnswers[1]}
+                                                            width={6}/>
                                                 <Form.Input id="rightAnswerOption3" label='Right Answer 3'
-                                                            defaultValue={this.state.newTask.options.correctAnswers[2]} width={6}/>
-                                            <Divider/>
+                                                            defaultValue={this.state.newTask.options.correctAnswers[2]}
+                                                            width={6}/>
+                                                <Divider/>
                                                 <Form.Input id="answerOption1" label='Wrong Answer 1' required
-                                                            defaultValue={this.state.newTask.options.falseAnswers[0]} width={6}/>
+                                                            defaultValue={this.state.newTask.options.falseAnswers[0]}
+                                                            width={6}/>
                                                 <Form.Input id="answerOption2" label='Wrong Answer 2'
-                                                            defaultValue={this.state.newTask.options.falseAnswers[1]} width={6}/>
+                                                            defaultValue={this.state.newTask.options.falseAnswers[1]}
+                                                            width={6}/>
                                                 <Form.Input id="answerOption3" label='Wrong Answer 3'
-                                                            defaultValue={this.state.newTask.options.falseAnswers[2]} width={6}/>
-                                                </Form.Group>
+                                                            defaultValue={this.state.newTask.options.falseAnswers[2]}
+                                                            width={6}/>
+                                            </Form.Group>
                                     }
                                     <Form.Input label='Tags' inline onChange={this.handleTaskTagsChange}/>
                                     <Form.Button positive onClick={this.handleAddMoreTasks}>Add more tasks</Form.Button>
@@ -552,7 +588,9 @@ class CourseDetails extends Component {
                                           content="Done" onClick={this.handleDone}/>
                                 : <span>
                             {
-                                this.state.attendedCourses.map((e) => {return e.courseID}).indexOf(this.props.courseID) !== -1 && this.state.retrievedData
+                                this.state.attendedCourses.map((e) => {
+                                    return e.courseID
+                                }).indexOf(this.props.courseID) !== -1 && this.state.retrievedData
                                     ? <Link to={"/course/" +
                                 this.props.courseID + "/" + this.state.nextTask[0] + "/process"}>
                                     <Label content='Continue with next task.' icon='terminal' color={"green"}
