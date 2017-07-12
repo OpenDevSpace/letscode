@@ -57,6 +57,7 @@ class CourseDetails extends Component {
         this.handleTypeChange = this.handleTypeChange.bind(this);
         this.handleLeaveCourse = this.handleLeaveCourse.bind(this);
         this.handleClozeChange = this.handleClozeChange.bind(this);
+        this.handleInviteButton = this.handleInviteButton.bind(this);
         this.handleAddMoreTasks = this.handleAddMoreTasks.bind(this);
         this.handleEditTaskClick = this.handleEditTaskClick.bind(this);
         this.handleEnrollTOCourse = this.handleEnrollTOCourse.bind(this);
@@ -300,6 +301,10 @@ class CourseDetails extends Component {
             });
     }
 
+    handleInviteButton() {
+        window.prompt("Invite a Friend to the course: \n Copy to clipboard: Ctrl+C, Enter", window.location.href);
+    }
+
     /*
     handleAddition = (e, { value }) => {
         this.setState({
@@ -365,6 +370,9 @@ class CourseDetails extends Component {
             <Segment className="courseDetailSegment">
                 <Segment vertical>
                     <Header as='h2'>
+                        <Button color='green' icon='mail'
+                                label={{basic: true, color: 'green', pointing: 'left', content: 'Invite a Friend'}}
+                                floated='right' onClick={this.handleInviteButton}/>
                         {
                             this.state.attendedCourses.map((e) => {
                                 return e.courseID

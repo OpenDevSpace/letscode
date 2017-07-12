@@ -74,6 +74,18 @@ class Sidebar extends Component {
                             </Button.Group>
                         </Link>
                     </List.Item>
+                    <List.Item>
+                        <Link to="/scoreboard">
+                            <Button.Group>
+                                <Button icon='star' basic color='blue'/>
+                                {
+                                    this.state.isToggleOn
+                                        ? <Button className="sidebarButtonText" color='blue'>Scoreboard</Button>
+                                        : null
+                                }
+                            </Button.Group>
+                        </Link>
+                    </List.Item>
                     {
                         this.props.userRole === 'Admin' || this.props.userRole === 'Moderator'
                             ? <List.Item>
