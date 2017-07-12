@@ -140,12 +140,15 @@ class CourseDetails extends Component {
             this.setState({
                 percent: ((this.state.attendedCourses[courseIndex].taskID.length) / (this.state.course.task.length)) * 100,
                 enrolledToCourse: true,
-                nextTask: tempTasks
+                nextTask: tempTasks,
+                retrievedData: true
+            })
+        } else {
+            this.setState({
+                retrievedData: true,
+                nextTask: taskListIDs
             })
         }
-        this.setState({
-            retrievedData: true
-        })
     }
 
     fetchData() {
@@ -583,27 +586,33 @@ class CourseDetails extends Component {
                                 </span>
                     }
                     <Divider/>
-                    <Container textAlign='center'>
-                        {
-                            (this.state.userRole === 'Admin' || this.state.userRole === 'Moderator') && this.state.editMode
-                                ? <Button type='submit' positive icon='checkmark' labelPosition='right'
-                                          content="Done" onClick={this.handleDone}/>
-                                : <span>
+                    {
+                        this.state.retrievedData
+                        ?<Container textAlign='center'>
+                            {
+                                (this.state.userRole === 'Admin' || this.state.userRole === 'Moderator') && this.state.editMode
+                                    ? <Button type='submit' positive icon='checkmark' labelPosition='right'
+                                              content="Done" onClick={this.handleDone}/>
+                                    : <span>
                             {
                                 this.state.attendedCourses.map((e) => {
                                     return e.courseID
                                 }).indexOf(this.props.courseID) !== -1 && this.state.retrievedData
-                                    ? <Link to={"/course/" +
-                                this.props.courseID + "/" + this.state.nextTask[0] + "/process"}>
-                                    <Label content='Continue with next task.' icon='terminal' color={"green"}
-                                           size={"big"}/>
-                                </Link>
+                                    ?
+                                    <Link to={"/course/" +
+                                    this.props.courseID + "/" + this.state.nextTask[0] + "/process"}>
+                                        <Label content='Continue with next task.' icon='terminal' color={"green"}
+                                               size={"big"}/>
+                                    </Link>
                                     : <Button positive icon='checkmark' labelPosition='right' content="Enroll course"
                                               onClick={this.handleEnrollTOCourse}/>
                             }
                         </span>
-                        }
-                    </Container>
+                            }
+                        </Container>
+                            : null
+                    }
+
                 </Segment>
             </Segment>
         )
