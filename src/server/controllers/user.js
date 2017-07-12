@@ -1,28 +1,18 @@
 var UserModel = require('../models/user');
 var bcrypt = require('bcryptjs');
 
+
+/**
+ * User class, contains functions for handling user actions
+ */
 class User {
-    register(firstName, LastName, email, password, callback) {
 
-        var success = false;
-
-        UserModel.findOne({email: email}, (err, user) => {
-            if (err) throw err;
-            if (!user) {
-                new UserModel({
-                    firstName: firstName,
-                    lastName: LastName,
-                    email: email,
-                    password: password
-                }).save();
-                success = true;
-            } else {
-                success = false;
-            }
-            callback(success);
-        });
-    }
-
+    /**
+     * Helper function, used by update() as soon as the server request has finished
+     * @param user
+     * @param data
+     * @param callback
+     */
     waitUntilHashReady(user, data, callback) {
         for (let prop in data) {
             if(prop === "courses"){
@@ -68,6 +58,12 @@ class User {
         });
     }
 
+    /**
+     * Updating a user
+     * @param id User ID
+     * @param data What to update?
+     * @param callback
+     */
     update(id, data, callback) {
         UserModel.findById(id, (err, user) => {
             if (err) {
@@ -129,6 +125,11 @@ class User {
         });
     }
 
+    /**
+     * Lists all users, if logged in user is admin
+     * @param role current user role
+     * @param callback
+     */
     listAll(role, callback) {
         if (role !== "Admin") {
             callback({
@@ -145,17 +146,11 @@ class User {
         }
     }
 
-    loadDashboard(userID, callback) {
-        UserModel.findById(userID, (err, user) => {
-            if (err) throw err;
-            callback({
-                firstName: user.firstName,
-                courses: user.courses,
-                role: user.role
-            });
-        })
-    }
-
+    /**
+     * load userdata to dashboard
+     * @param userID ID of user
+     * @param callback
+     */
     doAfterLogin(userID, callback) {
         UserModel.findById(userID, (err, user) => {
             if (err) throw err;
@@ -168,6 +163,12 @@ class User {
         })
     }
 
+    /**
+     * Called to delete course data from User Collection
+     * @param userID UserID
+     * @param courseID CourseID
+     * @param callback
+     */
     unenroll(userID, courseID, callback) {
 
         UserModel.findByIdAndUpdate(userID, {
@@ -182,6 +183,13 @@ class User {
         });
     }
 
+    /**
+     * Called if a task is solved successfully. Writes task ID to User Collection, if not already there
+     * @param userID UserID
+     * @param courseID CourseID
+     * @param taskID TaskID
+     * @param callback
+     */
     taskSolved(userID, courseID, taskID, callback) {
         UserModel.findOneAndUpdate({'_id': userID, 'courses.courseID': courseID}, {
             $addToSet: {
