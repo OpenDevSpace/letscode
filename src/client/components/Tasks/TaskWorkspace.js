@@ -31,7 +31,7 @@ class TaskWorkspace extends Component {
                 answers.push($(this).next("label").text());
             });
         } else {
-
+            answers.push($("#codeInput").val());
         }
 
         this.props.checkTheAnswer(
@@ -96,7 +96,10 @@ class TaskWorkspace extends Component {
                     (this.props.currentTask.taskType === "coding")
                         ? <Form >
                         <label>{this.props.currentTask.question}</label>
-                        <Form.TextArea defaultValue={this.props.currentTask.sampleCode} />
+                        <Form.TextArea id="codeInput" defaultValue={this.props.currentTask.sampleCode} />
+                        <Button basic color='green'
+                                onClick={this.handleCheckAnswer}>Check answer</Button>
+
                     </Form>
                         : null
                 }
