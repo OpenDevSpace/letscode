@@ -180,7 +180,26 @@ class User {
                 data: result
             });
         });
+    }
 
+    taskSolved(userID, courseID, taskID, callback) {
+        UserModel.findOneAndUpdate({'_id': userID, 'courses.courseID': courseID}, {
+            $addToSet: {
+                'courses.$.taskID': taskID
+            }
+        }, (err, result) => {
+            if (err) {
+                callback({
+                    success: false,
+                    message: err
+                });
+            } else {
+                callback({
+                    success: true,
+                    message: 'Successfully saved solved task'
+                });
+            }
+        });
     }
 }
 

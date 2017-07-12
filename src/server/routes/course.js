@@ -1,5 +1,7 @@
 var Course = require('../controllers/course');
 var CourseController = new Course();
+var User = require('../controllers/user');
+var UserController = new User();
 
 var routes = require('express').Router();
 
@@ -76,11 +78,21 @@ routes.get('/coursedetail/:courseID', (req, res) => {
 routes.post('/checktask/:courseID/:taskID', (req, res) => {
     CourseController.checkAnswer(req.params.courseID, req.params.taskID, req.body.answers, (cb) => {
         if (cb.success === true) {
-            console.log("Answers correct");
-            res.send("right");
+            if (cb.isCoding) {
+                res.json({
+                    success: true,
+                    message: 'Code received'
+                });
+            } else {
+                UserController.taskSolved(req.user.userID, req.params.courseID, req.params.taskID, (saveSuccessfull) => {
+                    res.json(saveSuccessfull);
+                });
+            }
         } else {
-            console.log("Answers false");
-            res.send("wrong");
+            res.json({
+                success: false,
+                message: 'Not solved correctly'
+            });
         }
     });
 });
