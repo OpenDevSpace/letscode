@@ -15,7 +15,7 @@ class CreateTask extends Component {
     }
 
     componentDidMount() {
-        let task = this.props.completedTasks[0].map((task, index) => {
+        let task = this.props.completedTasks.map((task, index) => {
             return task;
         });
 
@@ -31,14 +31,6 @@ class CreateTask extends Component {
 
         this.setState({
             userRole: this.props.userRole
-        })
-
-        let nextTask = this.props.taskListIDs.map((task, index) => {
-            return task.toString();
-        }).indexOf(this.props.task._id.toString())+1;
-
-        this.setState({
-            nextTaskID: nextTask
         })
     }
 

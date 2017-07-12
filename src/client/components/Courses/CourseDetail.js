@@ -47,7 +47,8 @@ class CourseDetails extends Component {
             enrolledToCourse: false,
             isTaskEdited: false,
             taskToEdit: '',
-            cancelWarning: false
+            cancelWarning: false,
+            nextTasks: []
         };
 
         this.handleDone = this.handleDone.bind(this);
@@ -102,10 +103,31 @@ class CourseDetails extends Component {
             return course.courseID.toString();
         }).indexOf(this.props.courseID.toString());
 
+        let completedTasks = this.state.attendedCourses[courseIndex].taskID;
+
+
+        let taskListIDs = this.state.course.task.map((value, index) => {
+            return value._id
+        });
+
+        console.log(taskListIDs);
+        console.log(completedTasks);
+
+        let tempTasks = [];
+
+        for(let i = 0; i < taskListIDs.length; i++){
+            if(completedTasks.indexOf(taskListIDs[i]) === -1){
+                console.log("Task fund: ");
+                tempTasks.push(taskListIDs[i]);
+            }
+        }
+
         if (courseIndex !== -1) {
             this.setState({
                 percent: ((this.state.attendedCourses[courseIndex].taskID.length) / (this.state.course.task.length)) * 100,
-                enrolledToCourse: true
+                enrolledToCourse: true,
+                nextTask: tempTasks,
+                retrievedData: true,
             })
         }
     }
@@ -115,7 +137,6 @@ class CourseDetails extends Component {
             .done((course) => {
                 this.setState({
                     course: course,
-                    retrievedData: true,
                     userRole: this.props.role,
                     userID: this.props._id,
                     attendedCourses: this.props.courses
@@ -318,9 +339,7 @@ class CourseDetails extends Component {
         const {radioTaskType, answerRadio} = this.state;
 
         let taskListItem;
-        let taskIDs;
         let continueWitchNextTask;
-        let taskAfterTaskId;
 
         if (this.state.retrievedData) {
             let completedTasks = [];
@@ -328,13 +347,12 @@ class CourseDetails extends Component {
                 return course.courseID.toString();
             }).indexOf(this.props.courseID.toString());
 
-
             let taskListIDs = this.state.course.task.map((value, index) => {
                 return value._id
             });
 
             if (courseIndex !== -1) {
-                completedTasks.push(this.state.attendedCourses[courseIndex].taskID);
+                completedTasks = this.state.attendedCourses[courseIndex].taskID;
 
                 taskListItem = this.state.course.task.map((value) => {
                     return <TaskList task={value}
@@ -344,17 +362,6 @@ class CourseDetails extends Component {
                                      taskListIDs = {taskListIDs}
                                      onClick={this.handleEditTaskClick}/>
                 });
-
-                taskIDs = this.state.course.task.map((e) => {
-                    return e._id
-                });
-
-                for (let i = 0; i < taskIDs.length; i++) {
-                    if (!(taskIDs[i].indexOf(this.props.courseID) !== -1)) {
-                        continueWitchNextTask = taskIDs[i];
-                        i = taskIDs.length;
-                    }
-                }
             }
         }
 
@@ -553,11 +560,9 @@ class CourseDetails extends Component {
                                           content="Done" onClick={this.handleDone}/>
                                 : <span>
                             {
-                                this.state.attendedCourses.map((e) => {
-                                    return e.courseID
-                                }).indexOf(this.props.courseID) !== -1
+                                this.state.attendedCourses.map((e) => {return e.courseID}).indexOf(this.props.courseID) !== -1 && this.state.retrievedData
                                     ? <Link to={"/course/" +
-                                this.props.courseID + "/" + continueWitchNextTask + "/process"}>
+                                this.props.courseID + "/" + this.state.nextTask[0] + "/process"}>
                                     <Label content='Continue with next task.' icon='terminal' color={"green"}
                                            size={"big"}/>
                                 </Link>
