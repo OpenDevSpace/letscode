@@ -3,20 +3,21 @@ import {Button, Icon, Segment, Header, Form, Message, Radio, Checkbox, Input}fro
 import '../../../styles/TaskWrapper.css'
 import $ from 'jquery'
 
-
 class TaskWorkspace extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rightAnswer: ''
+            checked: false
         }
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleNextTask = this.handleNextTask.bind(this);
         this.handleCheckAnswer = this.handleCheckAnswer.bind(this);
     }
 
 
     handleChange = (e, {value}) => {
+        console.log(e);
         this.setState({value});
     }
 
@@ -37,22 +38,25 @@ class TaskWorkspace extends Component {
         );
     }
 
+    handleNextTask(evt){
+        this.props.loadNewTask();
+
+        $('#checkboxName').prop('checked', false);
+    }
+
     render() {
-
-        const {value} = this.state;
-
         let myItem = this.props.options.map((option, index) => {
             if (option.length <= 1) {
                 return (
                     <Form.Field name="radioName" control={Radio} label={option} value={index}
-                                checked={this.state.value === index}
                                 onChange={this.handleChange}>
                         <br/>
                     </Form.Field>
                 )
             } else {
                 return (
-                    <Form.Field name="radioName" control={Checkbox} label={option} value={index} >
+                    <Form.Field>
+                        <Checkbox id="checkboxName" control={Checkbox} label={option} />
                         <br/>
                     </Form.Field>
                 )
@@ -130,7 +134,7 @@ class TaskWorkspace extends Component {
 
                 {
                     this.props.answerRight
-                    ? <Button floated='right' positive onClick={this.props.loadNewTask}>Next Task</Button>
+                    ? <Button floated='right' positive onClick={this.handleNextTask}>Next Task</Button>
                         : null
                 }
             </Segment>

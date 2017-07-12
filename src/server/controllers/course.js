@@ -211,26 +211,34 @@ class Course {
                         isCoding: true
                     })
                 } else {
+                    let temp = false;
                     if (correctAnswers.length !== givenAnswers.length) {
                         callback({
                             success: false,
                             answersChecked: true,
                             message: 'Not correct'
                         });
+                        temp = true;
                     } else {
                         _.forEach(correctAnswers, (value, key) => {
+                            console.log(givenAnswers[key]);
+                            console.log(correctAnswers[key]);
+                            //noinspection JSAnnotator
                             if (givenAnswers[key] !== correctAnswers[key]) {
                                 callback({
                                     success: false,
                                     answersChecked: true,
                                     message: 'Not correct'
                                 });
+                                temp = true;
+                                return false;
                             }
                         });
-                        callback({
-                            success: true
-                        });
-
+                        if(!temp) {
+                            callback({
+                                success: true
+                            });
+                        }
                     }
                 }
 

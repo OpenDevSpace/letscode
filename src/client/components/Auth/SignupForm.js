@@ -187,6 +187,3 @@ class Signup extends Component {
 }
 
 export default Signup
-
-
-/** TODO: Password check and success message on register (check your mails) **/

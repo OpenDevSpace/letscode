@@ -53,7 +53,7 @@ class TaskWrapper extends Component {
     }
 
     handleCheckAnswer(answers) {
-        $.post('http://localhost:8080/api/course/checktask/' + this.props.courseID + "/" + this.props.taskID, {
+        $.post('http://localhost:8080/api/course/checktask/' + this.props.courseID + "/" + this.state.currentTask._id, {
             answers: answers
         })
             .done((data) => {

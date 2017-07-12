@@ -190,6 +190,10 @@ class CourseDetails extends Component {
                 $.post("http://localhost:8080/api/course/updatetask/" + this.state.course._id + "/" + this.state.taskToEdit, {
                     task: this.state.newTask
                 })
+                    .done((data) => {
+                        $("#createTaskForm")[0].reset();
+                        this.clearCurrentTask();
+                    })
             } else {
                 $.post("http://localhost:8080/api/course/addtask/" + this.state.course._id, {
                     _id: this.state.course._id,
@@ -197,7 +201,7 @@ class CourseDetails extends Component {
                 })
                     .done((data) => {
                         console.log("done");
-                        //$("#createTaskForm")[0].reset();
+                        $("#createTaskForm")[0].reset();
                         //$("#createTaskForm").trigger("reset");
                         this.clearCurrentTask()
                     });
@@ -230,12 +234,20 @@ class CourseDetails extends Component {
     }
 
     handleEditTaskClick(evt, task) {
+
+        if(this.state.editMode){
+            $("#createTaskForm")[0].reset();
+        }
         this.clearCurrentTask();
+
         console.log(this.state.newTask);
-        console.log(task.value);
+        //console.log(task.value);
+
         let taskIndex = this.state.course.task.map((task, index) => {
             return task._id.toString();
         }).indexOf(task.value);
+
+        console.log(taskIndex);
 
         if (taskIndex !== -1) {
             this.setState({
@@ -246,6 +258,7 @@ class CourseDetails extends Component {
                 isTaskEdited: true,
                 taskToEdit: this.state.course.task[taskIndex]._id
             })
+            console.log(this.state.newTask);
         }
     }
 
@@ -312,22 +325,6 @@ class CourseDetails extends Component {
     handleInviteButton() {
         window.prompt("Invite a Friend to the course: \n Copy to clipboard: Ctrl+C, Enter", window.location.href);
     }
-
-    /*
-    handleAddition = (e, { value }) => {
-        this.setState({
-            options: [{ text: value, value }, ...this.state.options],
-        })
-
-        console.log(this.state.options);
-    }
-
-    handleChange = (e, { value }) => {
-        this.setState({ currentValues: value })
-        console.log(this.state.options);
-    }
-
-    */
 
     render() {
         const {radioTaskType} = this.state;
@@ -464,7 +461,8 @@ class CourseDetails extends Component {
                                     Add a task
                                 </Header>
                                 <Form id="createTaskForm" warning={this.state.cancelWarning}>
-                                    <Form.Input label='Task Title' defaultValue={this.state.newTask.title} required onChange={this.handleTaskTitleChange} width={6}/>
+                                    <Form.Input label='Task Title' defaultValue={this.state.newTask.title} required
+                                                onChange={this.handleTaskTitleChange} width={6}/>
                                     <Form.Group grouped required>
                                         <label>Task Type</label>
                                         <Form.Radio label='Coding' value='coding' checked={radioTaskType === 'coding'}

@@ -43,7 +43,7 @@ class CreateTask extends Component {
                             ?
                             <Header as='h4' color='green'>
                             <Icon name='check circle outline'/>
-                            {this.state.task.title} Edit
+                            {this.state.task.title}
                         </Header>
                             :
                             <Header as='h4' color='blue'>
