@@ -1,4 +1,6 @@
 var CourseModel = require('../models/course');
+var _ = require('lodash');
+var extend = require('util')._extend;
 
 class Course {
     create(data, userID, callback) {
@@ -115,106 +117,25 @@ class Course {
                     success: false,
                     message: 'Requested course not found!'
                 });
-            }
-            /*
-             else {
-             if (!course.active || userData.courses.map((e) => {
-             return e.courseID
-             }).indexOf(course._id) === -1 ) {
-             callback({
-             success: false,
-             message: 'Course not active or not enrolled'
-             })
-             } else {
-             console.log(selectedTask);
-             callback({
-             success: true,
-             task: course.task.map((e) => {
-             return e[selectedTask]
-             })
-             })
-             }
-             }
-             */
-        })
-            .populate('task', {})
-            .exec((err, res) => {
+            } else {
+                let combinedTasks = [];
+                let newCourse = course.toObject();
 
-                let temp;
 
-                for (let i = 0; i < res.task.length; i++) {
-                    if (res.task[i]._id.toString() === selectedTask.toString()){
-                        temp = res.task[i];
-                    }
-                }
-                if (err) throw err;
+                _.forEach(course.task, (value, key) => {
+                    combinedTasks.push(value.options.falseAnswers.join(','), value.options.correctAnswers.join(','));
+                    _.extend(newCourse.task[key], {
+                        combinedTasks: combinedTasks
+                    });
+                    delete newCourse.task[key].options;
+                });
+
                 callback({
                     success: true,
-                    data: temp
-                });
-            })
-    }
-    getTaskAnswer(courseID, selectedTask, userData, callback) {
-        CourseModel.findById(courseID, (err, course) => {
-            if (err) {
-                callback({
-                    success: false,
-                    message: 'An error occurred!'
-                });
-            } else if (!course) {
-                callback({
-                    success: false,
-                    message: 'Requested course not found!'
+                    tasks: newCourse.task
                 });
             }
         })
-            .populate('task', {})
-            .exec((err, res) => {
-
-                let temp;
-
-                for (let i = 0; i < res.task.length; i++) {
-                    if (res.task[i]._id.toString() === selectedTask.toString()){
-                        temp = res.task[i];
-                    }
-                }
-                if (err) throw err;
-                callback({
-                    success: true,
-                    data: temp
-                });
-            })
-    }
-    getNextTask(courseID, selectedTask, userData, callback) {
-        CourseModel.findById(courseID, (err, course) => {
-            if (err) {
-                callback({
-                    success: false,
-                    message: 'An error occurred!'
-                });
-            } else if (!course) {
-                callback({
-                    success: false,
-                    message: 'Requested course not found!'
-                });
-            }
-        })
-            .populate('task', {})
-            .exec((err, res) => {
-
-                let temp;
-
-                for (let i = 0; i < res.task.length-1; i++) {
-                    if (res.task[i]._id.toString() === selectedTask.toString()){
-                        temp = res.task[i+1];
-                    }
-                }
-                if (err) throw err;
-                callback({
-                    success: true,
-                    data: temp
-                });
-            })
     }
 
 
