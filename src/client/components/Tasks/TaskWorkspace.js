@@ -24,13 +24,19 @@ class TaskWorkspace extends Component {
         //console.log(this.props.options[$('input[name=radioName]:checked').val()]);
         //console.log(this.props.currentTask.options.correctAnswers);
         let answers = [];
-        $("#qandaForm input:checkbox:checked").each(function() {
-            answers.push($(this).next("label").text());
-        });
+        if(this.props.currentTask.taskType === "cloze"){
+            answers.push($("#clozeWord").val());
+        } else if (this.props.currentTask.taskType === "qanda"){
+            $("#qandaForm input:checkbox:checked").each(function() {
+                answers.push($(this).next("label").text());
+            });
+        } else {
+
+        }
+
         this.props.checkTheAnswer(
            answers
         );
-
         /*
             this.setState({
                 answerRight: true,
@@ -106,8 +112,7 @@ class TaskWorkspace extends Component {
                             />
                             <Message
                                 error
-                                header='Wrong. The right answer is:  '
-                                content={this.state.rightAnswer}
+                                header='Sorry, thats wrong.'
                             />
                             <Button basic color='green'
                                     onClick={this.handleCheckAnswer}>Check answer</Button>
@@ -119,14 +124,22 @@ class TaskWorkspace extends Component {
                     (this.props.currentTask.taskType === "cloze")
                         ?  <div>
                         <Header as={'h3'} content={this.props.currentTask.question}/>
-                        <Form inverted>
+                        <Form inverted  success={this.props.answerRight} error={this.props.answerWrong} >
                             <Form.Field inline>
                                 <Header as={'h4'}>
                                 {this.props.currentTask.cloze.clozePart1}
-                                <Input placeholder='Fill in the missing word' autoFocus/>
+                                <Input id="clozeWord" placeholder='Fill in the missing word' autoFocus/>
                                     {this.props.currentTask.cloze.clozePart2}
                                 </Header>
                             </Form.Field>
+                            <Message
+                                success
+                                header='That`s right'
+                            />
+                            <Message
+                                error
+                                header='Sorry, thats wrong.'
+                            />
                             <Button basic color='green'
                                     onClick={this.handleCheckAnswer}>Check answer</Button>
                         </Form>

@@ -123,12 +123,12 @@ class Course {
 
                 _.forEach(course.task, (value, key) => {
                     let combinedTasks = [];
-                        _.forEach(value.options.falseAnswers, (value) => {
-                            combinedTasks.push(value)
-                        });
+                    _.forEach(value.options.falseAnswers, (value) => {
+                        combinedTasks.push(value)
+                    });
                     _.forEach(value.options.correctAnswers, (value) => {
-                            combinedTasks.push(value)
-                        });
+                        combinedTasks.push(value)
+                    });
                     _.extend(newCourse.task[key], {
                         combinedTasks: combinedTasks.sort()
                     });
@@ -180,32 +180,63 @@ class Course {
                 });
             } else {
                 givenAnswers = givenAnswers.sort();
-                console.log(course.task[course.task.map((e) => { return e._id.toString() }).indexOf(taskID)].options.correctAnswers.sort());
+                console.log(course.task[course.task.map((e) => {
+                    return e._id.toString()
+                }).indexOf(taskID)].options.correctAnswers.sort());
                 console.log(givenAnswers);
-                let correctAnswers = course.task[course.task.map((e) => { return e._id.toString() }).indexOf(taskID)].options.correctAnswers.sort();
 
-                if(correctAnswers.length !== givenAnswers.length){
+                let correctAnswers = course.task[course.task.map((e) => {
+                    return e._id.toString()
+                }).indexOf(taskID)].options.correctAnswers.sort();
+
+                let clozeWord = course.task[course.task.map((e) => {
+                    return e._id.toString()
+                }).indexOf(taskID)].cloze.clozeWord;
+
+                if (course.task[course.task.map((e) => {
+                        return e._id.toString()
+                    }).indexOf(taskID)].taskType === "cloze") {
+                    if (givenAnswers[0] !== clozeWord[0]) {
+                        callback({
+                            success: false,
+                            answersChecked: true,
+                            message: 'Not correct'
+                        });
+                    } else {
+                        callback({
+                            success: true
+                        });
+                    }
+                } else if (course.task[course.task.map((e) => {
+                        return e._id.toString()
+                    }).indexOf(taskID)].taskType === "coding") {
                     callback({
-                        success: false,
-                        answersChecked: true,
-                        message: 'Not correct'
-                    });
+                        success: true,
+                        message: "code will be checked! (coming soon)",
+                        isCoding: true
+                    })
                 } else {
-                    _.forEach(correctAnswers, (value, key) => {
-                        if (givenAnswers[key] !== correctAnswers[key]) {
-                            callback({
-                                success: false,
-                                answersChecked: true,
-                                message: 'Not correct'
-                            });
-                        } else {
-                            callback({
-                                success: true
-                            });
-                        }
-                    });
-
-
+                    if (correctAnswers.length !== givenAnswers.length) {
+                        callback({
+                            success: false,
+                            answersChecked: true,
+                            message: 'Not correct'
+                        });
+                    } else {
+                        _.forEach(correctAnswers, (value, key) => {
+                            if (givenAnswers[key] !== correctAnswers[key]) {
+                                callback({
+                                    success: false,
+                                    answersChecked: true,
+                                    message: 'Not correct'
+                                });
+                            } else {
+                                callback({
+                                    success: true
+                                });
+                            }
+                        });
+                    }
                 }
 
             }
