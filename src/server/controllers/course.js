@@ -198,12 +198,14 @@ class Course {
                                 answersChecked: true,
                                 message: 'Not correct'
                             });
+                        } else {
+                            callback({
+                                success: true
+                            });
                         }
                     });
 
-                    callback({
-                        success: true
-                    });
+
                 }
 
             }
