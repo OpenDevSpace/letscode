@@ -49,7 +49,7 @@ class CourseOverviewItem extends Component {
 
         $.post('http://localhost:8080/api/course/update/'+this.state.course._id, requestdata)
             .done((data) => {
-
+                this.getLevel();
             })
             .fail((data) => {
 
@@ -137,7 +137,6 @@ class CourseOverviewItem extends Component {
             date.substring(11, 16) + " Uhr";
 
         const {open, dimmer} = this.state;
-        this.getLevel();
         return (
             <Table.Row>
                 <Table.Cell>{this.state.course.title}</Table.Cell>
