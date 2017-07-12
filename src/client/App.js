@@ -6,6 +6,7 @@ import registerServiceWorker from './registerServiceWorker'
 import AuthPage from "./components/_pages/AuthPage"
 import Dashboard from "./components/_pages/Dashboard"
 import Scoreboard from "./components/_pages/Scoreboard"
+import Notifications from "./components/_pages/Notifications"
 import Course from "./components/_pages/Course"
 import AllCourses from "./components/_pages/AllCourses"
 import AdminCourseList from './components/Admin/_pages/Courses'
@@ -25,6 +26,7 @@ class App extends Component {
                 <Route exact path="/" component={AuthPage}/>
                 <Route path="/dashboard" component={Dashboard}/>
                 <Route path="/scoreboard" component={Scoreboard}/>
+                <Route path="/notifications" component={Notifications}/>
                 <Route path="/course/:courseString/:taskString/process" component={Task}/>
                 <Route path="/course/:string" component={Course}/>
                 <Route exact path="/admin/courselist" component={AdminCourseList}/>

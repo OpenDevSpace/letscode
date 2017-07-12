@@ -62,6 +62,18 @@ class Sidebar extends Component {
                             </Button.Group>
                         </Link>
                     </List.Item>
+                    <List.Item >
+                        <Link to="/notifications">
+                            <Button.Group>
+                                <Button icon='inbox' basic color='blue'/>
+                                {
+                                    this.state.isToggleOn
+                                        ? <Button className="sidebarButtonText" color='blue'>Notifications</Button>
+                                        : null
+                                }
+                            </Button.Group>
+                        </Link>
+                    </List.Item>
                     <List.Item>
                         <Link to="/courselist">
                             <Button.Group>
@@ -77,7 +89,7 @@ class Sidebar extends Component {
                     <List.Item>
                         <Link to="/scoreboard">
                             <Button.Group>
-                                <Button icon='star' basic color='blue'/>
+                                <Button icon='trophy' basic color='blue'/>
                                 {
                                     this.state.isToggleOn
                                         ? <Button className="sidebarButtonText" color='blue'>Scoreboard</Button>
