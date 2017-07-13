@@ -108,7 +108,8 @@ class UserListItem extends Component {
     }
 
     handleRoleSelection(evt, role) {
-        this.updateUser('role', role)
+        this.updateUser('role', role);
+        console.log(this.state);
     }
 
     handleUserUpdate(evt) {
