@@ -1,5 +1,6 @@
 ## letscode - interactive coding platform
 
+<img src="./letscode-logo.png" alt="LetsCode Logo" style="width: 200px; display: inline;"/>
 **letscode** is an open source web-based, interactive coding platform for university students.
 We believe, daily training and improving of coding skills is necessary for a better understanding of theoretical concepts.
 
