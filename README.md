@@ -1,7 +1,7 @@
 ## letscode - interactive coding platform
 
 **letscode** is an open source web-based, interactive coding platform for university students.
-We believe, daily training and improving of coding skills is necessary for a better understanding of theoretical concepts.
+We believe, daily training and improving coding skills are necessary for a better understanding of theoretical concepts.
 
 Students may use the **letscode** platform by enrolling into courses and solving tasks.
 
@@ -9,13 +9,13 @@ Moderators and Administrators have additional features, including Course Managem
 
 **Please note:** This project is work in progress and absolutely far away from beeing ready for production use!
 
-### Constributions
+### Contributions
 
 The **letscode** platform is actively maintained and developed by OpenDevSpace,
 a student group creating open source applications at Ruhr West University of Applied Sciences.
 We are always looking for people and groups, who want to join us or support our development.
 
-You are an individual person? We appreciate your issues with feature requests or bugs and your pull requests.
+Are you an individual person? We appreciate your issues with feature requests or bugs and your pull requests.
 Located near Bottrop, Germany? Come along to one of our meetings :)
 
 Working on a similar solution with your group? Drop us a line and tell us! We are happy to hear from you!
