@@ -24,7 +24,7 @@ app.use(cors({
 
 console.log(path.join(__dirname, '../../build'));
 
-app.use(express.static(path.join(__dirname, '../../build')))
+app.use(express.static(path.join(__dirname, '../../build')));
 
 // Middleware: all routes behind API require an auth!
 app.use('/api', authMiddleware);
@@ -39,7 +39,20 @@ var port = process.env.port || 8080;
 
 var config = require('./config');
 
-mongoose.connect(config.database);
+const options = {
+    useMongoClient: true,
+    //autoIndex: false, // Don't build indexes
+    reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
+    reconnectInterval: 500, // Reconnect every 500ms
+    poolSize: 10, // Maintain up to 10 socket connections
+    // If not connected, return errors immediately rather than waiting for reconnect
+    bufferMaxEntries: 0
+};
+//mongoose.connect(uri, options);
+
+mongoose.connect(config.database, options);
+//mongoose.createConnection()(config.database);
+
 
 app.listen(port);
 

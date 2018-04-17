@@ -30,8 +30,8 @@ class AuthPage extends Component {
                     <Header icon textAlign='center'>
                         <Icon name='laptop' circular size='massive' color='blue' className="titleIcon"/>
                         <Header.Content>
-                            <h1 className="pageNameTitle">localhorst:3000</h1>
-                            <h3 className="pageNameSubtitle">Learn to code - even if your name in not Horst</h3>
+                            <h1 className="pageNameTitle">let's code</h1>
+                            <h3 className="pageNameSubtitle">Learn to code the modern way</h3>
                         </Header.Content>
                     </Header>
                 </div>

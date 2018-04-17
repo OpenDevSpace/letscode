@@ -27,13 +27,13 @@
     "react-scripts": "1.0.7"
   },
   "scripts": {
+    "express": "node ./src/server/server.js",
+    "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js express",
     "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "start-js": "react-scripts start",
     "build-css": "node-sass-chokidar src/client/styles/sass -o src/client/styles/",
-    "watch-css": "npm run build-css && node-sass-chokidar src/client/styles/sass -o src/client/styles/ --watch --recursive",
-    "express": "node ./src/server/server.js"
+    "watch-css": "npm run build-css && node-sass-chokidar src/client/styles/sass -o src/client/styles/ --watch --recursive"
   }
 }
