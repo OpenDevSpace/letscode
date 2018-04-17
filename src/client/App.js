@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import { Router, Route, Switch} from 'react-router-dom'
 import {createBrowserHistory} from 'history'
 import './App.css';
 import registerServiceWorker from './registerServiceWorker'

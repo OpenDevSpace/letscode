@@ -20,7 +20,7 @@ class LoginForm extends Component {
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
     }
 
-    handleEmailChange (evt) {
+    handleEmailChange(evt) {
         this.setState({
             user: evt.target.value
         });
@@ -43,32 +43,38 @@ class LoginForm extends Component {
             password: this.state.password
         })
             .done((data) => {
-            localStorage.setItem("odslearncode", data.token);
-            window.location.replace('/dashboard');
-        })
+                localStorage.setItem("odslearncode", data.token);
+                window.location.replace('/dashboard');
+            })
             .fail(
                 this.show('blurring')
             );
     }
 
-    show = (dimmer) => () => this.setState({ dimmer, open: true })
-    close = () => this.setState({ open: false, requestActive: false })
+    show = (dimmer) => () => this.setState({dimmer, open: true})
+    close = () => this.setState({open: false, requestActive: false})
 
     render() {
-        const { open, dimmer } = this.state
+        const {open, dimmer} = this.state
         // Hide overflow of body
         document.getElementsByTagName('body')[0].style.overflow = 'hidden'
         return (
             <div className="loginComponent">
                 <div className="loginFormBar">
                     <Dimmer active={this.state.requestActive}>
-                        <Loader />
+                        <Loader/>
                     </Dimmer>
                     <Form className="loginForm">
+						<img src="./LetsCode2.svg"/>
+
                         <h2>Sign in</h2>
-                        <Form.Input id="emailInput" label='E-Mail' type="email" placeholder='your.name@mail.com' onChange={this.handleEmailChange} required autoFocus/>
-                        <Form.Input label='Enter Password' type='password' placeholder='s3cur3Pa55w0rd' onChange={this.handlePasswordChange} required/>
-                        <Button type='submit' onClick={this.login.bind(this)}>Login</Button><Link to="/" id="forgotPassword">Forgot Password?</Link>
+                        <Form.Input id="emailInput" label='E-Mail' type="email" placeholder='your.name@mail.com'
+                                    onChange={this.handleEmailChange} required autoFocus/>
+                        <Form.Input label='Enter Password' type='password' placeholder='s3cur3Pa55w0rd'
+                                    onChange={this.handlePasswordChange} required/>
+                        <Button type='submit' onClick={this.login.bind(this)}>Login</Button><Link to="/"
+                                                                                                  id="forgotPassword">Forgot
+                        Password?</Link>
                     </Form>
                     <h2>Not registered?</h2>
                     <Button onClick={this.props.onClick}>Sign Up</Button>
@@ -82,7 +88,8 @@ class LoginForm extends Component {
                         </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button positive icon='checkmark' labelPosition='right' content="Try again" onClick={this.close} />
+                        <Button positive icon='checkmark' labelPosition='right' content="Try again"
+                                onClick={this.close}/>
                     </Modal.Actions>
                 </Modal>
             </div>
